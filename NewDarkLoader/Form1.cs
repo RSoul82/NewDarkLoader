@@ -353,17 +353,7 @@ namespace NewDarkLoader
         /// <param name="gameVersion">sGameVersion obtained from FMSelectorData.</param>
         public Form1(string exePath, bool fromDLL, string gameVersion)//, long startupTime)
         {
-            //ProfileOptimization.SetProfileRoot(Path.GetTempPath());
-            //ProfileOptimization.StartProfile("Startup.Profile");
-
-            //MessageBox.Show("Initializing.");
-            //Stopwatch s = new Stopwatch();
-            ////s.Start();
             InitializeComponent();
-            //s.Stop();
-            //textBox1.AppendText("Startup: " + startupTime);
-            //textBox1.AppendText("\r\nInitialize: " + s.ElapsedMilliseconds);
-            //fmTable.DoubleBuffered(true);
             exeFullPath = exePath;
             NDLRunFromDLL = fromDLL;
 
@@ -862,7 +852,7 @@ namespace NewDarkLoader
             string winState = i.IniReadValue(secOptions, kWindowState);
             if (winState == FormWindowState.Maximized.ToString())
             {
-                this.WindowState = FormWindowState.Maximized;
+                WindowState = FormWindowState.Maximized;
             }
             else
             {
@@ -874,17 +864,17 @@ namespace NewDarkLoader
                     int x;
                     int y;
 
-                    if (Int32.TryParse(coordSplit[0], out w)
-                        && Int32.TryParse(coordSplit[1], out h)
-                        && Int32.TryParse(coordSplit[2], out x)
-                        && Int32.TryParse(coordSplit[3], out y))
+                    if (int.TryParse(coordSplit[0], out w)
+                        && int.TryParse(coordSplit[1], out h)
+                        && int.TryParse(coordSplit[2], out x)
+                        && int.TryParse(coordSplit[3], out y))
                     {
-                        this.Size = new Size(w, h);
-                        this.Location = new Point(x, y);
+                        Size = new Size(w, h);
+                        Location = new Point(x, y);
                     }
                     else
                     {
-                        this.WindowState = FormWindowState.Maximized;
+                        WindowState = FormWindowState.Maximized;
                     }
                 }
             }
