@@ -351,7 +351,8 @@ namespace NewDarkLoader
         /// <param name="exePath">Full path of .exe that called this form.</param>
         /// <param name="fromDLL">'Play Game' actions depend on whether this is called as a normal exe or as a dll.</param>
         /// <param name="gameVersion">sGameVersion obtained from FMSelectorData.</param>
-        public Form1(string exePath, bool fromDLL, string gameVersion)//, long startupTime)
+        ///<param name="insPath">Install path, used for Thief 3.</param>
+        public Form1(string exePath, bool fromDLL, string gameVersion, string insPath)
         {
             InitializeComponent();
             exeFullPath = exePath;
@@ -374,7 +375,7 @@ namespace NewDarkLoader
             oSize.Height = readmeBox.Height; //This has to be measured at runtime because in VS it's very low.
             origReadmeSize = oSize;
 
-            readINIFileToData();
+            readINIFileToData(insPath);
             readINIData();
             readGameLanguage();
 
@@ -1009,11 +1010,13 @@ namespace NewDarkLoader
             {
                 gameName = "Thief 3";
                 Icon = Properties.Resources.t3;
+                gameIsThief3 = true;
             }
             else if (exeSimpleName.ToLower() == "shock2")
             {
                 gameName = "System Shock 2";
                 Icon = Properties.Resources.Shock2;
+                gameIsShock2 = true;
             }
 
             btnPlOriginal.Text = playTextPart1 + " " + gameName;
@@ -1098,24 +1101,22 @@ namespace NewDarkLoader
         /// <summary>
         /// Read the ini file and save the sections/keys/values as an iniFile object.
         /// </summary>
-        private void readINIFileToData()
+        private void readINIFileToData(string t3insFMPath)
         {
             fmInstalledPath = gamePath + "\\FMs"; // default
 
-            if (exeName.ToLower().StartsWith("thief3"))
+            if (gameIsThief3)
             {
-                gameIsThief3 = true;
                 btnTools.Visible = false;
                 //Does not end with \\
-                string sneakyOptionsFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Documents\\Thief - Deadly Shadows\\Options\\SneakyOptions.ini";
+                //string sneakyOptionsFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Documents\\Thief - Deadly Shadows\\Options\\SneakyOptions.ini";
 
-                INIFile snOptIni = new INIFile(sneakyOptionsFile);
-                fmInstalledPath = getStringFromINI("Loader", "InstallPath", StringType.TextWithQuotesRemoved, snOptIni);
+                //INIFile snOptIni = new INIFile(sneakyOptionsFile);
+                //fmInstalledPath = getStringFromINI("Loader", "InstallPath", StringType.TextWithQuotesRemoved, snOptIni);
+                fmInstalledPath = t3insFMPath;
             }
             else
             {
-                if (exeName.ToLower().StartsWith("shock2"))
-                    gameIsShock2 = true;
                 string newFMInstalledPath = getFMInsPathFromCam_Mod();
                 if (newFMInstalledPath != "")
                     fmInstalledPath = newFMInstalledPath;
