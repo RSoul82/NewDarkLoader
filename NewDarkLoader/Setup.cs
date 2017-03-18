@@ -6,14 +6,14 @@ using System.IO;
 namespace NewDarkLoader
 {
     public partial class Setup : Form
-    {      
-        public Setup(INIFile iniFile, string optionsSecName, string archiveRootKeyName, string languageKeyName, 
+    {
+        public Setup(INIFile iniFile, string optionsSecName, string archiveRootKeyName, string languageKeyName,
             string dateFormatKeyName, string backupTypeKeyName, string sevenZipGKeyName, string noWin7ZKeyName,
-            string returnTypeKeyName, string dcDontAskKeyName, 
-            string setupTitle, string fmArchFolderBox, string folderWarning, string installedFMsPath, string browseButton, string langBox, string dateFormatBox, 
-            string dmyChk, string mdyChk, string saveBackupBox, string bkTypeAsk, string bkTypeAlways, string dbClFMBox, 
-            string dbClChk, string returnAfterBox, string retTypeNeverRdo, string afterFMRdo, string alwaysRdo, 
-            string opt7zBox, string help7z1, string help7z2, string use7zeChk1, string use7zeChk2, string okBtnText, string cancBtnText, 
+            string returnTypeKeyName, string dcDontAskKeyName,
+            string setupTitle, string fmArchFolderBox, string folderWarning, string installedFMsPath, string browseButton, string langBox, string dateFormatBox,
+            string dmyChk, string mdyChk, string saveBackupBox, string bkTypeAsk, string bkTypeAlways, string dbClFMBox,
+            string dbClChk, string returnAfterBox, string retTypeNeverRdo, string afterFMRdo, string alwaysRdo,
+            string opt7zBox, string help7z1, string help7z2, string use7zeChk1, string use7zeChk2, string okBtnText, string cancBtnText,
             string folderRequiredMsg, string fldrRequiredMsgTitle, string webSearchSiteBox, string noSiteLabel, string articleLabel, string articleTip, bool sortNoArticles, bool _firstRun)
         {
             InitializeComponent();
@@ -71,7 +71,7 @@ namespace NewDarkLoader
 
             folderRequired = folderRequiredMsg;
             fldrRequiredTitle = fldrRequiredMsgTitle;
-            
+
             gbWebSearch.Text = webSearchSiteBox;
             lblNoSite.Text = noSiteLabel;
             lblSpecialWords.Text = articleLabel;
@@ -82,7 +82,7 @@ namespace NewDarkLoader
         }
 
         SetupInfo sInfo = new SetupInfo();
-        
+
         private INIFile i;
         private bool firstRun;
         private string fmInstalledPath = "";
@@ -151,7 +151,7 @@ namespace NewDarkLoader
                 if (site == "") site = "ttlg.com";
                 tbWebSearch.Text = site;
                 string articleWords = i.IniReadValue(secOptions, "ArticleWords");
-                if(articleWords == "") articleWords = "the an a";
+                if (articleWords == "") articleWords = "the an a";
                 tbSpecialWords.Text = articleWords;
             }
 
@@ -180,7 +180,7 @@ namespace NewDarkLoader
                     sInfo.dateFormat = 1;
                 else
                     sInfo.dateFormat = 2;
-                
+
                 if (rdoBkAsk.Checked)
                     sInfo.backupType = "Ask";
                 else
@@ -223,7 +223,7 @@ namespace NewDarkLoader
             {
                 if (tbFMArchivePath.Text == "")
                     MessageBox.Show(folderRequired, fldrRequiredTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                else if(tbFMArchivePath.Text == fmInstalledPath)
+                else if (tbFMArchivePath.Text == fmInstalledPath)
                     MessageBox.Show(archIsFMsWarning, fldrRequiredTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
         }

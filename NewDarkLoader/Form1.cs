@@ -364,7 +364,7 @@ namespace NewDarkLoader
 
             string version = ProductVersion.TrimEnd('.', '0');
 
-            Text = "NewDarkLoader " + version + " - " + gameVersion;
+            Text = "NewDarkLoader " + version + " - " + gameName;
 
             setHTMLReadmeSizeLoc();
 
@@ -502,7 +502,7 @@ namespace NewDarkLoader
 
                 //Scan FM
                 string secScan = "ScanAll";
-                label2.Text = langIni.IniReadValue(secScan, "Progress");
+                lblProgressTitle.Text = langIni.IniReadValue(secScan, "Progress");
                 scannedText = langIni.IniReadValue(secScan, "Scanned");
 
                 //Edit FM Data labels
@@ -1005,7 +1005,7 @@ namespace NewDarkLoader
                 gameName = "Thief";
                 Icon = Properties.Resources.t1;
             }
-            else if (exeSimpleName.ToLower() == "thief3")
+            else if (exeSimpleName.Contains('3'))
             {
                 gameName = "Thief 3";
                 Icon = Properties.Resources.t3;
@@ -1929,7 +1929,7 @@ namespace NewDarkLoader
             if (File.Exists(fmArchivePath + subFolder + "\\" + fNameWithExt))
             {
                 SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + fNameWithExt);
-                
+
                 //Find titles.str - extraction is case sensitive so the exact name must be found first
                 List<string> fnames = new List<string>(); //dummy list, only needed for below
                 System.Collections.ObjectModel.ReadOnlyCollection<string> archFiles = new System.Collections.ObjectModel.ReadOnlyCollection<string>(fnames);
@@ -1943,9 +1943,9 @@ namespace NewDarkLoader
                 }
 
                 bool extracted = false;
-                
+
                 extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, "strings\\" + langGame.ToLower() + "\\titles.str");
-                
+
                 //only look for non-language specific if language str is not found
                 if (!extracted)
                 {
@@ -2106,7 +2106,7 @@ namespace NewDarkLoader
                     }
                 }
 
-                if(missflagFromArchive)
+                if (missflagFromArchive)
                     FullDelete.DeleteFile(missflagStr);
             }
 
@@ -2157,12 +2157,12 @@ namespace NewDarkLoader
         /// <param name="archive">FM archive.</param>
         /// <returns></returns>
         private Point numMisFilesInArchive(string subFolder, string archive)
-        {   
+        {
             int count = 0;
             int max = 0;
             List<int> numbers = new List<int>();
-            if(File.Exists(fmArchivePath + subFolder + "\\" + archive))
-            {    
+            if (File.Exists(fmArchivePath + subFolder + "\\" + archive))
+            {
                 misFileNumber = 0;
                 SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + archive);
 
@@ -2218,7 +2218,7 @@ namespace NewDarkLoader
             }
             else //T3
             {
-                if (fI.DirectoryName.ToLower().Replace(" ", "") == fmInstPath.ToLower().Replace(" ", "") + "\\fanmissionextras" 
+                if (fI.DirectoryName.ToLower().Replace(" ", "") == fmInstPath.ToLower().Replace(" ", "") + "\\fanmissionextras"
                     || fI.DirectoryName.ToLower() == fmInstPath.ToLower())
                 {
                     correctRoot = true;
@@ -2245,7 +2245,7 @@ namespace NewDarkLoader
             foreach (FileInfo fI in allFiles)
             {
                 ReadmeFileData data = new ReadmeFileData();
-                if(readmeRootDir(fI.FullName, readmeDir) && readmeExtension(fI.Name))
+                if (readmeRootDir(fI.FullName, readmeDir) && readmeExtension(fI.Name))
                     if (readmeFilename == "" || fI.Name == readmeFilename)
                     {
                         data = storeReadmeData(fI.FullName, textFiles, rtfFiles, htmlFiles);
@@ -2295,7 +2295,7 @@ namespace NewDarkLoader
         /// <param name="archive">Filename with extension. Path relative to fmArchivePath.</param>
         /// <param name="readmeFilename">readme.txt, info.rtf, etc. Can be "".</param>
         /// <returns></returns>
-        private void extractReadme(string subFolder, string archive, string readmeFilename, string sectionName="")
+        private void extractReadme(string subFolder, string archive, string readmeFilename, string sectionName = "")
         {
             if (File.Exists(fmArchivePath + subFolder + "\\" + archive))
             {
@@ -2328,7 +2328,7 @@ namespace NewDarkLoader
 
                 string fName = ""; //filename of readme, no path.
                 bool html = false;
-                 
+
                 if (rtfFiles.Count != 0)
                 {
                     fName = rtfFiles[0].fileName;
@@ -2356,9 +2356,9 @@ namespace NewDarkLoader
                     releaseDate = fI.LastWriteTime;
                     goto noreadme;
                 }
-                
+
                 string fullName = userTempFolder + fName;
-                
+
                 //Store the InfoFile name in NDL.ini
                 if (sectionName != "")
                     i.IniWriteValue(sectionName, kInfoFile, fName);
@@ -2374,7 +2374,7 @@ namespace NewDarkLoader
                     if (exitCode != 0)
                         extractReadmeInternal(ext, vldFiles, html);
                 }
-                
+
                 //Set full path of readme file (in temp folder)
                 readmePath = fullName;
                 return;
@@ -2398,7 +2398,7 @@ namespace NewDarkLoader
         }
 
         //vldFiles will already contain the basic readme
-        private void extractReadmeInternal(SevenZipExtractor ext, List<int> vldFiles, bool html) 
+        private void extractReadmeInternal(SevenZipExtractor ext, List<int> vldFiles, bool html)
         {
             if (html)
             {
@@ -2418,7 +2418,7 @@ namespace NewDarkLoader
             {
                 int[] validFiles = new int[vldFiles.Count];
                 vldFiles.CopyTo(validFiles);
-                
+
                 try
                 {
                     ext.ExtractFiles(userTempFolder, validFiles);
@@ -2560,7 +2560,7 @@ namespace NewDarkLoader
         /// <returns></returns>
         private static bool fileIsRTF(string[] fLines)
         {
-            if(fLines.Length > 0)
+            if (fLines.Length > 0)
                 return fLines[0].StartsWith("{\\rtf1");
             return false;
         }
@@ -2588,7 +2588,7 @@ namespace NewDarkLoader
 
         private void item1_Click(object sender, EventArgs e)
         {
-            if(readmeBox.SelectedText != "")
+            if (readmeBox.SelectedText != "")
                 Clipboard.SetText(readmeBox.SelectedText);
         }
 
@@ -2611,7 +2611,7 @@ namespace NewDarkLoader
         /// </summary>
         /// <param name="archive">Archive's filename.</param>
         /// <returns></returns>
-        private fmIniData extractFMini(string subFolder,string archive)
+        private fmIniData extractFMini(string subFolder, string archive)
         {
             string path = fmArchivePath + subFolder + "\\" + archive;
             string fmIni = "fm.ini";
@@ -2632,7 +2632,7 @@ namespace NewDarkLoader
                     }
                     else
                     {
-                        SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, archive, 
+                        SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, archive,
                             userTempFolder, iniExtract.ArchiveFileNames[x], false);
                     }
                     foundIni = true;
@@ -2659,7 +2659,7 @@ namespace NewDarkLoader
             string path = fmInstalledPath + "\\" + simpleFolder + "\\fm.ini";
             fmIniData data = null;
 
-            if(File.Exists(path))
+            if (File.Exists(path))
                 data = getDataFromFMini(data, path);
 
             return data;
@@ -2694,7 +2694,7 @@ namespace NewDarkLoader
                     }
                 }
             }
-            data.tags = getValue(kTags, fileLines).Replace(';',',').Replace(" ", "");
+            data.tags = getValue(kTags, fileLines).Replace(';', ',').Replace(" ", "");
             data.infoFile = getValue(kInfoFile, fileLines);
             return data;
         }
@@ -2743,7 +2743,7 @@ namespace NewDarkLoader
             Cursor = Cursors.WaitCursor;
             pnlProgress.Visible = true;
             allEnabledToggle(false);
-            
+
             int current = 0;
             int total = fmTable.RowCount;
             for (int x = 0; x < foundFMs.Count; x++)
@@ -2754,7 +2754,7 @@ namespace NewDarkLoader
                 lblArchive.Text = foundFMs[x].archive;
                 pnlProgress.Refresh();
             }
-            
+
             Cursor = Cursors.Default;
             allEnabledToggle(true);
             pnlProgress.Visible = false;
@@ -2824,7 +2824,7 @@ namespace NewDarkLoader
                 string tagsFromINI = i.IniReadValue(sectionName, kTags);
                 string releaseDateFromINI = i.IniReadValue(sectionName, kRelease_date);
 
-#region Get or update values by looking in the ini or the archive/folder
+                #region Get or update values by looking in the ini or the archive/folder
                 if (overwriteData || infoFileFromINI == "" || titleFromINI == "" || releaseDateFromINI == "" || tagsFromINI == "")
                 {
                     fmIniData fmIni = null;
@@ -2833,7 +2833,7 @@ namespace NewDarkLoader
                         fmIni = extractFMini(subFolder, selArchive); //Only do this if a value is missing, or user is re-scanning
                     else
                         fmIni = readFMini(selArchive);//Only do this if a value is missing, or user is re-scanning
-#region If fm.ini exists
+                    #region If fm.ini exists
                     if (fmIni != null) //Use any values found to update the table/ini file
                     {
                         if (fmIni.infoFile != null && fmIni.infoFile != "")
@@ -2892,13 +2892,13 @@ namespace NewDarkLoader
                                 i.IniWriteValue(sectionName, kTags, emptyTag);
                         }
                     }
-#endregion
+                    #endregion
                     else // or fm.ini is null
                     {
                         if (overwriteData || titleFromINI == "" || releaseDateFromINI == "") //If title or date are missing or re-scanning
                         {
                             selFM.title = setFMNameFromEither(currentFMID, overwriteData, selArchive, subFolder, sectionName, fmIsArchive, titleFromINI);
-                            
+
                             if (overwriteData || releaseDateFromINI == "") //Don't update rel date if title was the only blank thing.
                             {
                                 StringPair sP = setReleaseDate(currentFMID, sectionName);
@@ -2926,7 +2926,7 @@ namespace NewDarkLoader
                     string dString = DateIntConverter.dateStringFromHexString(releaseDateFromINI, dateFormat);
                     selFM.relDateString = dString;
                 }
-#endregion
+                #endregion
 
                 //get last played
                 string lastPlayedFromINI = i.IniReadValue(sectionName, kLast_played);
@@ -3122,14 +3122,14 @@ namespace NewDarkLoader
         /// </summary>
         /// <param name="sectionName"></param>
         /// <returns></returns>
-        private List<catItem> getFMTags(string sectionName) 
+        private List<catItem> getFMTags(string sectionName)
         {
             List<catItem> cIList = new List<catItem>();
             string tagsFromINI = i.IniReadValue(sectionName, kTags);
-            
+
             List<string> uniqueTags = new List<string>();
             List<string> uniqueCategories = new List<string>();
-            
+
             if (tagsFromINI != "" && tagsFromINI != emptyTag)
             {
                 string[] tags = tagsFromINI.Split(',');
@@ -3217,7 +3217,7 @@ namespace NewDarkLoader
             string result = i.getAllTags(emptyTag);
 
             generateTagData(result, globalCatItems, globalCategories);
-            
+
             //for(int x = 0; x < fmTable.Rows.Count; x++)
             //{
             //    string sectionName = cellString(SECTION_NAME, x);
@@ -3303,7 +3303,7 @@ namespace NewDarkLoader
         private void writeTagsToINI(string sectionName, List<catItem> fmTags, string tagKeyName)
         {
             string tagString = tagsToString(fmTags);
-            
+
             if (tagString.Length == 0 && sectionName != secOptions)
                 tagString = emptyTag;
 
@@ -3350,12 +3350,12 @@ namespace NewDarkLoader
         {
             List<string> textFiles = new List<string>();
 
-            if(File.Exists(fmArchivePath + subFolder + "\\" + archiveFilename))
+            if (File.Exists(fmArchivePath + subFolder + "\\" + archiveFilename))
             {
                 SevenZipExtractor ex = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + archiveFilename);
                 foreach (string s in ex.ArchiveFileNames)
                 {
-                    if(readmeRootArchive(s))
+                    if (readmeRootArchive(s))
                         if (readmeExtension(s))
                             textFiles.Add(s);
                 }
@@ -3430,7 +3430,7 @@ namespace NewDarkLoader
                 fm.title = editedData.title;
                 setPlayFMButtonText(editedData.title);
 
-                if (editedData.rating >=0)
+                if (editedData.rating >= 0)
                     i.IniWriteValue(secName, kRating, editedData.rating.ToString());
                 else
                     i.IniWriteValue(secName, kRating, null);
@@ -3549,7 +3549,7 @@ namespace NewDarkLoader
         {
             setHTMLReadmeSizeLoc();
 
-#region Set TableLayoutPanel Sizes
+            #region Set TableLayoutPanel Sizes
             if (!fullReadme) //Enlarge
             {
                 fullReadme = true;
@@ -3562,7 +3562,7 @@ namespace NewDarkLoader
                 splitContainer1.SplitterDistance = splCurrentDist;
                 fmTable.Select();
             }
-#endregion
+            #endregion
         }
 
         private void tbFilter_KeyPress(object sender, KeyPressEventArgs e)
@@ -3584,7 +3584,7 @@ namespace NewDarkLoader
             System.Diagnostics.Process.Start(htmlReadmePath);
         }
 
-#region Properties
+        #region Properties
         public string selectedFMName
         {
             get
@@ -3616,7 +3616,7 @@ namespace NewDarkLoader
                 return fmInstalledPath;
             }
         }
-#endregion
+        #endregion
 
         private void btnTools_Click(object sender, EventArgs e)
         {
@@ -3696,7 +3696,7 @@ namespace NewDarkLoader
         /// <param name="fullTagString"></param>
         private void addTag(string fullTagString)
         {
-            if (fullTagString != "" && !fullTagString.StartsWith(":") && !fullTagString.EndsWith(":") && countColons(fullTagString) <=1)
+            if (fullTagString != "" && !fullTagString.StartsWith(":") && !fullTagString.EndsWith(":") && countColons(fullTagString) <= 1)
             {
                 hideTagSelectionList();
                 string[] tagData = fullTagString.Split(':');
@@ -3744,14 +3744,14 @@ namespace NewDarkLoader
             return colons;
         }
 
-#region genre tags
+        #region genre tags
         private void addGenreTag(object senderFromMenu)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)senderFromMenu;
             addTag(genreToolStripMenuItem.Text + menuItem.Text);
         }
 
-        
+
         private void actionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             addGenreTag(sender);
@@ -3776,15 +3776,15 @@ namespace NewDarkLoader
         {
             addGenreTag(sender);
         }
-#endregion
+        #endregion
 
-#region language tags
+        #region language tags
         private void customToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             addCustomTag(languageToolStripMenuItem.Text);
         }
 
-        
+
         private void addLanguageTag(object senderFromMenu)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)senderFromMenu;
@@ -3846,9 +3846,9 @@ namespace NewDarkLoader
         {
             addLanguageTag(sender);
         }
-#endregion
+        #endregion
 
-#region simple tags
+        #region simple tags
         private void addSimpleTag(object senderFromMenu)
         {
             ToolStripMenuItem mItem = (ToolStripMenuItem)senderFromMenu;
@@ -3879,7 +3879,7 @@ namespace NewDarkLoader
         {
             addSimpleTag(sender);
         }
-#endregion
+        #endregion
 
         private void btnRemoveTags_Click(object sender, EventArgs e)
         {
@@ -3940,7 +3940,7 @@ namespace NewDarkLoader
 
         private void btnSetTagFilter_Click(object sender, EventArgs e)
         {
-            TagFilter tFilter = new TagFilter(globalCatItems, globalCategories, includeTags, excludeTags, 
+            TagFilter tFilter = new TagFilter(globalCatItems, globalCategories, includeTags, excludeTags,
                 tagWindowTitle, availTagsText, incTagsText, excTagsText, incBtnText, excBtnText, remBtnText, remAllBtnText,
                 okBtnText, cancBtnText, remAllMessage, confirmBoxMsgTitle, miscTagCat);
 
@@ -3992,14 +3992,14 @@ namespace NewDarkLoader
                 i.IniWriteValue(secOptions, kUnfinishedFilter, null);
 
             //Min date set
-            if(cbMinYear.SelectedIndex != 0 )
-                    i.IniWriteValue(secOptions, kStartDateFilter, (cbMinMonth.SelectedIndex) + "," + cbMinYear.Items[cbMinYear.SelectedIndex]);
+            if (cbMinYear.SelectedIndex != 0)
+                i.IniWriteValue(secOptions, kStartDateFilter, (cbMinMonth.SelectedIndex) + "," + cbMinYear.Items[cbMinYear.SelectedIndex]);
             else
                 i.IniWriteValue(secOptions, kStartDateFilter, null);
 
             //Max date set.
-            if(cbMaxYear.SelectedIndex != 0)
-                i.IniWriteValue(secOptions, kEndDateFilter, (cbMaxMonth.SelectedIndex ) + "," + cbMaxYear.Items[cbMaxYear.SelectedIndex]);
+            if (cbMaxYear.SelectedIndex != 0)
+                i.IniWriteValue(secOptions, kEndDateFilter, (cbMaxMonth.SelectedIndex) + "," + cbMaxYear.Items[cbMaxYear.SelectedIndex]);
             else
                 i.IniWriteValue(secOptions, kEndDateFilter, null);
 
@@ -4032,8 +4032,8 @@ namespace NewDarkLoader
             }
             else if (st == FormWindowState.Normal)
             {
-                i.IniWriteValue(secOptions, kWindowState, 
-                    this.Width + "," + 
+                i.IniWriteValue(secOptions, kWindowState,
+                    this.Width + "," +
                     this.Height + "," +
                     this.Location.X + "," +
                     this.Location.Y);
@@ -4093,7 +4093,7 @@ namespace NewDarkLoader
             }
         }
 
-        private void showTags(bool dontResize=false)
+        private void showTags(bool dontResize = false)
         {
             int bHPos = btnHideTags.Location.X;
             gbTags.Visible = true;
@@ -4293,7 +4293,7 @@ namespace NewDarkLoader
         {
             addTag(tbAddTag.Text);
         }
-        
+
         private void lbTags_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectTag();
@@ -4330,7 +4330,7 @@ namespace NewDarkLoader
 
         //[System.Runtime.InteropServices.DllImport("User32.dll", CharSet = System.Runtime.InteropServices.CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         //private static extern bool MoveWindow(IntPtr hWnd, int x, int y, int w, int h, bool Repaint);
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
 #if screenSize
@@ -4414,13 +4414,13 @@ namespace NewDarkLoader
 
             StringBuilder generate = new StringBuilder();
 
-            if(titleExport != "")
+            if (titleExport != "")
                 generate.AppendLine(kFm_title + "=" + titleExport);
-            if(infoFileExport != "")
+            if (infoFileExport != "")
                 generate.AppendLine(kInfoFile + "=" + infoFileExport);
-            if(relDateExport != "")
+            if (relDateExport != "")
                 generate.AppendLine(kRelease_date + "=" + relDateExport);
-            if(tagsExport != "")
+            if (tagsExport != "")
                 generate.AppendLine(kTags + "=" + tagsExport);
 
             dlgSaveFMINI.InitialDirectory = gamePath;
@@ -4739,21 +4739,21 @@ namespace NewDarkLoader
             DateTime convToDate = DateTime.ParseExact(relDate, dateFormat, null);
 
             int fMonthMin = 1; //Default, Jan
-            if (cbMinMonth.SelectedIndex != 0)            
+            if (cbMinMonth.SelectedIndex != 0)
                 fMonthMin = cbMinMonth.SelectedIndex;
             int fYearMin = 1066;
-            if(cbMinYear.SelectedIndex != 0)
+            if (cbMinYear.SelectedIndex != 0)
                 fYearMin = Convert.ToInt32(cbMinYear.Items[cbMinYear.SelectedIndex]);
-            
+
             DateTime min = new DateTime(fYearMin, fMonthMin, 1);
 
             int fMonthMax = 12;//Default, Dec
-            if(cbMaxMonth.SelectedIndex > 0)
+            if (cbMaxMonth.SelectedIndex > 0)
                 fMonthMax = cbMaxMonth.SelectedIndex;
             int fYearMax = 7510;
-            if(cbMaxYear.SelectedIndex > 0)
+            if (cbMaxYear.SelectedIndex > 0)
                 fYearMax = Convert.ToInt32(cbMaxYear.Items[cbMaxYear.SelectedIndex]);
-            
+
             DateTime max = new DateTime(fYearMax, fMonthMax, DateTime.DaysInMonth(fYearMax, fMonthMax)); //gets the last day
 
             if (convToDate >= min && convToDate <= max)
@@ -5217,7 +5217,7 @@ namespace NewDarkLoader
 
         private void deleteFMFolder(string fmPath)
         {
-            
+
             //clear all read only flags
             foreach (string file in Directory.GetFiles(fmPath, "*.*", SearchOption.AllDirectories))
             {
@@ -5477,7 +5477,7 @@ namespace NewDarkLoader
                     else if (fm1.lastPlayedHex == "" && fm2.lastPlayedHex == "")
                         sortResult = 0;
                     else
-                    { 
+                    {
                         DateTime lp1 = DateIntConverter.dateFromHexString(fm1.lastPlayedHex);
                         DateTime lp2 = DateIntConverter.dateFromHexString(fm2.lastPlayedHex);
                         sortResult = lp1.CompareTo(lp2);
