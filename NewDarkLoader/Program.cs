@@ -40,7 +40,7 @@ namespace NewDarkLoader
             FMSelData = data;
             string fol = "";
             string nomod = "";
-            string fmPath = "";
+            //string fmPath = "";
             int runAfter = 0; //default value
             Thread thd = new Thread(() =>
             {
@@ -57,8 +57,8 @@ namespace NewDarkLoader
 
                 if (dR == DialogResult.OK) //Play FM
                 {
-                    fmPath = nForm.instFMPath;
-                    sRootPath = ASCIIEncoding.ASCII.GetBytes(fmPath + "\0");
+                    //fmPath = nForm.instFMPath;
+                    //sRootPath = ASCIIEncoding.ASCII.GetBytes(fmPath + "\0");
 
                     fol = nForm.selectedFMName;
                     sName = ASCIIEncoding.ASCII.GetBytes(fol + "\0");
@@ -91,7 +91,7 @@ namespace NewDarkLoader
             thd.Start();
             thd.Join();
 
-            Marshal.Copy(sRootPath, 0, FMSelData.sRootPath, sRootPath.Length);
+            //Marshal.Copy(sRootPath, 0, FMSelData.sRootPath, sRootPath.Length);
             Marshal.Copy(sName, 0, FMSelData.sName, sName.Length);
             Marshal.Copy(sModExcludePaths, 0, FMSelData.sModExcludePaths, sModExcludePaths.Length);
             data.bRunAfterGame = runAfter;

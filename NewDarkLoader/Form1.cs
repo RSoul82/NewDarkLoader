@@ -1108,11 +1108,6 @@ namespace NewDarkLoader
             if (gameIsThief3)
             {
                 btnTools.Visible = false;
-                //Does not end with \\
-                //string sneakyOptionsFile = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\Documents\\Thief - Deadly Shadows\\Options\\SneakyOptions.ini";
-
-                //INIFile snOptIni = new INIFile(sneakyOptionsFile);
-                //fmInstalledPath = getStringFromINI("Loader", "InstallPath", StringType.TextWithQuotesRemoved, snOptIni);
                 fmInstalledPath = t3insFMPath;
             }
             else
