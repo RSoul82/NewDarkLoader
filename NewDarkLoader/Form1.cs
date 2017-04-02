@@ -1,4 +1,5 @@
 ﻿//#define screenSize
+#define readmeChoice
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,7 +38,7 @@ namespace NewDarkLoader
         const int DISABLED_MODS = 8;
         const int INSTALLED = 9;
 
-        string dirPath = System.Environment.CurrentDirectory; //No \\ at end
+        string dirPath = Environment.CurrentDirectory; //No \\ at end
         string iniPath = "";
         /// <summary>
         /// Full path of game folder. Does not end with \\
@@ -406,9 +407,7 @@ namespace NewDarkLoader
             restoreShowTagState();
             restoreSortOrder();
             readAllTags();
-            selectLastPlayed();
             loadFilterFromIni();
-
             aprMessages();
         }
         #endregion
@@ -1206,7 +1205,6 @@ namespace NewDarkLoader
 
         private string readLangFromINI()
         {
-            //Logger.LogThisLine("Reading \"Language\" from ini.");
             int langNumber = 1; //Default: english
             string readLang = i.IniReadValue(secOptions, kLanguage);
 
@@ -1216,13 +1214,14 @@ namespace NewDarkLoader
             return LangList.getLanguageList()[langNumber - 1];
         }
 
+        /// <summary>
+        /// Search the fm archive and installed FMs dirs and fill the table. For each found FM, attempt to get values from the ini object (file).
+        /// </summary>
         private void fillFMList()
         {
             foundFMs.Clear();
-            Stopwatch s = new Stopwatch();
 
             #region Archives
-            //s.Start();
             string[] fullPaths = Directory.GetFiles(fmArchivePath, "*.*", SearchOption.AllDirectories);
             for (int x = 0; x < fullPaths.Length; x++)
             {
@@ -1234,13 +1233,9 @@ namespace NewDarkLoader
                 if (!simpleName.ToLower().Contains("fmselbak") && validArchiveExtension(simpleName + extension) && !subFolder.Contains(".fix"))
                     addFMToList(simpleName, subFolder, extension, sectionName, FMType.Archive);
             }
-            //s.Stop();
-            textBox1.AppendText("\r\nScan archives: " + s.ElapsedMilliseconds);
-            s.Reset();
             #endregion
 
             #region look for fms with no archive
-            //s.Start();
             string[] dirs = Directory.GetDirectories(fmInstalledPath);
             for (int x = 0; x < dirs.Length; x++)
             {
@@ -1255,22 +1250,14 @@ namespace NewDarkLoader
                     }
                 }
             }
-            //s.Stop();
-            textBox1.AppendText("\r\nScan dirs: " + s.ElapsedMilliseconds);
-            s.Reset();
 
-            //s.Start();
             fmTable.RowCount = foundFMs.Count;
-            //s.Stop();
-            textBox1.AppendText("\r\nFM table filled: " + s.ElapsedMilliseconds);
 
             #endregion
 
             restoreSortOrder();
 
             fmTable.Select(); //allows uer to immediately use cursor keys to scroll down the table
-
-            //updateAllCellTips();
         }
 
         /// <summary>
@@ -1717,13 +1704,20 @@ namespace NewDarkLoader
             //Look for niceName in ini file
             string niceName = i.IniReadValue(sectionName, kFm_title);
 
-            if (!gameIsThief3)
+            if (gameIsThief3)
+            {
+                foundName = getT3FMTitle(simpleFilename, sectionName, fNameWithExt, subFolder);
+            }
+            else
             {
                 extractTitlesStr(subFolder, fNameWithExt);
 
                 string foundTitle = "";
 
-                if (niceName != "" && !overwriteTitle) foundName = niceName;
+                if (niceName != "" && !overwriteTitle)
+                {
+                    foundName = niceName;
+                }
                 else
                 {
                     if (File.Exists(titlesStr))
@@ -1742,93 +1736,89 @@ namespace NewDarkLoader
                 }
                 else foundName = foundTitle;
             }
-            else
-            {
-                foundName = getT3FMTitle(simpleFilename, sectionName, fNameWithExt, subFolder);
-            }
 
             return foundName;
         }
 
-        private string getT3FMTitle(string simpleFilename, string sectionName, string fNameWithExt, string subFolder)
-        {
-            return "Something";
-        }
-
         //private string getT3FMTitle(string simpleFilename, string sectionName, string fNameWithExt, string subFolder)
         //{
-        //    SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + fNameWithExt);
-
-        //    //FM ini already looked for
-        //    //NDL ini already looked in
-        //    //Look for GLML file and GLTITLE tags
-        //    //Extract glml file
-        //    string foundTitle = "";
-        //    string glFile = userTempFolder + "readme.glml";
-        //    bool found = false;
-        //    for (int x = 0; x < ext.ArchiveFileNames.Count; x++ )
-        //    {
-        //        if (ext.ArchiveFileNames[x].ToLower().EndsWith(".glml"))
-        //        {
-        //            if (sevenZipGExe == "")
-        //            {
-        //                FileStream glFS = new FileStream(glFile, FileMode.Create);
-        //                ext.ExtractFile(x, glFS);
-        //                glFS.Close();
-        //            }
-        //            else
-        //            {
-        //                SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, fNameWithExt, userTempFolder, ext.ArchiveFileNames[x], false);
-        //                //Filename coulde be "folder\\something.glml" or just something.glml
-        //                string[] fNameSplit = ext.ArchiveFileNames[x].Split('\\');
-        //                string basicFilename = fNameSplit[fNameSplit.Length - 1]; //get the last part, even if there's only 1 element.
-        //                glFile = userTempFolder + basicFilename;
-        //            }
-
-        //            //read the glml file to find the GLTITLe tags
-        //            string[] fileLines = File.ReadAllLines(glFile);
-        //            foreach (string line in fileLines)
-        //            {
-        //                if (line.Contains("GLTITLE"))
-        //                {
-        //                    foundTitle = extractString(line, "GLTITLE");
-        //                    found = true;
-        //                    break;
-        //                }
-        //                else if (line.Contains("gltitle"))
-        //                {
-        //                    foundTitle = extractString(line, "gltitle");
-        //                    found = true; 
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //        if (found) break;
-        //    }
-
-        //    if (!found) //look in each text file if title was not found in glml, or glml did not exist
-        //    {
-        //        string infoFile = i.IniReadValue(sectionName, kInfoFile);
-        //        for (int x = 0; x < ext.ArchiveFileNames.Count; x++)
-        //        {
-        //            if(infoFile != "") //start by looking in the specified InfoFile (saves time when there are multiple texts)
-        //            {
-        //                if (ext.ArchiveFileNames[x] == infoFile)
-        //                {
-        //                    foundTitle = getTitleFromText(ext, fNameWithExt, x, sectionName);
-        //                    break;
-        //                }
-        //            }
-        //            else if (textFile(ext.ArchiveFileNames[x])) //If no InfoFile specified, look through each text file.
-        //            {
-        //                foundTitle = getTitleFromText(ext, fNameWithExt, x, sectionName);
-        //                break;
-        //            }
-        //        }
-        //    }
-
-        //    return foundTitle;
+        //    return "Something";
         //}
+
+        private string getT3FMTitle(string simpleFilename, string sectionName, string fNameWithExt, string subFolder)
+        {
+            SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + fNameWithExt);
+
+            //FM ini already looked for
+            //NDL ini already looked in
+            //Look for GLML file and GLTITLE tags
+            //Extract glml file
+            string foundTitle = "";
+            string glFile = userTempFolder + "readme.glml";
+            bool found = false;
+            for (int x = 0; x < ext.ArchiveFileNames.Count; x++)
+            {
+                if (ext.ArchiveFileNames[x].ToLower().EndsWith(".glml"))
+                {
+                    if (sevenZipGExe == "")
+                    {
+                        FileStream glFS = new FileStream(glFile, FileMode.Create);
+                        ext.ExtractFile(x, glFS);
+                        glFS.Close();
+                    }
+                    else
+                    {
+                        SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, fNameWithExt, userTempFolder, ext.ArchiveFileNames[x], false);
+                        //Filename coulde be "folder\\something.glml" or just something.glml
+                        string[] fNameSplit = ext.ArchiveFileNames[x].Split('\\');
+                        string basicFilename = fNameSplit[fNameSplit.Length - 1]; //get the last part, even if there's only 1 element.
+                        glFile = userTempFolder + basicFilename;
+                    }
+
+                    //read the glml file to find the GLTITLe tags
+                    string[] fileLines = File.ReadAllLines(glFile);
+                    foreach (string line in fileLines)
+                    {
+                        if (line.Contains("GLTITLE"))
+                        {
+                            foundTitle = extractString(line, "GLTITLE");
+                            found = true;
+                            break;
+                        }
+                        else if (line.Contains("gltitle"))
+                        {
+                            foundTitle = extractString(line, "gltitle");
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (found) break;
+            }
+
+            if (!found) //look in each text file if title was not found in glml, or glml did not exist
+            {
+                string infoFile = i.IniReadValue(sectionName, kInfoFile);
+                for (int x = 0; x < ext.ArchiveFileNames.Count; x++)
+                {
+                    if (infoFile != "") //start by looking in the specified InfoFile (saves time when there are multiple texts)
+                    {
+                        if (ext.ArchiveFileNames[x] == infoFile)
+                        {
+                            foundTitle = getTitleFromText(ext, fNameWithExt, x, sectionName);
+                            break;
+                        }
+                    }
+                    else if (textFile(ext.ArchiveFileNames[x])) //If no InfoFile specified, look through each text file.
+                    {
+                        foundTitle = getTitleFromText(ext, fNameWithExt, x, sectionName);
+                        break;
+                    }
+                }
+            }
+
+            return foundTitle;
+        }
 
         private bool textFile(string pathInArchive)
         {
@@ -2187,6 +2177,11 @@ namespace NewDarkLoader
             return result;
         }
 
+        /// <summary>
+        /// True if the file is in the correct location for a readme. Dark Engine: The root dir only (not in \hints or \lootlist etc. T3: something like \Fan Mission Extras.
+        /// </summary>
+        /// <param name="filePathInArchive">File path/name exactly as it's listed in the archive.</param>
+        /// <returns></returns>
         private bool readmeRootArchive(string filePathInArchive)
         {
             bool correctRoot = false;
@@ -2285,7 +2280,7 @@ namespace NewDarkLoader
         }
 
         /// <summary>
-        /// Extract named file. If "", extracts the first rtf, or the first txt file it finds, to the user's temp folder.
+        /// Extract named file and use modified date to set release date.
         /// Sets 'readmePath'. Also sets 'releaseDate' in case that's needed later.
         /// </summary>
         /// <param name="archive">Filename with extension. Path relative to fmArchivePath.</param>
@@ -2303,57 +2298,34 @@ namespace NewDarkLoader
                 System.Collections.ObjectModel.ReadOnlyCollection<string> archFiles = new System.Collections.ObjectModel.ReadOnlyCollection<string>(fnames);
                 archFiles = ext.ArchiveFileNames;
 
-                List<ReadmeFileData> textFiles = new List<ReadmeFileData>();
-                List<ReadmeFileData> rtfFiles = new List<ReadmeFileData>();
-                List<ReadmeFileData> htmlFiles = new List<ReadmeFileData>();
-
+                //Stores the indices of files to be extracted (htmls may require multiple files)
                 List<int> vldFiles = new List<int>();
-
-                int fileIndex = -1;
-                foreach (string s in archFiles)
-                {
-                    fileIndex++;
-                    ReadmeFileData data = new ReadmeFileData();
-                    if (readmeRootArchive(s) && readmeExtension(s)) //don't allow files within other folders
-                    {
-                        //Store data of all possible readmes, or a specifically named readme.
-                        if (readmeFilename == "" || s.ToLower().EndsWith(readmeFilename.ToLower()))
-                            data = storeReadmeData(ext, textFiles, rtfFiles, htmlFiles, fileIndex, s);
-                    }
-                }
-
-                string fName = ""; //filename of readme, no path.
+                string fName = ""; //Filename of readme, no path. Stored in ini file.
                 bool html = false;
 
-                if (rtfFiles.Count != 0)
+                int fileIndex = -1;
+                if (readmeFilename != "") //If a readme was specified, set the readme path and release date.
                 {
-                    fName = rtfFiles[0].fileName;
-                    releaseDate = rtfFiles[0].lastModified;
-                    vldFiles.Add(rtfFiles[0].index);
-                }
-                else if (textFiles.Count != 0)
-                {
-                    fName = textFiles[0].fileName;
-                    releaseDate = textFiles[0].lastModified;
-                    vldFiles.Add(textFiles[0].index);
-                }
-                else if (htmlFiles.Count != 0)
-                {
-                    fName = htmlFiles[0].fileName;
-                    releaseDate = htmlFiles[0].lastModified;
-                    htmlReadmePath = userTempFolder + fName;
-                    vldFiles.Add(htmlFiles[0].index);
-                    html = true;
-                    webBrowser1.Url = null;
-                }
-                else
-                {
-                    FileInfo fI = new FileInfo(fmArchivePath + subFolder + "\\" + archive);
-                    releaseDate = fI.LastWriteTime;
-                    goto noreadme;
-                }
+                    foreach (string s in archFiles)
+                    {
+                        fileIndex++;
+                        if (s == readmeFilename)
+                        {
+                            fName = ext.ArchiveFileNames[fileIndex];
+                            readmePath = userTempFolder + fName;
+                            releaseDate = ext.ArchiveFileData[fileIndex].LastWriteTime;
+                            vldFiles.Add(fileIndex);
+                            break;
+                        }
+                    }
 
-                string fullName = userTempFolder + fName;
+                    if (fName.ToLower().EndsWith(".html") || fName.ToLower().EndsWith(".htm"))
+                    {
+                        htmlReadmePath = userTempFolder + fName;
+                        html = true;
+                        webBrowser1.Url = null;
+                    }
+                }
 
                 //Store the InfoFile name in NDL.ini
                 if (sectionName != "")
@@ -2370,13 +2342,6 @@ namespace NewDarkLoader
                     if (exitCode != 0)
                         extractReadmeInternal(ext, vldFiles, html);
                 }
-
-                //Set full path of readme file (in temp folder)
-                readmePath = fullName;
-                return;
-
-            noreadme:
-                dummyReadme();
             }
         }
 
@@ -2502,13 +2467,6 @@ namespace NewDarkLoader
             File.WriteAllText(readmePath, noReadme);
         }
 
-        struct ReadmeFileData
-        {
-            public int index;
-            public string fileName;
-            public DateTime lastModified;
-        }
-
         private DateTime getLastWriteTime(SevenZipExtractor ext, int fileIndex)
         {
             return ext.ArchiveFileData[fileIndex].LastWriteTime;
@@ -2520,33 +2478,36 @@ namespace NewDarkLoader
         /// <param name="deleteAfterShowing">True if file was extracted from archive. False if read from dir.</param>
         private void showReadme(bool deleteAfterShowing)
         {
-            if (readmePath.ToLower().EndsWith(".htm") || readmePath.ToLower().EndsWith(".html"))
+            if (File.Exists(readmePath))
             {
-                webBrowser1.BringToFront();
-                webBrowser1.Url = new Uri("file:///" + readmePath);
-                btnShowInBrowser.BringToFront(); //Main form, not browser
+                if (readmePath.ToLower().EndsWith(".htm") || readmePath.ToLower().EndsWith(".html"))
+                {
+                    webBrowser1.BringToFront();
+                    webBrowser1.Url = new Uri("file:///" + readmePath);
+                    btnShowInBrowser.BringToFront(); //Main form, not browser
+                }
+                else if (readmePath.ToLower().EndsWith(".txt") || readmePath.ToLower().EndsWith(".rtf"))
+                {
+                    string[] fLines = File.ReadAllLines(readmePath);
+                    if (fileIsRTF(fLines))
+                        readmeFileType = RichTextBoxStreamType.RichText;
+                    else
+                        readmeFileType = RichTextBoxStreamType.PlainText;
+
+                    readmeBox.BringToFront();
+                    readmeBox.LoadFile(readmePath, readmeFileType);
+                    btnShowInBrowser.SendToBack();
+
+                    readmeBox.ScrollToCaret();
+
+                    if (deleteAfterShowing && File.Exists(readmePath))
+                        FullDelete.DeleteFile(readmePath);
+
+                    //Deletes any possible html readme from the **previous** FM -i.e. triggered by selecting another FM
+                    deleteHTMLReadme();
+                }
+                btnFullScreenReadme.BringToFront();
             }
-            else if (readmePath.ToLower().EndsWith(".txt") || readmePath.ToLower().EndsWith(".rtf"))
-            {
-                string[] fLines = File.ReadAllLines(readmePath);
-                if (fileIsRTF(fLines))
-                    readmeFileType = RichTextBoxStreamType.RichText;
-                else
-                    readmeFileType = RichTextBoxStreamType.PlainText;
-
-                readmeBox.BringToFront();
-                readmeBox.LoadFile(readmePath, readmeFileType);
-                btnShowInBrowser.SendToBack();
-
-                readmeBox.ScrollToCaret();
-
-                if (deleteAfterShowing)
-                    FullDelete.DeleteFile(readmePath);
-
-                //Deletes any possible html readme from the **previous** FM -i.e. triggered by selecting another FM
-                deleteHTMLReadme();
-            }
-            btnFullScreenReadme.BringToFront();
         }
 
         /// <summary>
@@ -2590,7 +2551,7 @@ namespace NewDarkLoader
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(e.LinkText);
+            Process.Start(e.LinkText);
         }
 
         private class fmIniData
@@ -2725,7 +2686,7 @@ namespace NewDarkLoader
                     selFMID = row.Index;
                 }
 
-                getFMDetails(selFMID, false);
+                getFMDetails(selFMID, false, true);
 
                 Cursor = Cursors.Default;
             }
@@ -2785,13 +2746,95 @@ namespace NewDarkLoader
         }
 
         /// <summary>
+        /// Returns a list of all possible readme filenames within the archive/folder.
+        /// </summary>
+        /// <param name="subFolder">Read from table.</param>
+        /// <param name="selArchive">Read from table.</param>
+        /// <param name="isArchive"></param>
+        /// <returns></returns>
+        private List<string> getPossibleReadmes(string subFolder, string selArchive, bool isArchive)
+        {
+            List<string> possibleReadmes = new List<string>();
+            if (isArchive)
+            {
+                SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + selArchive);
+
+                List<string> fnames = new List<string>();
+                System.Collections.ObjectModel.ReadOnlyCollection<string> archFiles = new System.Collections.ObjectModel.ReadOnlyCollection<string>(fnames);
+                archFiles = ext.ArchiveFileNames;
+
+                foreach (string s in archFiles)
+                {
+                    if (readmeRootArchive(s) && readmeExtension(s))
+                    {
+                        possibleReadmes.Add(s);
+                    }
+                }
+            }
+            else //if folder only
+            {
+                string[] allFiles = Directory.GetFiles(fmInstalledPath + "\\" + subFolder + selArchive, "*.*", SearchOption.AllDirectories);
+
+                foreach(string s in allFiles)
+                {
+                    if(readmeRootDir(s, fmInstalledPath) && readmeExtension(s))
+                    {
+                        possibleReadmes.Add(s);
+                    }
+                }
+            }
+
+            possibleReadmes.Sort(CompareReadmes);
+
+            return possibleReadmes;
+        }
+
+        /// <summary>
+        /// Sorts a file list by rtf, then txt, then htm/html, in that order. When two extensions are the same, files are sorted by simple string comparison.
+        /// </summary>
+        /// <param name="s1">First filename.</param>
+        /// <param name="s2">Second filename.</param>
+        /// <returns></returns>
+        private int CompareReadmes(string s1, string s2)
+        {
+            int s1Rank = extensionRank(s1);
+            int s2Rank = extensionRank(s2);
+
+            if (s1Rank.CompareTo(s2Rank) != 0)
+                return (s1Rank.CompareTo(s2Rank));
+            else
+                return (s1.CompareTo(s2));
+        }
+
+        /// <summary>
+        /// Converts a file extension to a number, for readme sorting.
+        /// </summary>
+        /// <param name="ext">Filename entry from folder or archive</param>
+        /// <returns></returns>
+        private int extensionRank(string filename)
+        {
+            string ext = Path.GetExtension(filename);
+
+            switch (ext)
+            {
+                case ".rtf":
+                    return 1;
+                case ".txt":
+                    return 2;
+                default: //.html or .html
+                    return 3;
+            }
+        }
+
+        /// <summary>
         /// Fill in the row of the currently selected FM. Archive is read if no value found in ini.
         /// </summary>
         /// <param name="currentFMID">Index of selected row.</param>
         /// <param name="showThisFM">True if this method is called by changing the selcted row (show readme, tags etc).
         /// False if just updating the table.</param>
         /// <param name="overwriteData"></param>
-        private void getFMDetails(int currentFMID, bool overwriteData)
+        /// <param name="withUserSelection">True if this is responding the the user selecting it. Allows a readme choice to be made.</param>
+        private void getFMDetails(int currentFMID, bool overwriteData, bool withUserSelection = false)
         {
             FanMission selFM = foundFMs[currentFMID];
             string selArchive = selFM.archive;
@@ -2806,21 +2849,54 @@ namespace NewDarkLoader
                 if (selFM.archiveOrDirectory == FMType.Archive)
                     fmIsArchive = true;
 
+                string infoFileFromINI = i.IniReadValue(sectionName, kInfoFile); //read the value from the file.
+
+                //If the user changes the selection and no readme file has been chosen
+                List<string> possibleReadmes = new List<string>();
+                if (withUserSelection && infoFileFromINI == "")
+                {
+                    possibleReadmes = getPossibleReadmes(subFolder, selArchive, fmIsArchive);
+#if readmeChoice
+                    if (possibleReadmes.Count > 1) //give user a choice if there are multiple possible readmes
+                    {
+                        ReadmeSelect rSel = new ReadmeSelect(possibleReadmes);
+                        rSel.TopMost = false;
+                        rSel.ShowDialog();
+
+                        infoFileFromINI = rSel.SelectedReadme;
+                    }
+                    else if (possibleReadmes.Count == 1)
+                    {
+                        infoFileFromINI = possibleReadmes[0];
+                    }
+#else
+                    if (possibleReadmes.Count != 1)
+                    {
+                        infoFileFromINI = possibleReadmes[0]; //original behaviour - first rtf, first txt, or first html
+                    }
+#endif
+                    else
+                    {
+                        dummyReadme();
+                        FileInfo fI = new FileInfo(fmArchivePath + subFolder + "\\" + selArchive);
+                        releaseDate = fI.LastWriteTime;
+                    }
+                }
+
                 //Readme always needs to be scanned/extracted for display in the window
                 if (fmIsArchive)
                 {
                     if (subFolder != "") subFolder += "\\";
-                    extractReadme(subFolder, selArchive, i.IniReadValue(sectionName, kInfoFile), sectionName);
+                    extractReadme(subFolder, selArchive, infoFileFromINI, sectionName);
                 }
                 else
-                    scanReadme(fmInstalledPath + "\\" + selArchive, i.IniReadValue(sectionName, kInfoFile), sectionName);
+                    scanReadme(fmInstalledPath + "\\" + selArchive, infoFileFromINI, sectionName);
 
-                string infoFileFromINI = i.IniReadValue(sectionName, kInfoFile);
                 string titleFromINI = i.IniReadValue(sectionName, kFm_title);
                 string tagsFromINI = i.IniReadValue(sectionName, kTags);
                 string releaseDateFromINI = i.IniReadValue(sectionName, kRelease_date);
 
-                #region Get or update values by looking in the ini or the archive/folder
+#region Get or update values by looking in the ini or the archive/folder
                 if (overwriteData || infoFileFromINI == "" || titleFromINI == "" || releaseDateFromINI == "" || tagsFromINI == "")
                 {
                     fmIniData fmIni = null;
@@ -2829,7 +2905,7 @@ namespace NewDarkLoader
                         fmIni = extractFMini(subFolder, selArchive); //Only do this if a value is missing, or user is re-scanning
                     else
                         fmIni = readFMini(selArchive);//Only do this if a value is missing, or user is re-scanning
-                    #region If fm.ini exists
+#region If fm.ini exists
                     if (fmIni != null) //Use any values found to update the table/ini file
                     {
                         if (fmIni.infoFile != null && fmIni.infoFile != "")
@@ -2888,7 +2964,7 @@ namespace NewDarkLoader
                                 i.IniWriteValue(sectionName, kTags, emptyTag);
                         }
                     }
-                    #endregion
+#endregion
                     else // or fm.ini is null
                     {
                         if (overwriteData || titleFromINI == "" || releaseDateFromINI == "") //If title or date are missing or re-scanning
@@ -2922,7 +2998,7 @@ namespace NewDarkLoader
                     string dString = DateIntConverter.dateStringFromHexString(releaseDateFromINI, dateFormat);
                     selFM.relDateString = dString;
                 }
-                #endregion
+#endregion
 
                 //get last played
                 string lastPlayedFromINI = i.IniReadValue(sectionName, kLast_played);
@@ -3435,7 +3511,7 @@ namespace NewDarkLoader
                 if (editedData.finished == 0)
                 {
                     i.IniWriteValue(secName, kFinished, null); //clear it
-                    fm.imgFinished = NewDarkLoader.Properties.Resources.blank;
+                    fm.imgFinished = Properties.Resources.blank;
                 }
                 else
                 {
@@ -3545,7 +3621,7 @@ namespace NewDarkLoader
         {
             setHTMLReadmeSizeLoc();
 
-            #region Set TableLayoutPanel Sizes
+#region Set TableLayoutPanel Sizes
             if (!fullReadme) //Enlarge
             {
                 fullReadme = true;
@@ -3558,7 +3634,7 @@ namespace NewDarkLoader
                 splitContainer1.SplitterDistance = splCurrentDist;
                 fmTable.Select();
             }
-            #endregion
+#endregion
         }
 
         private void tbFilter_KeyPress(object sender, KeyPressEventArgs e)
@@ -3580,7 +3656,7 @@ namespace NewDarkLoader
             System.Diagnostics.Process.Start(htmlReadmePath);
         }
 
-        #region Properties
+#region Properties
         public string selectedFMName
         {
             get
@@ -3612,7 +3688,7 @@ namespace NewDarkLoader
                 return fmInstalledPath;
             }
         }
-        #endregion
+#endregion
 
         private void btnTools_Click(object sender, EventArgs e)
         {
@@ -3740,7 +3816,7 @@ namespace NewDarkLoader
             return colons;
         }
 
-        #region genre tags
+#region genre tags
         private void addGenreTag(object senderFromMenu)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)senderFromMenu;
@@ -3772,9 +3848,9 @@ namespace NewDarkLoader
         {
             addGenreTag(sender);
         }
-        #endregion
+#endregion
 
-        #region language tags
+#region language tags
         private void customToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             addCustomTag(languageToolStripMenuItem.Text);
@@ -3842,9 +3918,9 @@ namespace NewDarkLoader
         {
             addLanguageTag(sender);
         }
-        #endregion
+#endregion
 
-        #region simple tags
+#region simple tags
         private void addSimpleTag(object senderFromMenu)
         {
             ToolStripMenuItem mItem = (ToolStripMenuItem)senderFromMenu;
@@ -3875,7 +3951,7 @@ namespace NewDarkLoader
         {
             addSimpleTag(sender);
         }
-        #endregion
+#endregion
 
         private void btnRemoveTags_Click(object sender, EventArgs e)
         {
@@ -4324,17 +4400,14 @@ namespace NewDarkLoader
             tagPresetToolStripMenuItem.ShowDropDown();
         }
 
-        //[System.Runtime.InteropServices.DllImport("User32.dll", CharSet = System.Runtime.InteropServices.CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        //private static extern bool MoveWindow(IntPtr hWnd, int x, int y, int w, int h, bool Repaint);
-
         private void Form1_Load(object sender, EventArgs e)
         {
 #if screenSize
             this.MaximumSize = new Size(5000, 5000);
             bool Result = MoveWindow(this.Handle, this.Left, this.Top, 1980, 1080, true);
 #endif
-
             splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
+            selectLastPlayed();
         }
 
         private void btnWebSearch_Click(object sender, EventArgs e)
@@ -4889,16 +4962,16 @@ namespace NewDarkLoader
             if (!Directory.Exists(extractToPath))
                 Directory.CreateDirectory(extractToPath);
 
-            #region SevenZipSharp code
+#region SevenZipSharp code
             //Extract FM
             SevenZipExtractor fmExtract = new SevenZipExtractor(archiveFullPath);
             fmExtract.Extracting += new EventHandler<ProgressEventArgs>(extracting);
             fmExtract.ExtractionFinished += new EventHandler<EventArgs>(extFMFinished);
             fmExtract.BeginExtractArchive(extractToPath); //async method
-            #endregion
+#endregion
         }
 
-        #region Event handlers for internal 7z extraction
+#region Event handlers for internal 7z extraction
         private void extracting(object sender, ProgressEventArgs e)
         {
             byte b = e.PercentDone;
@@ -4939,7 +5012,7 @@ namespace NewDarkLoader
         {
             checkForFixes();
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Checks for the existence of missflag.str, then looks for FM fixes (e.g. dmls) Then plays FM is user has chosen to.
@@ -5262,7 +5335,7 @@ namespace NewDarkLoader
             deleteHTMLReadme();
             mainButtonClicked = true;
             this.DialogResult = DialogResult.Abort;
-            this.Close();
+            Close();
         }
 
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
@@ -5552,6 +5625,13 @@ namespace NewDarkLoader
             }
             return newTitle.ToString().Trim() + ", " + allWords[0];
         }
+    }
+
+    public struct ReadmeFileData
+    {
+        public int index;
+        public string fileName;
+        public DateTime lastModified;
     }
 
     public class SortArchive : IComparer<FanMission>

@@ -66,7 +66,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnHideTags = new System.Windows.Forms.Button();
             this.gbTags = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnTagPresets = new System.Windows.Forms.Button();
             this.lbTags = new System.Windows.Forms.ListBox();
             this.lblFMTags = new System.Windows.Forms.Label();
@@ -1487,7 +1486,6 @@
             // gbTags
             // 
             resources.ApplyResources(this.gbTags, "gbTags");
-            this.gbTags.Controls.Add(this.textBox1);
             this.gbTags.Controls.Add(this.btnTagPresets);
             this.gbTags.Controls.Add(this.lbTags);
             this.gbTags.Controls.Add(this.lblFMTags);
@@ -1499,11 +1497,6 @@
             this.gbTags.Controls.Add(this.menuTags);
             this.gbTags.Name = "gbTags";
             this.gbTags.TabStop = false;
-            // 
-            // textBox1
-            // 
-            resources.ApplyResources(this.textBox1, "textBox1");
-            this.textBox1.Name = "textBox1";
             // 
             // btnTagPresets
             // 
@@ -2030,7 +2023,6 @@
         private System.Windows.Forms.ToolStripMenuItem generateFMiniToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog dlgSaveFMINI;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArchiveOrDir;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArchiveSize;
