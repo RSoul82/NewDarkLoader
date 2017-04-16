@@ -18,8 +18,7 @@ namespace NewDarkLoader
         /// <param name="tempPath">User's temp path. Ends with \\</param>
         /// <param name="archiveNames">Filenames of FM archives, extension, no path.</param>
         /// <param name="archiveExts">List of valid FM archive extensions, initially read from the .ini file.</param>
-        public Tools(string gameFullPath, string fmArchiveFullPath, string sevenZipGExePath, string tempPath, List<DarkLoaderFMData> dataList, newKeyNames keyNames, INIFile ndlINI, List<string> archiveExts, string windowTitle, string gamePathText, string saveImportText, string dataImportText, string closeText,
-            string ovTitle, string ovWarn1, string ovWarn2, string ovWarn3, string ovWarn4, string ovWarn5, string ovWarn6, string yesBtn, string yesToAllBtn, string noBtn, string noToAllBtn, bool gameIsShock2)
+        public Tools(string gameFullPath, string fmArchiveFullPath, string sevenZipGExePath, string tempPath, List<DarkLoaderFMData> dataList, newKeyNames keyNames, INIFile ndlINI, INIFile langIni, List<string> archiveExts, bool gameIsShock2)
         {
             InitializeComponent();
             gamePath = gameFullPath;
@@ -33,25 +32,31 @@ namespace NewDarkLoader
 
             nKeys = keyNames;
 
-            Text = windowTitle;
-            label1.Text = gamePathText;
-            lblGamePath.Text = gamePath;
-            btnImportSaves.Text = saveImportText;
-            btnImportINI.Text = dataImportText;
-            btnClose.Text = closeText;
+            if (langIni != null)
+            {
+                string secOldDLTools = "OldDarkloaderTools";
+                string secSaveImport = "DLSaveImport";
 
-            overWarnTitle = ovTitle;
-            overMsg1 = ovWarn1;
-            overMsg2 = ovWarn2;
-            overMsg3 = ovWarn3;
-            overMsg4 = ovWarn4;
-            overMsg5 = ovWarn5;
-            overMsg6 = ovWarn6;
-            yBtn = yesBtn;
-            yToAllBtn = yesToAllBtn;
-            nBtn = noBtn;
-            nToAllBtn = noToAllBtn;
-            shock2 = gameIsShock2;
+                Text = langIni.IniReadValue(secOldDLTools, "DLToolsTitle");
+                label1.Text = langIni.IniReadValue(secOldDLTools, "GamePath");
+                lblGamePath.Text = gamePath;
+                btnImportSaves.Text = langIni.IniReadValue(secOldDLTools, "ImportDLSaves");
+                btnImportINI.Text = langIni.IniReadValue(secOldDLTools, "ImportDLFMData");
+                btnClose.Text = langIni.IniReadValue(secOldDLTools, "DLToolsClose");
+
+                overWarnTitle = langIni.IniReadValue(secSaveImport, "OverwriteTitle");
+                overMsg1 = langIni.IniReadValue(secSaveImport, "OverwriteLn1");
+                overMsg2 = langIni.IniReadValue(secSaveImport, "OverwriteLn2");
+                overMsg3 = langIni.IniReadValue(secSaveImport, "OverwriteLn3");
+                overMsg4 = langIni.IniReadValue(secSaveImport, "OverwriteLn4");
+                overMsg5 = langIni.IniReadValue(secSaveImport, "OverwriteLn5");
+                overMsg6 = langIni.IniReadValue(secSaveImport, "OverwriteLn6");
+                yBtn = langIni.IniReadValue(secSaveImport, "Yes");
+                yToAllBtn = langIni.IniReadValue(secSaveImport, "YesToAll");
+                nBtn = langIni.IniReadValue(secSaveImport, "No");
+                nToAllBtn = langIni.IniReadValue(secSaveImport, "NoToAll");
+                shock2 = gameIsShock2;
+            }
 
             newINI = ndlINI;
         }

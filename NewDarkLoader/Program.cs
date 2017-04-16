@@ -20,10 +20,10 @@ namespace NewDarkLoader
             Application.SetCompatibleTextRenderingDefault(false);
             //T2 path hardcoded for testing
             //Application.Run(new Form1("C:\\Games\\ThiefG\\ThiefG.exe", false, "Thief Gold", ""));
-            //Application.Run(new Form1("C:\\Games\\Thief2\\thief2.exe", false, "Thief 2", ""));//, 0));
+            Application.Run(new Form1("C:\\Games\\Thief2\\thief2.exe", false, "Thief 2", ""));//, 0));
             //Application.Run(new Form1("C:\\Games\\Thief2\\Dromed.exe", false, "Dromed, """));
             //Application.Run(new Form1("C:\\Games\\ThiefG\\Dromed.exe", false, "Dromed, """));
-            Application.Run(new Form1("C:\\Games\\Thief - Deadly Shadows\\System\\Thief3.exe", false, "Thief 3", "C:\\ProgramData\\Thief 3 Sneaky Upgrade\\Installed FMs"));
+            //Application.Run(new Form1("C:\\Games\\Thief - Deadly Shadows\\System\\Thief3.exe", false, "Thief 3", "C:\\ProgramData\\Thief 3 Sneaky Upgrade\\Installed FMs"));
             //Application.Run(new Form2()); //Used for testing things without cluttering the main form
         }
 
@@ -40,10 +40,13 @@ namespace NewDarkLoader
             FMSelData = data;
             string fol = "";
             string nomod = "";
-            //string fmPath = "";
+
+            byte[] bLang = new byte[256];
+
             int runAfter = 0; //default value
+
             Thread thd = new Thread(() =>
-            {
+            {  
                 //Full path of exe that calls this.
                 string exePath = Process.GetCurrentProcess().MainModule.FileName;
 
@@ -57,9 +60,6 @@ namespace NewDarkLoader
 
                 if (dR == DialogResult.OK) //Play FM
                 {
-                    //fmPath = nForm.instFMPath;
-                    //sRootPath = ASCIIEncoding.ASCII.GetBytes(fmPath + "\0");
-
                     fol = nForm.selectedFMName;
                     sName = ASCIIEncoding.ASCII.GetBytes(fol + "\0");
 
@@ -91,7 +91,6 @@ namespace NewDarkLoader
             thd.Start();
             thd.Join();
 
-            //Marshal.Copy(sRootPath, 0, FMSelData.sRootPath, sRootPath.Length);
             Marshal.Copy(sName, 0, FMSelData.sName, sName.Length);
             Marshal.Copy(sModExcludePaths, 0, FMSelData.sModExcludePaths, sModExcludePaths.Length);
             data.bRunAfterGame = runAfter;

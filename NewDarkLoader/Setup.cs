@@ -7,14 +7,9 @@ namespace NewDarkLoader
 {
     public partial class Setup : Form
     {
-        public Setup(INIFile iniFile, string optionsSecName, string archiveRootKeyName, string languageKeyName,
-            string dateFormatKeyName, string backupTypeKeyName, string sevenZipGKeyName, string noWin7ZKeyName,
-            string returnTypeKeyName, string dcDontAskKeyName,
-            string setupTitle, string fmArchFolderBox, string folderWarning, string installedFMsPath, string browseButton, string langBox, string dateFormatBox,
-            string dmyChk, string mdyChk, string saveBackupBox, string bkTypeAsk, string bkTypeAlways, string dbClFMBox,
-            string dbClChk, string returnAfterBox, string retTypeNeverRdo, string afterFMRdo, string alwaysRdo,
-            string opt7zBox, string help7z1, string help7z2, string use7zeChk1, string use7zeChk2, string okBtnText, string cancBtnText,
-            string folderRequiredMsg, string fldrRequiredMsgTitle, string webSearchSiteBox, string noSiteLabel, string articleLabel, string articleTip, bool sortNoArticles, bool _firstRun)
+        public Setup(INIFile iniFile, INIFile langIni, string optionsSecName, string archiveRootKeyName, string languageKeyName, 
+            string dateFormatKeyName, string backupTypeKeyName, string sevenZipGKeyName, string noWin7ZKeyName, 
+            string returnTypeKeyName, string dcDontAskKeyName, string installedFMsPath, bool sortNoArticles, bool _firstRun)
         {
             InitializeComponent();
 
@@ -37,47 +32,10 @@ namespace NewDarkLoader
             k7zipNoWin = noWin7ZKeyName;
             kDCDontAsk = dcDontAskKeyName;
 
-            Text = setupTitle;
-            gbFMArchive.Text = fmArchFolderBox;
             fmInstalledPath = installedFMsPath;
-            archIsFMsWarning = folderWarning;
-            btnBrArchivePath.Text = browseButton;
-            gbLang.Text = langBox;
-            gbDateFormat.Text = dateFormatBox;
-            rdoDMY.Text = dmyChk;
-            rdoMDY.Text = mdyChk;
-            gbSaveBackup.Text = saveBackupBox;
-            rdoBkAsk.Text = bkTypeAsk;
-            rdoBkAlways.Text = bkTypeAlways;
-            gbDblClick.Text = dbClFMBox;
-            chkDblClickDontAsk.Text = dbClChk;
-            gbReturn.Text = returnAfterBox;
-            rdoRetNever.Text = retTypeNeverRdo;
-            rdoRetAfterFM.Text = afterFMRdo;
-            rdoRetAlways.Text = alwaysRdo;
-            gb7z.Text = opt7zBox;
-            btnBr7zGexe.Text = browseButton;
-            StringBuilder help7zBld = new StringBuilder();
-            help7zBld.AppendLine(help7z1);
-            help7zBld.AppendLine(help7z2);
-            lbl7zHelp.Text = help7zBld.ToString();
-
-            StringBuilder use7zeBld = new StringBuilder();
-            use7zeBld.AppendLine(use7zeChk1);
-            use7zeBld.AppendLine(use7zeChk2);
-            chkUseNoWinExe.Text = use7zeBld.ToString();
-            btnOK.Text = okBtnText;
-            btnCancel.Text = cancBtnText;
-
-            folderRequired = folderRequiredMsg;
-            fldrRequiredTitle = fldrRequiredMsgTitle;
-
-            gbWebSearch.Text = webSearchSiteBox;
-            lblNoSite.Text = noSiteLabel;
-            lblSpecialWords.Text = articleLabel;
-            toolTip1.SetToolTip(tbSpecialWords, articleTip);
             checkBox1.Checked = sortNoArticles;
 
+            readLangINI(langIni);
             readFromINI();
         }
 
@@ -101,6 +59,58 @@ namespace NewDarkLoader
         private string k7zipNoWin = "";
         private string kDCDontAsk = "";
         #endregion
+
+        /// <summary>
+        /// Sets the interface text from the optional language ini file
+        /// </summary>
+        /// <param name="langIni"></param>
+        private void readLangINI(INIFile langIni)
+        {
+            if(langIni != null)
+            {
+                string secSetup = "Setup";
+                Text = langIni.IniReadValue(secSetup, "SetupTitle");
+                gbFMArchive.Text = langIni.IniReadValue(secSetup, "FmArchFolderBox");
+                archIsFMsWarning = langIni.IniReadValue(secSetup, "FolderIsFMsWarning");
+                btnBrArchivePath.Text = langIni.IniReadValue(secSetup, "BrowseButton");
+                gbLang.Text = langIni.IniReadValue(secSetup, "LangBox");
+                gbDateFormat.Text = langIni.IniReadValue(secSetup, "DateFormatBox");
+                rdoDMY.Text = langIni.IniReadValue(secSetup, "DmyChk");
+                rdoMDY.Text = langIni.IniReadValue(secSetup, "MdyChk");
+                gbSaveBackup.Text = langIni.IniReadValue(secSetup, "SaveBackupBox");
+                rdoBkAsk.Text = langIni.IniReadValue(secSetup, "BackupTypeAsk");
+                rdoBkAlways.Text = langIni.IniReadValue(secSetup, "BackupTypeAlways");
+                gbDblClick.Text = langIni.IniReadValue(secSetup, "DblClickFMBox");
+                chkDblClickDontAsk.Text = langIni.IniReadValue(secSetup, "DblClChk");
+                gbReturn.Text = langIni.IniReadValue(secSetup, "ReturnAfterBox");
+                rdoRetNever.Text = langIni.IniReadValue(secSetup, "RetNever");
+                rdoRetAfterFM.Text = langIni.IniReadValue(secSetup, "RetAfterFM");
+                rdoRetAlways.Text = langIni.IniReadValue(secSetup, "RetAlways");
+                gb7z.Text = langIni.IniReadValue(secSetup, "OptLocate7zBox");
+                btnBr7zGexe.Text = langIni.IniReadValue(secSetup, "BrowseButton");
+                StringBuilder help7zBld = new StringBuilder();
+                help7zBld.AppendLine(langIni.IniReadValue(secSetup, "Help7z1"));
+                help7zBld.AppendLine(langIni.IniReadValue(secSetup, "Help7z2"));
+                lbl7zHelp.Text = help7zBld.ToString();
+
+                StringBuilder use7zeBld = new StringBuilder();
+                use7zeBld.AppendLine(langIni.IniReadValue(secSetup, "Use7zeChk1"));
+                use7zeBld.AppendLine(langIni.IniReadValue(secSetup, "Use7zeChk2"));
+                chkUseNoWinExe.Text = use7zeBld.ToString();
+
+                string secTagFilter = "TagFilterWindow"; //this is just done to prevent duplicate button text entries.
+                btnOK.Text = langIni.IniReadValue(secTagFilter, "OK");
+                btnCancel.Text = langIni.IniReadValue(secTagFilter, "Cancel");
+
+                folderRequired = langIni.IniReadValue(secSetup, "FolderRequired");
+                fldrRequiredTitle = langIni.IniReadValue(secSetup, "FldrRequiredTitle");
+
+                gbWebSearch.Text = langIni.IniReadValue(secSetup, "WebSearchSite");
+                lblNoSite.Text = langIni.IniReadValue(secSetup, "NoSiteLabel");
+                lblSpecialWords.Text = langIni.IniReadValue(secSetup, "ArticleLabel");
+                toolTip1.SetToolTip(tbSpecialWords, langIni.IniReadValue(secSetup, "ArticleTip"));
+            }
+        }
 
         private void readFromINI()
         {

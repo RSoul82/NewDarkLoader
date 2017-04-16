@@ -1,5 +1,6 @@
 ﻿//#define screenSize
-#define readmeChoice
+//#define readmeChoice
+#define sameWindow
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -132,55 +133,13 @@ namespace NewDarkLoader
         DateTime releaseDate; //For the DataGridView cell
 
         #region Interface text
-        string setupTitle = "Setup";
-        string fmArchFolderBox = "FM Archive folder (zip, 7z, rar...)";
-        string folderIsFMsWarning = "\"Archive path\" must not also be the \"installed FM path\".";
-        string browseButton = "Browse...";
-        string langBox = "Language";
-        string dateFormatBox = "Date Format";
-        string dmyChk = "Day/Month/Year";
-        string mdyChk = "Month/Day/Year";
-        string saveBackupBox = "Backup Savegames and Screenshots when Uninstalling";
-        string bkTypeAsk = "Ask each time";
-        string bkTypeAlways = "Always make backup";
-        string dbClFMBox = "Double-Click to Play FM";
-        string dbClChk = "Don't ask for confirmation";
-        string returnAfterBox = "Return to NewDarkLoader after Playing";
-        string retTypeNeverRdo = "Never!";
-        string afterFMRdo = "After FM";
-        string alwaysRdo = "Always";
-        string opt7zBox = "Optional: Locate 7zG.exe";
-        //Second browse button
-        string help7z1 = "If you have 7Zip installed, you can locate the \"7zG.exe\" file to imrpove FM installation performance.";
-        string help7z2 = "7zG.exe shows a progress bar. Choose \"7z.exe\" if you want things to be completely hidden.";
-        string use7zeChk1 = "Use \"7z.exe\" for minor operations, e.g. accessing the readme.";
-        string use7zeChk2 = "This creates no window.";
-        string folderRequired = "FM archive folder required.";
-        string errorTitle = "Error";
-        string webSearchSite = "Web Search Target Site";
-        string noSiteLabel = "Type in 0 (zero) to use no site";
-        string articleLabel = "Article list";
-        string articleTip = "If searching on thiefmissions.com, words in this box will go at the end. E.g. Drymian Codex, The";
-
-        //OK/Cancel buttons
-
         //Columns headers and Edit FM labels
-        string readmeLabel = "Readme";
-        string colArchive = "Archive";
-        string colTitle = "Title";
-        string colRating = "Rating";
-        string colFinished = "Finished";
         string diffT3Easy = "Easy";
         string diffNormal = "Normal";
         string diffHard = "Hard";
         string diffExpert = "Expert";
         string diffExtreme = "Extreme";
-        string colReleaseDate = "Release Date";
-        string colLastPlayed = "Last Played";
         string notPlayed = "NotPlayed";
-        string getFromSaves = "Get from savegames";
-        string colComment = "Comment";
-        string colDisabledMods = "Disabled Mods";
         string colInstalled = "Installed";
 
         string noReadme = "No info file. You're on your own!";
@@ -193,7 +152,6 @@ namespace NewDarkLoader
         string scanAllMsg2 = "This may take a while depending on your PC and the number/size of the FMs.";
         string generateINI = "Generate FM.ini...";
 
-        string editFMDetails = "Edit FM Details";
         string forceReinstall1 = "Force this FM to be re-installed?";
         string forceReinstall2 = "Re-install?";
         string cantReinstall1 = "Forced re-installation only possible with 7zip installed and selected in Setup.";
@@ -215,35 +173,8 @@ namespace NewDarkLoader
         string installText = "Install Only";
         string uninstallText = "Uninstall";
 
-        string dlWindowTitle = "Old Darkloader Tools";
-        string dlGamePath = "Game Path:";
-        string dlSavesImport = "Import Darkloader Saves";
-        string dlIniImport = "Import FM data from Darkloader.ini...";
-
-        string overwriteTitle = "Overwrite?";
-        string overwriteLn1 = "Attempting to create";
-        string overwriteLn2 = "This file already exists.";
-        string overwriteLn3 = "File modified date is";
-        string overwriteLn4 = "Darkloader save backup's modified date is";
-        string overwriteLn5 = "Click Yes to replace the new-style backup with the Darkloader backup,";
-        string overwriteLn6 = "or No to keep using it.";
-        string yesBtn = "Yes";
-        string yesToAllBtn = "Yes to all";
-        string noBtn = "No";
-        string noToAllBtn = "No to all";
-
-        string dlClose = "Close";
         string dateMin = "Start Date";
         string dateMax = "End Date";
-        string tagWindowTitle = "Tag Filter";
-        string availTagsText = "Available Tags";
-        string incTagsText = "Include (OR):";
-        string excTagsText = "Exclude (NOT)";
-        string incBtnText = "Include";
-        string excBtnText = "Exclude";
-        string remBtnText = "Remove";
-        string remAllBtnText = "Remove All...";
-        string remAllMessage = "Remove all tags from both lists?";
         string confirmBoxMsgTitle = "Confirm";
         string okBtnText = "OK";
         string cancBtnText = "Cancel";
@@ -251,6 +182,7 @@ namespace NewDarkLoader
         string remTagMsgStart = "Remove";
         string remAllCatMsgStart = "Remove all";
         string remAllCatMsgEnd = "tags";
+        string errorTitle = "Error";
         string tagError1 = "Tag not in right format.";
         string tagError2 = "It should be category:tag or just tag on its own.";
 
@@ -275,6 +207,7 @@ namespace NewDarkLoader
         bool showThisFM = true;
 
         INIFile i;
+        INIFile langIni;
         #endregion
 
         #region Key names
@@ -353,7 +286,7 @@ namespace NewDarkLoader
         /// <param name="fromDLL">'Play Game' actions depend on whether this is called as a normal exe or as a dll.</param>
         /// <param name="gameVersion">sGameVersion obtained from FMSelectorData.</param>
         ///<param name="insPath">Install path, used for Thief 3.</param>
-        public Form1(string exePath, bool fromDLL, string gameVersion, string insPath)
+        public Form1(string exePath, bool fromDLL, string gameVersion, string insPath, string testVar = "")
         {
             InitializeComponent();
             exeFullPath = exePath;
@@ -370,10 +303,10 @@ namespace NewDarkLoader
 
             setHTMLReadmeSizeLoc();
 
-            origReadmeLoc = readmeBox.Location;
+            origReadmeLoc = lbReadmes.Location;
             Size oSize = new Size();
-            oSize.Width = readmeBox.Width;
-            oSize.Height = readmeBox.Height; //This has to be measured at runtime because in VS it's very low.
+            oSize.Width = lbReadmes.Width;
+            oSize.Height = lbReadmes.Height; //This has to be measured at runtime because in VS it's very low.
             origReadmeSize = oSize;
 
             readINIFileToData(insPath);
@@ -409,6 +342,12 @@ namespace NewDarkLoader
             readAllTags();
             loadFilterFromIni();
             aprMessages();
+
+            if (testVar != "")
+            {
+                btnFullScreenReadme.Text = testVar;
+                File.WriteAllText("C:\\users\\robin\\lang.txt", testVar);
+            }
         }
         #endregion
 
@@ -451,7 +390,6 @@ namespace NewDarkLoader
             string langINIPath = fmInstalledPath + "\\" + langNDL + ".ini";
             if (File.Exists(langINIPath))
             {
-                string secSetup = "Setup";
                 string secCols = "Columns";
                 string secRightClick = "RightClick";
                 string secDClickEnter = "DoubleClickEnter";
@@ -460,43 +398,11 @@ namespace NewDarkLoader
                 string secFMTable = "FMTable";
                 string secReadme = "Readme";
                 string secFilter = "Filter";
-                string secTagFilter = "TagFilterWindow";
                 string secTags = "Tags";
-                string secOldDLTools = "OldDarkloaderTools";
-                string secSaveImport = "DLSaveImport";
-                INIFile langIni = new INIFile(langINIPath);
+                langIni = new INIFile(langINIPath);
 
                 #region Get text from lang.ini
-                //Setup window
-                setupTitle = langIni.IniReadValue(secSetup, "SetupTitle");
-                fmArchFolderBox = langIni.IniReadValue(secSetup, "FmArchFolderBox");
-                folderIsFMsWarning = langIni.IniReadValue(secSetup, "FolderIsFMsWarning");
-                browseButton = langIni.IniReadValue(secSetup, "BrowseButton");
-                langBox = langIni.IniReadValue(secSetup, "LangBox");
-                dateFormatBox = langIni.IniReadValue(secSetup, "DateFormatBox");
-                dmyChk = langIni.IniReadValue(secSetup, "DmyChk");
-                mdyChk = langIni.IniReadValue(secSetup, "MdyChk");
-                saveBackupBox = langIni.IniReadValue(secSetup, "SaveBackupBox");
-                bkTypeAsk = langIni.IniReadValue(secSetup, "BackupTypeAsk");
-                bkTypeAlways = langIni.IniReadValue(secSetup, "BackupTypeAlways");
-                dbClFMBox = langIni.IniReadValue(secSetup, "DblClickFMBox");
-                dbClChk = langIni.IniReadValue(secSetup, "DblClChk");
-                returnAfterBox = langIni.IniReadValue(secSetup, "ReturnAfterBox");
-                retTypeNeverRdo = langIni.IniReadValue(secSetup, "RetNever");
-                afterFMRdo = langIni.IniReadValue(secSetup, "RetAfterFM");
-                alwaysRdo = langIni.IniReadValue(secSetup, "RetAlways");
-                opt7zBox = langIni.IniReadValue(secSetup, "OptLocate7zBox");
-                help7z1 = langIni.IniReadValue(secSetup, "Help7z1");
-                help7z2 = langIni.IniReadValue(secSetup, "Help7z2");
-                use7zeChk1 = langIni.IniReadValue(secSetup, "Use7zeChk1");
-                use7zeChk2 = langIni.IniReadValue(secSetup, "Use7zeChk2");
-                folderRequired = langIni.IniReadValue(secSetup, "FolderRequired");
-                errorTitle = langIni.IniReadValue(secSetup, "FldrRequiredTitle");
-                webSearchSite = langIni.IniReadValue(secSetup, "WebSearchSite");
-                noSiteLabel = langIni.IniReadValue(secSetup, "NoSiteLabel");
-                articleLabel = langIni.IniReadValue(secSetup, "ArticleLabel");
-                articleTip = langIni.IniReadValue(secSetup, "ArticleTip");
-
+                errorTitle = langIni.IniReadValue("Setup", "FldrRequiredTitle");
                 noReadme = langIni.IniReadValue(secReadme, "NoReadme");
                 badReadme = langIni.IniReadValue(secReadme, "BadReadme");
 
@@ -504,25 +410,6 @@ namespace NewDarkLoader
                 string secScan = "ScanAll";
                 lblProgressTitle.Text = langIni.IniReadValue(secScan, "Progress");
                 scannedText = langIni.IniReadValue(secScan, "Scanned");
-
-                //Edit FM Data labels
-                readmeLabel = langIni.IniReadValue(secCols, "Readme");
-                colArchive = langIni.IniReadValue(secCols, "Archive");
-                colTitle = langIni.IniReadValue(secCols, "Title");
-                colRating = langIni.IniReadValue(secCols, "Rating");
-                colFinished = langIni.IniReadValue(secCols, "Finished");
-                diffT3Easy = langIni.IniReadValue(secCols, "T3Easy");
-                diffNormal = langIni.IniReadValue(secCols, "Normal");
-                diffHard = langIni.IniReadValue(secCols, "Hard");
-                diffExpert = langIni.IniReadValue(secCols, "Expert");
-                diffExtreme = langIni.IniReadValue(secCols, "Extreme");
-                colReleaseDate = langIni.IniReadValue(secCols, "ReleaseDate");
-                colLastPlayed = langIni.IniReadValue(secCols, "LastPlayed");
-                notPlayed = langIni.IniReadValue(secCols, "NotPlayed");
-                getFromSaves = langIni.IniReadValue(secCols, "GetFromSaves");
-                colComment = langIni.IniReadValue(secCols, "Comment");
-                colDisabledMods = langIni.IniReadValue(secCols, "DisabledMods");
-                colInstalled = langIni.IniReadValue(secCols, "Installed"); //For FMs scanned on startup only
 
                 //Update the Installed value in the table
                 for (int x = 0; x < fmTable.Rows.Count; x++)
@@ -534,18 +421,17 @@ namespace NewDarkLoader
                 }
 
                 //Column headers
-                fmTable.Columns[ARCHIVE].HeaderText = colArchive;
-                fmTable.Columns[TITLE].HeaderText = colTitle;
-                fmTable.Columns[RATING].HeaderText = colRating;
-                fmTable.Columns[FINISHED].HeaderText = colFinished;
-                fmTable.Columns[RELEASE_DATE].HeaderText = colReleaseDate;
-                fmTable.Columns[LAST_PLAYED].HeaderText = colLastPlayed;
-                fmTable.Columns[COMMENT].HeaderText = colComment;
-                fmTable.Columns[DISABLED_MODS].HeaderText = colDisabledMods;
-                fmTable.Columns[INSTALLED].HeaderText = colInstalled;
+                fmTable.Columns[ARCHIVE].HeaderText = langIni.IniReadValue(secCols, "Archive");
+                fmTable.Columns[TITLE].HeaderText = langIni.IniReadValue(secCols, "Title");
+                fmTable.Columns[RATING].HeaderText = langIni.IniReadValue(secCols, "Rating");
+                fmTable.Columns[FINISHED].HeaderText = langIni.IniReadValue(secCols, "Finished");
+                fmTable.Columns[RELEASE_DATE].HeaderText = langIni.IniReadValue(secCols, "ReleaseDate");
+                fmTable.Columns[LAST_PLAYED].HeaderText = langIni.IniReadValue(secCols, "LastPlayed");
+                fmTable.Columns[COMMENT].HeaderText = langIni.IniReadValue(secCols, "Comment");
+                fmTable.Columns[DISABLED_MODS].HeaderText = langIni.IniReadValue(secCols, "DisabledMods");
+                fmTable.Columns[INSTALLED].HeaderText = langIni.IniReadValue(secCols, "Installed"); //For FMs scanned on startup only
 
                 //Right click menu
-                editFMDetails = langIni.IniReadValue("EditFM", "EditDetailsTitle");
                 rightClickFM.Items[0].Text = langIni.IniReadValue(secRightClick, "EditFMDetails");
                 rightClickFM.Items[1].Text = langIni.IniReadValue(secRightClick, "ScanAllFMs");
                 rightClickFM.Items[2].Text = langIni.IniReadValue(secRightClick, "ReScanThisFM");
@@ -588,16 +474,20 @@ namespace NewDarkLoader
                 rightClickTip = langIni.IniReadValue(secFMTable, "TableTip");
                 refresh = langIni.IniReadValue(secFMTable, "Refresh");
                 refreshButton = langIni.IniReadValue(secFMTable, "RefreshButton");
-
+                
                 //Static buttons
                 btnWebSearch.Text = langIni.IniReadValue(secMainButtons, "WebSearch");
                 btnTools.Text = langIni.IniReadValue(secMainButtons, "OldDLTools");
                 btnSetup.Text = langIni.IniReadValue(secMainButtons, "Setup");
                 btnExit.Text = langIni.IniReadValue(secMainButtons, "Exit");
-
+                
                 //Readme
                 btnFullScreenReadme.Text = langIni.IniReadValue(secReadme, "FullScreenReadme");
                 btnShowInBrowser.Text = langIni.IniReadValue(secReadme, "ShowInBrowser");
+
+                //Select readme panel
+                lblReadme.Text = langIni.IniReadValue(secCols, "Readme");
+                btnReadmeOK.Text = langIni.IniReadValue("TagFilterWindow", "OK");
 
                 //Filters
                 btnResetFilters.Text = langIni.IniReadValue(secFilter, "ResetFilters");
@@ -609,20 +499,6 @@ namespace NewDarkLoader
                 toolTip1.SetToolTip(cbMaxMonth, dateMax);
                 toolTip1.SetToolTip(cbMaxYear, dateMax);
                 btnSetTagFilter.Text = langIni.IniReadValue(secFilter, "SetTagFilter");
-
-                //Tag Filter Window
-                tagWindowTitle = langIni.IniReadValue(secTagFilter, "WindowTitle");
-                availTagsText = langIni.IniReadValue(secTagFilter, "AvailTags");
-                incTagsText = langIni.IniReadValue(secTagFilter, "IncludeTags");
-                excTagsText = langIni.IniReadValue(secTagFilter, "ExcludeTags");
-                incBtnText = langIni.IniReadValue(secTagFilter, "IncludeBtn");
-                excBtnText = langIni.IniReadValue(secTagFilter, "ExcludeBtn");
-                remBtnText = langIni.IniReadValue(secTagFilter, "RemoveTag");
-                remAllBtnText = langIni.IniReadValue(secTagFilter, "RemoveAll");
-                remAllMessage = langIni.IniReadValue(secTagFilter, "RemoveAllMsg");
-                confirmBoxMsgTitle = langIni.IniReadValue(secTagFilter, "RemoveAllMsgTitle");
-                okBtnText = langIni.IniReadValue(secTagFilter, "OK");
-                cancBtnText = langIni.IniReadValue(secTagFilter, "Cancel");
 
                 //Tags
                 gbTags.Text = langIni.IniReadValue(secTags, "TagBox");
@@ -670,26 +546,6 @@ namespace NewDarkLoader
                 //Tag error
                 tagError1 = langIni.IniReadValue(secTags, "TagFormatError1");
                 tagError2 = langIni.IniReadValue(secTags, "TagFormatError2");
-
-                //Old Darkloader Tools
-                dlWindowTitle = langIni.IniReadValue(secOldDLTools, "DLToolsTitle");
-                dlGamePath = langIni.IniReadValue(secOldDLTools, "GamePath");
-                dlSavesImport = langIni.IniReadValue(secOldDLTools, "ImportDLSaves");
-                dlIniImport = langIni.IniReadValue(secOldDLTools, "ImportDLFMData");
-                dlClose = langIni.IniReadValue(secOldDLTools, "DLToolsClose");
-
-                //Import DL Saves
-                overwriteTitle = langIni.IniReadValue(secSaveImport, "OverwriteTitle");
-                overwriteLn1 = langIni.IniReadValue(secSaveImport, "OverwriteLn1");
-                overwriteLn2 = langIni.IniReadValue(secSaveImport, "OverwriteLn2");
-                overwriteLn3 = langIni.IniReadValue(secSaveImport, "OverwriteLn3");
-                overwriteLn4 = langIni.IniReadValue(secSaveImport, "OverwriteLn4");
-                overwriteLn5 = langIni.IniReadValue(secSaveImport, "OverwriteLn5");
-                overwriteLn6 = langIni.IniReadValue(secSaveImport, "OverwriteLn6");
-                yesBtn = langIni.IniReadValue(secSaveImport, "Yes");
-                yesToAllBtn = langIni.IniReadValue(secSaveImport, "YesToAll");
-                noBtn = langIni.IniReadValue(secSaveImport, "No");
-                noToAllBtn = langIni.IniReadValue(secSaveImport, "NoToAll");
                 #endregion
             }
         }
@@ -918,8 +774,8 @@ namespace NewDarkLoader
         /// </summary>
         private void setHTMLReadmeSizeLoc()
         {
-            webBrowser1.Location = readmeBox.Location;
-            webBrowser1.Size = readmeBox.Size;
+            webBrowser1.Location = lbReadmes.Location;
+            webBrowser1.Size = lbReadmes.Size;
         }
 
         /// <summary>
@@ -929,7 +785,8 @@ namespace NewDarkLoader
         /// <param name="alreadyRunning">True if the user has run setup via the button. Prevents file being re-read.</param>
         private void showSetup(bool firstRun, bool alreadyRunning)
         {
-            Setup setupWindow = new Setup(i, secOptions, kArchive_root, kLanguage, kDate_format, kBackup_type, k7zipG, kUse7zNoWin, currentReturnType, kAlwaysPlay, setupTitle, fmArchFolderBox, folderIsFMsWarning, fmInstalledPath, browseButton, langBox, dateFormatBox, dmyChk, mdyChk, saveBackupBox, bkTypeAsk, bkTypeAlways, dbClFMBox, dbClChk, returnAfterBox, retTypeNeverRdo, afterFMRdo, alwaysRdo, opt7zBox, help7z1, help7z2, use7zeChk1, use7zeChk2, okBtnText, cancBtnText, folderRequired, errorTitle, webSearchSite, noSiteLabel, articleLabel, articleTip, sortIgnoreArticles, firstRun);
+            Setup setupWindow = new Setup(i, langIni, secOptions, kArchive_root, kLanguage, kDate_format, kBackup_type, k7zipG, 
+                kUse7zNoWin, currentReturnType, kAlwaysPlay, fmInstalledPath, sortIgnoreArticles, firstRun);
             DialogResult dR = setupWindow.ShowDialog();
 
             if (dR == DialogResult.OK)
@@ -2494,11 +2351,11 @@ namespace NewDarkLoader
                     else
                         readmeFileType = RichTextBoxStreamType.PlainText;
 
-                    readmeBox.BringToFront();
-                    readmeBox.LoadFile(readmePath, readmeFileType);
+                    lbReadmes.BringToFront();
+                    lbReadmes.LoadFile(readmePath, readmeFileType);
                     btnShowInBrowser.SendToBack();
 
-                    readmeBox.ScrollToCaret();
+                    lbReadmes.ScrollToCaret();
 
                     if (deleteAfterShowing && File.Exists(readmePath))
                         FullDelete.DeleteFile(readmePath);
@@ -2545,8 +2402,8 @@ namespace NewDarkLoader
 
         private void item1_Click(object sender, EventArgs e)
         {
-            if (readmeBox.SelectedText != "")
-                Clipboard.SetText(readmeBox.SelectedText);
+            if (lbReadmes.SelectedText != "")
+                Clipboard.SetText(lbReadmes.SelectedText);
         }
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -2813,7 +2670,7 @@ namespace NewDarkLoader
         /// <returns></returns>
         private int extensionRank(string filename)
         {
-            string ext = Path.GetExtension(filename);
+            string ext = Path.GetExtension(filename.ToLower());
 
             switch (ext)
             {
@@ -2856,7 +2713,7 @@ namespace NewDarkLoader
                 if (withUserSelection && infoFileFromINI == "")
                 {
                     possibleReadmes = getPossibleReadmes(subFolder, selArchive, fmIsArchive);
-#if readmeChoice
+#if readmeChoice //Show new window. Works, but can look bad.
                     if (possibleReadmes.Count > 1) //give user a choice if there are multiple possible readmes
                     {
                         ReadmeSelect rSel = new ReadmeSelect(possibleReadmes);
@@ -2869,7 +2726,17 @@ namespace NewDarkLoader
                     {
                         infoFileFromINI = possibleReadmes[0];
                     }
-#else
+#elif sameWindow
+
+                    if(possibleReadmes.Count > 1)
+                    {
+                        lbReadmeList.Items.Clear();
+                        pnlReadmeList.BringToFront();
+                        lbReadmeList.Items.AddRange(possibleReadmes.ToArray());
+                        lbReadmeList.SelectedIndex = 0;
+                    }
+
+#else //Original behaviour. Mostly fine except when a spoiler file is loaded instead.
                     if (possibleReadmes.Count != 1)
                     {
                         infoFileFromINI = possibleReadmes[0]; //original behaviour - first rtf, first txt, or first html
@@ -3462,12 +3329,10 @@ namespace NewDarkLoader
             if (fm.archiveOrDirectory == FMType.Directory)
                 fmIsArchive = false;
 
-            EditFM edFM = new EditFM(fm.title, fm.rating, fm.finishedID, fm.comment, fm.disabledMods, fm.relDateHex,
+            EditFM edFM = new EditFM(langIni, fm.title, fm.rating, fm.finishedID, fm.comment, fm.disabledMods, fm.relDateHex,
                 fm.lastPlayedHex, fmTextFiles, i.IniReadValue(secName, kInfoFile), gameIsThief3,
                 fmArchivePath + fm.subFolder + "\\" + fm.saveBackupName,
-                fmInstalledPath + "\\" + fm.extractionName, editFMDetails,
-                readmeLabel, colArchive, colTitle, colRating, colFinished, diffT3Easy, diffNormal, diffHard, diffExpert, diffExtreme,
-                colReleaseDate, colLastPlayed, notPlayed, getFromSaves, colComment, colDisabledMods, colInstalled, okBtnText, cancBtnText);
+                fmInstalledPath + "\\" + fm.extractionName, notPlayed);
 
             DialogResult dR = edFM.ShowDialog();
 
@@ -3710,9 +3575,7 @@ namespace NewDarkLoader
             keys.LastPlayedInt = kLast_played;
             keys.Comment = kComment;
 
-            Tools nTools = new Tools(gamePath, fmArchivePath, sevenZipGExe, userTempFolder, dataList, keys, i, archiveExtensions, dlWindowTitle, dlGamePath, dlSavesImport, dlIniImport, dlClose,
-                overwriteTitle, overwriteLn1, overwriteLn2, overwriteLn3, overwriteLn4, overwriteLn5, overwriteLn6,
-                yesBtn, yesToAllBtn, noBtn, noToAllBtn, gameIsShock2);
+            Tools nTools = new Tools(gamePath, fmArchivePath, sevenZipGExe, userTempFolder, dataList, keys, i, langIni, archiveExtensions, gameIsShock2);
 
             nTools.ShowDialog();
 
@@ -4012,9 +3875,7 @@ namespace NewDarkLoader
 
         private void btnSetTagFilter_Click(object sender, EventArgs e)
         {
-            TagFilter tFilter = new TagFilter(globalCatItems, globalCategories, includeTags, excludeTags,
-                tagWindowTitle, availTagsText, incTagsText, excTagsText, incBtnText, excBtnText, remBtnText, remAllBtnText,
-                okBtnText, cancBtnText, remAllMessage, confirmBoxMsgTitle, miscTagCat);
+            TagFilter tFilter = new TagFilter(globalCatItems, globalCategories, includeTags, excludeTags, langIni);
 
             DialogResult dR = tFilter.ShowDialog();
 
@@ -4260,7 +4121,7 @@ namespace NewDarkLoader
                 userSelectsPlayFM();
             else
             {
-                DblClickFM dClickFM = new DblClickFM(confirmBoxMsgTitle, dCEQuestion, dCEAlwaysPlay, yesBtn, noBtn);
+                DblClickFM dClickFM = new DblClickFM(langIni, confirmBoxMsgTitle, dCEQuestion, dCEAlwaysPlay);
                 DialogResult dR = dClickFM.ShowDialog();
 
                 if (dClickFM.AlwaysPlayFM)
@@ -4631,7 +4492,7 @@ namespace NewDarkLoader
 
         private void readmeBox_MouseEnter(object sender, EventArgs e)
         {
-            readmeBox.Focus();
+            lbReadmes.Focus();
         }
 
         /// <summary>
@@ -5355,8 +5216,7 @@ namespace NewDarkLoader
 
                 string tip = rightClickTip;
                 string content = "";
-                //if(cellString(col, row) !=null)
-                //{
+
                 string cellValue = "";
                 if (col == FINISHED)
                 {
@@ -5436,6 +5296,17 @@ namespace NewDarkLoader
         private void cbMaxYear_SelectedIndexChanged(object sender, EventArgs e)
         {
             setFilter();
+        }
+
+        private void btnReadmeOK_Click(object sender, EventArgs e)
+        {
+            FanMission fm = foundFMs[selFMID];
+            i.IniWriteValue(foundFMs[selFMID].sectionName, kInfoFile, lbReadmeList.SelectedItem.ToString());
+            //Resets the date, forcing NDL to scan the selected readme
+            i.IniWriteValue(fm.sectionName, kRelease_date, "");
+
+            pnlReadmeList.SendToBack();
+            refreshFMTable();
         }
     }
 

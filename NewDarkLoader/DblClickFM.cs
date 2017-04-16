@@ -12,14 +12,20 @@ namespace NewDarkLoader
 {
     public partial class DblClickFM : Form
     {
-        public DblClickFM(string boxTitle, string question, string always, string yesButton, string noButton)
+        public DblClickFM(INIFile langIni, string boxTitle, string question, string always)
         {
             InitializeComponent();
-            this.Text = boxTitle;
-            label1.Text = question;
-            chkAlwaysPlay.Text = always;
-            btnYes.Text = yesButton;
-            btnNo.Text = noButton;
+
+            if (langIni != null)
+            {
+                string secSaveImport = "DLSaveImport";
+
+                this.Text = boxTitle;
+                label1.Text = question;
+                chkAlwaysPlay.Text = always;
+                btnYes.Text = langIni.IniReadValue(secSaveImport, "Yes");
+                btnNo.Text = langIni.IniReadValue(secSaveImport, "No");
+            }
         }
 
         public bool AlwaysPlayFM

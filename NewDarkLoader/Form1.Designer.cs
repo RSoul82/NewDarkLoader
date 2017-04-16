@@ -108,10 +108,13 @@
             this.btnSetTagFilter = new System.Windows.Forms.Button();
             this.tbFilter = new System.Windows.Forms.TextBox();
             this.chkUnfinished = new System.Windows.Forms.CheckBox();
+            this.pnlReadmeList = new System.Windows.Forms.Panel();
+            this.btnReadmeOK = new System.Windows.Forms.Button();
+            this.lbReadmeList = new System.Windows.Forms.ListBox();
             this.btnFullScreenReadme = new System.Windows.Forms.Button();
             this.btnShowInBrowser = new System.Windows.Forms.Button();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.readmeBox = new System.Windows.Forms.RichTextBox();
+            this.lbReadmes = new System.Windows.Forms.RichTextBox();
             this.rightClickReadme = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.item1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -126,6 +129,7 @@
             this.progBar = new System.Windows.Forms.ProgressBar();
             this.dlgSelectFixFile = new System.Windows.Forms.OpenFileDialog();
             this.dlgSaveFMINI = new System.Windows.Forms.SaveFileDialog();
+            this.lblReadme = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -135,6 +139,7 @@
             this.rightClickFM.SuspendLayout();
             this.gbTags.SuspendLayout();
             this.menuTags.SuspendLayout();
+            this.pnlReadmeList.SuspendLayout();
             this.rightClickReadme.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -168,10 +173,11 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer1.Panel2.Controls.Add(this.pnlReadmeList);
             this.splitContainer1.Panel2.Controls.Add(this.btnFullScreenReadme);
             this.splitContainer1.Panel2.Controls.Add(this.btnShowInBrowser);
             this.splitContainer1.Panel2.Controls.Add(this.webBrowser1);
-            this.splitContainer1.Panel2.Controls.Add(this.readmeBox);
+            this.splitContainer1.Panel2.Controls.Add(this.lbReadmes);
             resources.ApplyResources(this.splitContainer1.Panel2, "splitContainer1.Panel2");
             // 
             // cbMaxYear
@@ -1792,6 +1798,28 @@
             this.chkUnfinished.UseVisualStyleBackColor = true;
             this.chkUnfinished.CheckedChanged += new System.EventHandler(this.chkUnfinished_CheckedChanged);
             // 
+            // pnlReadmeList
+            // 
+            this.pnlReadmeList.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pnlReadmeList.Controls.Add(this.lblReadme);
+            this.pnlReadmeList.Controls.Add(this.btnReadmeOK);
+            this.pnlReadmeList.Controls.Add(this.lbReadmeList);
+            resources.ApplyResources(this.pnlReadmeList, "pnlReadmeList");
+            this.pnlReadmeList.Name = "pnlReadmeList";
+            // 
+            // btnReadmeOK
+            // 
+            resources.ApplyResources(this.btnReadmeOK, "btnReadmeOK");
+            this.btnReadmeOK.Name = "btnReadmeOK";
+            this.btnReadmeOK.UseVisualStyleBackColor = true;
+            this.btnReadmeOK.Click += new System.EventHandler(this.btnReadmeOK_Click);
+            // 
+            // lbReadmeList
+            // 
+            this.lbReadmeList.FormattingEnabled = true;
+            resources.ApplyResources(this.lbReadmeList, "lbReadmeList");
+            this.lbReadmeList.Name = "lbReadmeList";
+            // 
             // btnFullScreenReadme
             // 
             resources.ApplyResources(this.btnFullScreenReadme, "btnFullScreenReadme");
@@ -1811,14 +1839,14 @@
             resources.ApplyResources(this.webBrowser1, "webBrowser1");
             this.webBrowser1.Name = "webBrowser1";
             // 
-            // readmeBox
+            // lbReadmes
             // 
-            resources.ApplyResources(this.readmeBox, "readmeBox");
-            this.readmeBox.ContextMenuStrip = this.rightClickReadme;
-            this.readmeBox.Name = "readmeBox";
-            this.readmeBox.ReadOnly = true;
-            this.readmeBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
-            this.readmeBox.MouseEnter += new System.EventHandler(this.readmeBox_MouseEnter);
+            resources.ApplyResources(this.lbReadmes, "lbReadmes");
+            this.lbReadmes.ContextMenuStrip = this.rightClickReadme;
+            this.lbReadmes.Name = "lbReadmes";
+            this.lbReadmes.ReadOnly = true;
+            this.lbReadmes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
+            this.lbReadmes.MouseEnter += new System.EventHandler(this.readmeBox_MouseEnter);
             // 
             // rightClickReadme
             // 
@@ -1914,6 +1942,11 @@
             this.dlgSaveFMINI.FileName = "fm.ini";
             resources.ApplyResources(this.dlgSaveFMINI, "dlgSaveFMINI");
             // 
+            // lblReadme
+            // 
+            resources.ApplyResources(this.lblReadme, "lblReadme");
+            this.lblReadme.Name = "lblReadme";
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -1940,6 +1973,8 @@
             this.gbTags.PerformLayout();
             this.menuTags.ResumeLayout(false);
             this.menuTags.PerformLayout();
+            this.pnlReadmeList.ResumeLayout(false);
+            this.pnlReadmeList.PerformLayout();
             this.rightClickReadme.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -1949,7 +1984,7 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox readmeBox;
+        private System.Windows.Forms.RichTextBox lbReadmes;
         private System.Windows.Forms.ContextMenuStrip rightClickReadme;
         private System.Windows.Forms.ToolStripMenuItem item1;
         private System.Windows.Forms.DataGridView fmTable;
@@ -2038,6 +2073,10 @@
         private System.Windows.Forms.ComboBox cbMaxMonth;
         private System.Windows.Forms.ComboBox cbMinYear;
         private System.Windows.Forms.ComboBox cbMinMonth;
+        private System.Windows.Forms.ListBox lbReadmeList;
+        private System.Windows.Forms.Panel pnlReadmeList;
+        private System.Windows.Forms.Button btnReadmeOK;
+        private System.Windows.Forms.Label lblReadme;
     }
 }
 

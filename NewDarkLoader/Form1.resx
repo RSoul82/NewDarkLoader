@@ -4380,6 +4380,102 @@
   <data name="splitContainer1.Panel1MinSize" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
+  <data name="lblReadme.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblReadme.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 7</value>
+  </data>
+  <data name="lblReadme.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 13</value>
+  </data>
+  <data name="lblReadme.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lblReadme.Text" xml:space="preserve">
+    <value>Readme</value>
+  </data>
+  <data name="&gt;&gt;lblReadme.Name" xml:space="preserve">
+    <value>lblReadme</value>
+  </data>
+  <data name="&gt;&gt;lblReadme.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblReadme.Parent" xml:space="preserve">
+    <value>pnlReadmeList</value>
+  </data>
+  <data name="&gt;&gt;lblReadme.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnReadmeOK.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 168</value>
+  </data>
+  <data name="btnReadmeOK.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnReadmeOK.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnReadmeOK.Text" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="&gt;&gt;btnReadmeOK.Name" xml:space="preserve">
+    <value>btnReadmeOK</value>
+  </data>
+  <data name="&gt;&gt;btnReadmeOK.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnReadmeOK.Parent" xml:space="preserve">
+    <value>pnlReadmeList</value>
+  </data>
+  <data name="&gt;&gt;btnReadmeOK.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lbReadmeList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 28</value>
+  </data>
+  <data name="lbReadmeList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>458, 134</value>
+  </data>
+  <data name="lbReadmeList.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;lbReadmeList.Name" xml:space="preserve">
+    <value>lbReadmeList</value>
+  </data>
+  <data name="&gt;&gt;lbReadmeList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbReadmeList.Parent" xml:space="preserve">
+    <value>pnlReadmeList</value>
+  </data>
+  <data name="&gt;&gt;lbReadmeList.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="pnlReadmeList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pnlReadmeList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="pnlReadmeList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>922, 286</value>
+  </data>
+  <data name="pnlReadmeList.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;pnlReadmeList.Name" xml:space="preserve">
+    <value>pnlReadmeList</value>
+  </data>
+  <data name="&gt;&gt;pnlReadmeList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pnlReadmeList.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel2</value>
+  </data>
+  <data name="&gt;&gt;pnlReadmeList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="btnFullScreenReadme.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
@@ -4405,7 +4501,7 @@
     <value>splitContainer1.Panel2</value>
   </data>
   <data name="&gt;&gt;btnFullScreenReadme.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="btnShowInBrowser.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -4432,13 +4528,13 @@
     <value>splitContainer1.Panel2</value>
   </data>
   <data name="&gt;&gt;btnShowInBrowser.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="webBrowser1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="webBrowser1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>76, 43</value>
+    <value>89, 28</value>
   </data>
   <data name="webBrowser1.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>20, 19</value>
@@ -4459,9 +4555,9 @@
     <value>splitContainer1.Panel2</value>
   </data>
   <data name="&gt;&gt;webBrowser1.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
-  <data name="readmeBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="lbReadmes.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
   <metadata name="rightClickReadme.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -4482,29 +4578,29 @@
   <data name="&gt;&gt;rightClickReadme.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="readmeBox.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="lbReadmes.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 3</value>
   </data>
-  <data name="readmeBox.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lbReadmes.Size" type="System.Drawing.Size, System.Drawing">
     <value>912, 280</value>
   </data>
-  <data name="readmeBox.TabIndex" type="System.Int32, mscorlib">
+  <data name="lbReadmes.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="readmeBox.Text" xml:space="preserve">
+  <data name="lbReadmes.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="&gt;&gt;readmeBox.Name" xml:space="preserve">
-    <value>readmeBox</value>
+  <data name="&gt;&gt;lbReadmes.Name" xml:space="preserve">
+    <value>lbReadmes</value>
   </data>
-  <data name="&gt;&gt;readmeBox.Type" xml:space="preserve">
+  <data name="&gt;&gt;lbReadmes.Type" xml:space="preserve">
     <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;readmeBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lbReadmes.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
   </data>
-  <data name="&gt;&gt;readmeBox.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="&gt;&gt;lbReadmes.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="splitContainer1.Panel2.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>No</value>

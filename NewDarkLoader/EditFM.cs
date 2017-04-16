@@ -10,14 +10,11 @@ namespace NewDarkLoader
         /// Initialized using strings read from the table.
         /// </summary>
         public EditFM(
+            INIFile langIni, 
             string _fmTitle, int _rating, int _finished, string _comment, 
             string _disabledMods, string _hexRelDate, string _hexLastPlayed, 
             List<string> _textFiles, string currentReadme, bool _gameIsT3, 
-            string _savegameFilePath, string _fmInstPath, string windowTitle, 
-            string readmeLabel, string archiveText, string titleText, string ratingText, 
-            string finsishedText, string t3EasyText, string normalText, string hardText, string expertText, string extremeText, 
-            string relDateText, string lastPlayedText, string notPlayedText, string fromSavesText, 
-            string commentText, string disModsText, string installedText, string okText, string cancelText)
+            string _savegameFilePath, string _fmInstPath, string notPlayedText)
         {
             InitializeComponent();
             tbTitle.Text = _fmTitle;
@@ -54,39 +51,42 @@ namespace NewDarkLoader
 
             fmInstalledPath = _fmInstPath;
 
-            //Set interface text from params
-            this.Text = windowTitle;
-            lblReadme.Text = readmeLabel;
-            lblTitle.Text = titleText;
-            lblRating.Text = ratingText;
-            gbFinished.Text = finsishedText;
-
-            if (gameIsT3)
+            string secCols = "Columns";
+            //Set interface text from lang ini
+            if (langIni != null)
             {
-                chkNormal.Text = t3EasyText;
-                chkHard.Text = normalText;
-                chkExpert.Text = hardText;
-                chkExtreme.Text = expertText;
-                fmSavesPath = _fmInstPath + "\\savegames";
-            }
-            else
-            {
-                chkNormal.Text = normalText;
-                chkHard.Text = hardText;
-                chkExpert.Text = expertText;
-                chkExtreme.Text = extremeText;
-                fmSavesPath = _fmInstPath + "\\saves";
-            }
+                Text = langIni.IniReadValue("EditFM", "EditDetailsTitle");
+                lblReadme.Text = langIni.IniReadValue(secCols, "Readme");
+                lblTitle.Text = langIni.IniReadValue(secCols, "Title");
+                lblRating.Text = langIni.IniReadValue(secCols, "Rating");
+                gbFinished.Text = langIni.IniReadValue(secCols, "Finished");
 
-            lblRelDate.Text = relDateText;
-            lblLastPlayed.Text = lastPlayedText;
-            chkNotPlayed.Text = notPlayedText;
-            btnGetLastSaveDate.Text = fromSavesText;
-            lblComment.Text = commentText;
-            lblDisMods.Text = disModsText;
-            btnOK.Text = okText;
-            btnCancel.Text = cancelText;
+                if (gameIsT3)
+                {
+                    chkNormal.Text = langIni.IniReadValue(secCols, "T3Easy");
+                    chkHard.Text = langIni.IniReadValue(secCols, "Normal");
+                    chkExpert.Text = langIni.IniReadValue(secCols, "Hard");
+                    chkExtreme.Text = langIni.IniReadValue(secCols, "Expert");
+                    fmSavesPath = _fmInstPath + "\\savegames";
+                }
+                else
+                {
+                    chkNormal.Text = langIni.IniReadValue(secCols, "Normal");
+                    chkHard.Text = langIni.IniReadValue(secCols, "Hard");
+                    chkExpert.Text = langIni.IniReadValue(secCols, "Expert");
+                    chkExtreme.Text = langIni.IniReadValue(secCols, "Expert");
+                    fmSavesPath = _fmInstPath + "\\saves";
+                }
 
+                lblRelDate.Text = langIni.IniReadValue(secCols, "ReleaseDate");
+                lblLastPlayed.Text = langIni.IniReadValue(secCols, "LastPlayed");
+                chkNotPlayed.Text = notPlayedText;
+                btnGetLastSaveDate.Text = langIni.IniReadValue(secCols, "GetFromSaves");
+                lblComment.Text = langIni.IniReadValue(secCols, "Comment");
+                lblDisMods.Text = langIni.IniReadValue(secCols, "DisabledMods");
+                btnOK.Text = langIni.IniReadValue("TagFilterWindow", "OK");
+                btnCancel.Text = langIni.IniReadValue("TagFilterWindow", "Cancel");
+            }
             checkForSaves();
         }
 

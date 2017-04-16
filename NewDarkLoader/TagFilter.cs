@@ -12,9 +12,7 @@ namespace NewDarkLoader
 {
     public partial class TagFilter : Form
     {
-        public TagFilter(List<catItem> globalCIList, List<string> globalCatList, List<catItem> restoreInclude, List<catItem> restoreExclude,
-            string windowTitle, string availTagsText, string incTagsText, string excTagsText, string incBtnText, string excBtnText,
-            string remBtnText, string remAllBtnText, string okBtnText, string cancBtnText, string remAllMsg, string remAllMsgTitle, string miscTagCatName)
+        public TagFilter(List<catItem> globalCIList, List<string> globalCatList, List<catItem> restoreInclude, List<catItem> restoreExclude, INIFile langIni)
         {
             InitializeComponent();
 
@@ -48,19 +46,23 @@ namespace NewDarkLoader
             addToList(excludeList, tvExclude, excludeCats);
 
             //Set interface text
-            this.Text = windowTitle;
-            lblAvailTags.Text = availTagsText;
-            lblInc.Text = incTagsText;
-            lblExc.Text = excTagsText;
-            btnInclude.Text = incBtnText;
-            btnExclude.Text = excBtnText;
-            btnRemove.Text = remBtnText;
-            btnRemoveAll.Text = remAllBtnText;
-            btnOK.Text = okBtnText;
-            btnCancel.Text = cancBtnText;
-            removeAllMessage = remAllMsg;
-            removeAllMsgTitle = remAllMsgTitle;
-            miscTagCat = miscTagCatName;
+            if(langIni != null)
+            {
+                string secTagFilter = "TagFilterWindow";
+                Text = langIni.IniReadValue(secTagFilter, "WindowTitle");
+                lblAvailTags.Text = langIni.IniReadValue(secTagFilter, "AvailTags");
+                lblInc.Text = langIni.IniReadValue(secTagFilter, "IncludeTags");
+                lblExc.Text = langIni.IniReadValue(secTagFilter, "ExcludeTags");
+                btnInclude.Text = langIni.IniReadValue(secTagFilter, "IncludeBtn");
+                btnExclude.Text = langIni.IniReadValue(secTagFilter, "ExcludeBtn");
+                btnRemove.Text = langIni.IniReadValue(secTagFilter, "RemoveTag");
+                btnRemoveAll.Text = langIni.IniReadValue(secTagFilter, "RemoveAll");
+                btnOK.Text = langIni.IniReadValue(secTagFilter, "OK");
+                btnCancel.Text = langIni.IniReadValue(secTagFilter, "Cancel");
+                removeAllMessage = langIni.IniReadValue(secTagFilter, "RemoveAllMsg");
+                removeAllMsgTitle = langIni.IniReadValue(secTagFilter, "RemoveAllMsgTitle");
+                miscTagCat = langIni.IniReadValue("Tags", "MiscTagName");
+            }
         }
 
         private List<catItem> globalCatItems = new List<catItem>();
