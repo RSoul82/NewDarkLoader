@@ -1,6 +1,5 @@
 ﻿//#define screenSize
-//#define readmeChoice
-#define sameWindow
+#define readmeChoice
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,9 +24,6 @@ namespace NewDarkLoader
         bool NDLRunFromDLL = false;
         //Column name indices set here so I can add/remove colums from the table and
         //only need to change each column number once.
-        /// <summary>
-        /// Game icon image.
-        /// </summary>
         const int ARCHIVE = 0;
         const int FM_SIZE = 1;
         const int TITLE = 2;
@@ -2713,21 +2709,7 @@ namespace NewDarkLoader
                 if (withUserSelection && infoFileFromINI == "")
                 {
                     possibleReadmes = getPossibleReadmes(subFolder, selArchive, fmIsArchive);
-#if readmeChoice //Show new window. Works, but can look bad.
-                    if (possibleReadmes.Count > 1) //give user a choice if there are multiple possible readmes
-                    {
-                        ReadmeSelect rSel = new ReadmeSelect(possibleReadmes);
-                        rSel.TopMost = false;
-                        rSel.ShowDialog();
-
-                        infoFileFromINI = rSel.SelectedReadme;
-                    }
-                    else if (possibleReadmes.Count == 1)
-                    {
-                        infoFileFromINI = possibleReadmes[0];
-                    }
-#elif sameWindow
-
+#if readmeChoice
                     if(possibleReadmes.Count > 1)
                     {
                         lbReadmeList.Items.Clear();

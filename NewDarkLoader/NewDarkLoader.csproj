@@ -137,12 +137,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadmeSelect.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReadmeSelect.Designer.cs">
-      <DependentUpon>ReadmeSelect.cs</DependentUpon>
-    </Compile>
     <Compile Include="RealDate.cs" />
     <Compile Include="Setup.cs">
       <SubType>Form</SubType>
@@ -203,9 +197,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ReadmeSelect.resx">
-      <DependentUpon>ReadmeSelect.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Setup.resx">
       <DependentUpon>Setup.cs</DependentUpon>
     </EmbeddedResource>
