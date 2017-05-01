@@ -22,7 +22,7 @@ namespace NewDarkLoader
         SortOrder fmSortOrder = SortOrder.Ascending; //Default value
 
         bool NDLRunFromDLL = false;
-        //Column name indices set here so I can add/remove colums from the table and
+        //Column name indices set here so I can add/remove columns from the table and
         //only need to change each column number once.
         const int ARCHIVE = 0;
         const int FM_SIZE = 1;
@@ -2716,6 +2716,11 @@ namespace NewDarkLoader
                         pnlReadmeList.BringToFront();
                         lbReadmeList.Items.AddRange(possibleReadmes.ToArray());
                         lbReadmeList.SelectedIndex = 0;
+                    }
+
+                    else if(possibleReadmes.Count == 1)
+                    {
+                        infoFileFromINI = possibleReadmes[0];
                     }
 
 #else //Original behaviour. Mostly fine except when a spoiler file is loaded instead.
