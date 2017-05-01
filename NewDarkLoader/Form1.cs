@@ -293,8 +293,13 @@ namespace NewDarkLoader
             exeName = gameExeInfo.Name.Replace(gameExeInfo.Extension, "");
             setGameName(exeName);
 
-            string version = ProductVersion.TrimEnd('.', '0');
-
+            string version = ProductVersion;
+            if (version.EndsWith(".0"))
+            {
+                int endOf = version.LastIndexOf(".0");
+                version = version.Substring(0, endOf);
+            }
+            
             Text = "NewDarkLoader " + version + " - " + gameName;
 
             setHTMLReadmeSizeLoc();
