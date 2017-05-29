@@ -18,6 +18,7 @@ namespace NewDarkLoader
         {
             InitializeComponent();
             installedFMFullPath = fmInstallationPath;
+            Visible = false;
         }
 
         private string installedFMFullPath = "";
@@ -26,6 +27,9 @@ namespace NewDarkLoader
         {
             DirectoryInfo dInfo = new DirectoryInfo(installedFMFullPath);
             FileInfo[] fmFiles = dInfo.GetFiles("*.mp3", SearchOption.AllDirectories);
+
+            if (fmFiles.Length > 0)
+                Visible = true;
 
             for (int i = 0; i < fmFiles.Length; i++ )
             {
