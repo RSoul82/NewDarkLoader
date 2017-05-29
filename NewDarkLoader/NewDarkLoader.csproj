@@ -129,6 +129,12 @@
     <Compile Include="FullDelete.cs" />
     <Compile Include="INIFile.cs" />
     <Compile Include="LangList.cs" />
+    <Compile Include="NewFMFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewFMFolder.Designer.cs">
+      <DependentUpon>NewFMFolder.cs</DependentUpon>
+    </Compile>
     <Compile Include="OverwriteSave.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -183,6 +189,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewFMFolder.resx">
+      <DependentUpon>NewFMFolder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OverwriteSave.resx">
       <DependentUpon>OverwriteSave.cs</DependentUpon>
@@ -306,6 +315,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="new_folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets" Condition="Exists('../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets')" />

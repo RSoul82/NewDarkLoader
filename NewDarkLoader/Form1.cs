@@ -161,7 +161,6 @@ namespace NewDarkLoader
 
         string rightClickTip = "Right-click to edit details";
         string refresh = "Press F5 to refresh.";
-        string refreshButton = "Refresh (F5)";
 
         //Main buttons
         string playTextPart1 = "Play";
@@ -195,6 +194,7 @@ namespace NewDarkLoader
 
         bool gameIsThief3;
         bool gameIsShock2;
+        bool gameIsEditor;
         bool alwaysPlayOnDC;
 
         /// <summary>
@@ -329,6 +329,18 @@ namespace NewDarkLoader
             else
             {
                 fillFMList();
+            }
+
+            if (gameIsEditor)
+            {
+                btnNewFM.Visible = true;
+                int makeSpace = btnNewFM.Size.Height + 5;
+
+                Size newSize = new Size(btnHideTags.Width, btnHideTags.Size.Height - makeSpace);
+                btnHideTags.Size = newSize;
+
+                Point newLoc = new Point(btnHideTags.Location.X, btnHideTags.Location.Y + makeSpace);
+                btnHideTags.Location = newLoc;
             }
 
             setColumnWidths();
@@ -474,7 +486,8 @@ namespace NewDarkLoader
                 uninstallText = langIni.IniReadValue(secMainButtons, "Uninstall");
                 rightClickTip = langIni.IniReadValue(secFMTable, "TableTip");
                 refresh = langIni.IniReadValue(secFMTable, "Refresh");
-                refreshButton = langIni.IniReadValue(secFMTable, "RefreshButton");
+                toolTip1.SetToolTip(btnRefresh, langIni.IniReadValue(secFMTable, "RefreshButton"));
+                toolTip1.SetToolTip(btnNewFM, langIni.IniReadValue(secFMTable, "NewFMButton"));
                 
                 //Static buttons
                 btnWebSearch.Text = langIni.IniReadValue(secMainButtons, "WebSearch");
@@ -885,6 +898,7 @@ namespace NewDarkLoader
                 btnPlOriginal.Text = "DromEd";
                 currentReturnType = kReturn_type_ed;
                 generateFMiniToolStripMenuItem.Visible = true;
+                gameIsEditor = true;
             }
             else if (exeSimpleName.ToLower().Contains("shocked"))
             {
@@ -893,6 +907,7 @@ namespace NewDarkLoader
                 btnPlOriginal.Text = "ShockEd";
                 currentReturnType = kReturn_type_ed;
                 generateFMiniToolStripMenuItem.Visible = true;
+                gameIsEditor = true;
             }
         }
 
@@ -1099,7 +1114,8 @@ namespace NewDarkLoader
             {
                 string[] filesInDir = Directory.GetFiles(dirs[x], "*.*", SearchOption.AllDirectories);
                 string dirName = Path.GetFileName(dirs[x]); //folder name without full path
-                if (dirs[x].ToLower() != ".fmsel.cache" && filesInDir.Length != 0)
+                //if (dirs[x].ToLower() != ".fmsel.cache" && filesInDir.Length != 0)
+                if (!dirs[x].ToLower().EndsWith(".fmsel.cache") && gameIsEditor ? true : filesInDir.Length != 0) //show empty dirs if called from editor
                 {
                     if (dirNotInList(dirName))
                     {
@@ -4460,12 +4476,29 @@ namespace NewDarkLoader
             refreshFMTable();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            NewFMFolder newFMFol = new NewFMFolder(langIni, fmInstalledPath);
+            DialogResult dR = newFMFol.ShowDialog();
+
+            if(dR == DialogResult.OK)
+            {
+                refreshFMTable("FM=" + newFMFol.NewFMName);
+            }
+        }
+
         /// <summary>
         /// Stores the current FM selection, deletes and refills the table, and selects the current FM again.
         /// </summary>
-        private void refreshFMTable()
+        /// <param name="fmToSelect">If not blank, selects the FM with the specified name.</param>
+        private void refreshFMTable(string fmToSelect = "")
         {
-            string currentFM = foundFMs[selFMID].sectionName;
+            string currentFM;
+            if (fmToSelect == "")
+                currentFM = foundFMs[selFMID].sectionName;
+            else
+                currentFM = fmToSelect;
+
             fmTable.ClearSelection();
             fmTable.Rows.Clear();
             fillFMList();
@@ -5054,6 +5087,7 @@ namespace NewDarkLoader
                 prepareToDeleteFMFolder(backupZipPath, currentFMPath, savesPath, screensPath);
                 if (!fmIsArchive)
                     foundFMs.RemoveAt(selFMID);
+                refreshFMTable();
             }
         }
 

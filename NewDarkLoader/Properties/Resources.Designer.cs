@@ -113,6 +113,16 @@ namespace NewDarkLoader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap newFM {
+            get {
+                object obj = ResourceManager.GetObject("newFM", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap nexp {
             get {
                 object obj = ResourceManager.GetObject("nexp", resourceCulture);

@@ -128,6 +128,43 @@
   <data name="splitContainer1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
     <value>Horizontal</value>
   </data>
+  <data name="btnNewFM.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnNewFM.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnNewFM.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 61</value>
+  </data>
+  <data name="btnNewFM.Size" type="System.Drawing.Size, System.Drawing">
+    <value>26, 26</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnNewFM.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>300, 17</value>
+  </metadata>
+  <data name="btnNewFM.ToolTip" xml:space="preserve">
+    <value>New FM Folder</value>
+  </data>
+  <data name="btnNewFM.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;btnNewFM.Name" xml:space="preserve">
+    <value>btnNewFM</value>
+  </data>
+  <data name="&gt;&gt;btnNewFM.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnNewFM.Parent" xml:space="preserve">
+    <value>splitContainer1.Panel1</value>
+  </data>
+  <data name="&gt;&gt;btnNewFM.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="cbMaxYear.Items" xml:space="preserve">
     <value />
   </data>
@@ -1718,7 +1755,6 @@
   <data name="cbMaxYear.Size" type="System.Drawing.Size, System.Drawing">
     <value>61, 21</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cbMaxYear.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
   </data>
@@ -1732,7 +1768,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMaxYear.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="cbMaxMonth.Items" xml:space="preserve">
     <value />
@@ -1792,7 +1828,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMaxMonth.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="cbMinYear.Items" xml:space="preserve">
     <value />
@@ -3397,7 +3433,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMinYear.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="cbMinMonth.Items" xml:space="preserve">
     <value />
@@ -3457,7 +3493,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMinMonth.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="lblArchive.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3565,7 +3601,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;pnlProgress.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="fmTable.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -3715,7 +3751,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;fmTable.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="btnRefresh.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -3729,9 +3765,6 @@
   <data name="btnRefresh.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>300, 17</value>
-  </metadata>
   <data name="btnRefresh.ToolTip" xml:space="preserve">
     <value>Refresh (F5)</value>
   </data>
@@ -3745,7 +3778,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;btnRefresh.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3772,7 +3805,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="btnHideTags.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
@@ -3802,7 +3835,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;btnHideTags.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="gbTags.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
@@ -4234,7 +4267,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;gbTags.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="btnResetFilters.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -4258,7 +4291,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;btnResetFilters.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="lblTagFilter.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4285,7 +4318,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;lblTagFilter.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="btnSetTagFilter.Location" type="System.Drawing.Point, System.Drawing">
     <value>735, 3</value>
@@ -4309,7 +4342,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;btnSetTagFilter.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="tbFilter.Location" type="System.Drawing.Point, System.Drawing">
     <value>111, 4</value>
@@ -4333,7 +4366,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;tbFilter.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="chkUnfinished.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4360,7 +4393,7 @@
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;chkUnfinished.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="splitContainer1.Panel1.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>No</value>

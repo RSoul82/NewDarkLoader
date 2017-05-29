@@ -20,9 +20,9 @@ namespace NewDarkLoader
             Application.SetCompatibleTextRenderingDefault(false);
             //T2 path hardcoded for testing
             //Application.Run(new Form1("C:\\Games\\ThiefG\\ThiefG.exe", false, "Thief Gold", ""));
-            Application.Run(new Form1("C:\\Games\\Thief2\\thief2.exe", false, "Thief 2", ""));//, 0));
-            //Application.Run(new Form1("C:\\Games\\Thief2\\Dromed.exe", false, "Dromed, """));
-            //Application.Run(new Form1("C:\\Games\\ThiefG\\Dromed.exe", false, "Dromed, """));
+            //Application.Run(new Form1("C:\\Games\\Thief2\\thief2.exe", false, "Thief 2", ""));//, 0));
+            Application.Run(new Form1("C:\\Games\\Thief2\\Dromed.exe", false, "Dromed", ""));
+            //Application.Run(new Form1("C:\\Games\\ThiefG\\Dromed.exe", false, "Dromed", ""));
             //Application.Run(new Form1("C:\\Games\\Thief - Deadly Shadows\\System\\Thief3.exe", false, "Thief 3", "C:\\ProgramData\\Thief 3 Sneaky Upgrade\\Installed FMs"));
             //Application.Run(new Form2()); //Used for testing things without cluttering the main form
         }

@@ -38,6 +38,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnNewFM = new System.Windows.Forms.Button();
             this.cbMaxYear = new System.Windows.Forms.ComboBox();
             this.cbMaxMonth = new System.Windows.Forms.ComboBox();
             this.cbMinYear = new System.Windows.Forms.ComboBox();
@@ -109,6 +110,7 @@
             this.tbFilter = new System.Windows.Forms.TextBox();
             this.chkUnfinished = new System.Windows.Forms.CheckBox();
             this.pnlReadmeList = new System.Windows.Forms.Panel();
+            this.lblReadme = new System.Windows.Forms.Label();
             this.btnReadmeOK = new System.Windows.Forms.Button();
             this.lbReadmeList = new System.Windows.Forms.ListBox();
             this.btnFullScreenReadme = new System.Windows.Forms.Button();
@@ -129,7 +131,6 @@
             this.progBar = new System.Windows.Forms.ProgressBar();
             this.dlgSelectFixFile = new System.Windows.Forms.OpenFileDialog();
             this.dlgSaveFMINI = new System.Windows.Forms.SaveFileDialog();
-            this.lblReadme = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -153,6 +154,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer1.Panel1.Controls.Add(this.btnNewFM);
             this.splitContainer1.Panel1.Controls.Add(this.cbMaxYear);
             this.splitContainer1.Panel1.Controls.Add(this.cbMaxMonth);
             this.splitContainer1.Panel1.Controls.Add(this.cbMinYear);
@@ -179,6 +181,15 @@
             this.splitContainer1.Panel2.Controls.Add(this.webBrowser1);
             this.splitContainer1.Panel2.Controls.Add(this.lbReadmes);
             resources.ApplyResources(this.splitContainer1.Panel2, "splitContainer1.Panel2");
+            // 
+            // btnNewFM
+            // 
+            resources.ApplyResources(this.btnNewFM, "btnNewFM");
+            this.btnNewFM.Image = global::NewDarkLoader.Properties.Resources.newFM;
+            this.btnNewFM.Name = "btnNewFM";
+            this.toolTip1.SetToolTip(this.btnNewFM, resources.GetString("btnNewFM.ToolTip"));
+            this.btnNewFM.UseVisualStyleBackColor = true;
+            this.btnNewFM.Click += new System.EventHandler(this.button1_Click);
             // 
             // cbMaxYear
             // 
@@ -1807,6 +1818,11 @@
             resources.ApplyResources(this.pnlReadmeList, "pnlReadmeList");
             this.pnlReadmeList.Name = "pnlReadmeList";
             // 
+            // lblReadme
+            // 
+            resources.ApplyResources(this.lblReadme, "lblReadme");
+            this.lblReadme.Name = "lblReadme";
+            // 
             // btnReadmeOK
             // 
             resources.ApplyResources(this.btnReadmeOK, "btnReadmeOK");
@@ -1942,11 +1958,6 @@
             this.dlgSaveFMINI.FileName = "fm.ini";
             resources.ApplyResources(this.dlgSaveFMINI, "dlgSaveFMINI");
             // 
-            // lblReadme
-            // 
-            resources.ApplyResources(this.lblReadme, "lblReadme");
-            this.lblReadme.Name = "lblReadme";
-            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -2077,6 +2088,7 @@
         private System.Windows.Forms.Panel pnlReadmeList;
         private System.Windows.Forms.Button btnReadmeOK;
         private System.Windows.Forms.Label lblReadme;
+        private System.Windows.Forms.Button btnNewFM;
     }
 }
 
