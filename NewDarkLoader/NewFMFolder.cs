@@ -20,7 +20,13 @@ namespace NewDarkLoader
             InitializeComponent();
             if(langIni != null)
             {
-                Text = langIni.IniReadValue("FMTable", "NewFMButton");
+                string newTitle = langIni.IniReadValue("FMTable", "NewFMButton");
+                if (newTitle != "")
+                    Text = newTitle;
+                string newLalel = langIni.IniReadValue("FMTable", "NewFMName");
+                if (newLalel != "")
+                    label1.Text = newLalel;
+
                 FMsPath = installedFMsPath;
             }
         }

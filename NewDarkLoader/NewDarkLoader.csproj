@@ -34,7 +34,8 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>queue</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
@@ -172,6 +173,7 @@
       <DependentUpon>Tools.cs</DependentUpon>
     </Compile>
     <Compile Include="ValidFileName.cs" />
+    <Compile Include="WriteLog.cs" />
     <EmbeddedResource Include="Add Existing Tag.resx">
       <DependentUpon>Add Existing Tag.cs</DependentUpon>
     </EmbeddedResource>

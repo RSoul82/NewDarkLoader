@@ -17,6 +17,12 @@ namespace NewDarkLoader
     public partial class Form1 : Form
     {
         #region Fields
+        bool enableLog = false;
+        /// <summary>
+        ///  fmInstalledPath + "\\ndlog.txt" - set after path has been read from ini file.
+        /// </summary>
+        string logFilename = "";
+
         List<FanMission> foundFMs = new List<FanMission>();
         int fmSortColumn = 2; //Default
         SortOrder fmSortOrder = SortOrder.Ascending; //Default value
@@ -282,7 +288,7 @@ namespace NewDarkLoader
         /// <param name="fromDLL">'Play Game' actions depend on whether this is called as a normal exe or as a dll.</param>
         /// <param name="gameVersion">sGameVersion obtained from FMSelectorData.</param>
         ///<param name="insPath">Install path, used for Thief 3.</param>
-        public Form1(string exePath, bool fromDLL, string gameVersion, string insPath, string testVar = "")
+        public Form1(string exePath, bool fromDLL, string gameVersion, string insPath)
         {
             InitializeComponent();
             exeFullPath = exePath;
@@ -355,12 +361,6 @@ namespace NewDarkLoader
             readAllTags();
             loadFilterFromIni();
             aprMessages();
-
-            if (testVar != "")
-            {
-                btnFullScreenReadme.Text = testVar;
-                File.WriteAllText("C:\\users\\robin\\lang.txt", testVar);
-            }
         }
         #endregion
 
@@ -575,9 +575,9 @@ namespace NewDarkLoader
                 chkUnfinished.Checked = true;
             }
             //min date (stored as m,y)
-            restoreMinDate(i.IniReadValue(secOptions, kStartDateFilter));
+            restoreDateFilter(i.IniReadValue(secOptions, kStartDateFilter), true, false);
             //max date (stored as m,y)
-            restoreMaxDate(i.IniReadValue(secOptions, kEndDateFilter));
+            restoreDateFilter(i.IniReadValue(secOptions, kEndDateFilter), false, true);
             //read include and exlude tag lists
             string incTags = i.IniReadValue(secOptions, kIncTagsFilter);
             string excTags = i.IniReadValue(secOptions, kExcTagsFilter);
@@ -594,7 +594,10 @@ namespace NewDarkLoader
             setFilter();
         }
 
-        private void restoreMinDate(string monthYearString)
+        /// <summary>
+        /// Restores the date filter from the ini file.
+        /// </summary>
+        private void restoreDateFilter(string monthYearString, bool minDate, bool maxDate)
         {
             if (monthYearString != "")
             {
@@ -602,22 +605,16 @@ namespace NewDarkLoader
                 if (split.Length == 2)
                 {
                     int mInt = Convert.ToInt32(split[0]);
-                    cbMinMonth.SelectedIndex = mInt;
-                    cbMinYear.SelectedIndex = indexOfCBValue(cbMinYear, split[1]);
-                }
-            }
-        }
-
-        private void restoreMaxDate(string monthYearString)
-        {
-            if (monthYearString != "")
-            {
-                string[] split = monthYearString.Split(',');
-                if (split.Length == 2)
-                {
-                    int mInt = Convert.ToInt32(split[0]);
-                    cbMaxMonth.SelectedIndex = mInt;
-                    cbMaxYear.SelectedIndex = indexOfCBValue(cbMaxYear, split[1]);
+                    if (minDate)
+                    {
+                        cbMinMonth.SelectedIndex = mInt;
+                        cbMinYear.SelectedIndex = indexOfCBValue(cbMinYear, split[1]);
+                    }
+                    else if (maxDate)
+                    {
+                        cbMaxMonth.SelectedIndex = mInt;
+                        cbMaxYear.SelectedIndex = indexOfCBValue(cbMaxYear, split[1]);
+                    }
                 }
             }
         }
@@ -895,6 +892,7 @@ namespace NewDarkLoader
             {
                 Icon = Properties.Resources.sp;
                 playTextPart1 = editText;
+                gameName = "DromEd";
                 btnPlOriginal.Text = "DromEd";
                 currentReturnType = kReturn_type_ed;
                 generateFMiniToolStripMenuItem.Visible = true;
@@ -904,6 +902,7 @@ namespace NewDarkLoader
             {
                 Icon = Properties.Resources.sp;
                 playTextPart1 = editText;
+                gameName = "ShockEd";
                 btnPlOriginal.Text = "ShockEd";
                 currentReturnType = kReturn_type_ed;
                 generateFMiniToolStripMenuItem.Visible = true;
@@ -961,6 +960,24 @@ namespace NewDarkLoader
             }
             else
                 defaultSplit();
+
+            //check log enable state
+            string logValue = getStringFromINI(secOptions, "Log", StringType.SimpleNumber, i);
+            if (logValue == "1")
+            {
+                enableLog = true; //default = false
+                logFilename = fmInstalledPath + "\\ndlog.txt";
+
+                if (File.Exists(logFilename))
+                {
+                    File.WriteAllText(logFilename, ""); //clear the file
+                }
+
+                File.WriteAllText(logFilename, "Log file: " + DateTime.Now);
+                WriteLog.AddEntry(logFilename, "Game: " + exeFullPath);
+                WriteLog.AddEntry(logFilename, "Archive Path: " + fmArchivePath);
+                WriteLog.AddEntry(logFilename, "Installed FMs: " + fmInstalledPath);
+            }
         }
 
         private void defaultSplit()
@@ -1092,6 +1109,9 @@ namespace NewDarkLoader
         /// </summary>
         private void fillFMList()
         {
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Filling FM list");
+
             foundFMs.Clear();
 
             #region Archives
@@ -1167,6 +1187,9 @@ namespace NewDarkLoader
         /// <param name="sectionName">Value for the ini file.</param>
         private void addFMToList(string simpleName, string subFolder, string extension, string sectionName, FMType archOrDir)
         {
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Adding FM: " + simpleName);
+
             //Create FM object with values ready for table
             FanMission nFM = new FanMission();
             nFM.archive = simpleName + extension;
@@ -1318,6 +1341,10 @@ namespace NewDarkLoader
         {
             //Select previously played FM
             string lastSelFM = "FM=" + i.IniReadValue(secOptions, kLast_fm);
+
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Selecting in table: " + lastSelFM);
+
             if (lastSelFM != "FM=" && lastSelFM != "")
             {
                 selectRow(lastSelFM);
@@ -1447,7 +1474,6 @@ namespace NewDarkLoader
 
         private string getStringFromINI(string sectionName, string key, StringType sType, INIFile ini)
         {
-            //Logger.LogThisLine("Reading [" + sectionName + "], " + key + " from ini file.");
             string result = ini.IniReadValue(sectionName, key);
 
             if (sType == StringType.TextWithQuotesRemoved)
@@ -1457,7 +1483,6 @@ namespace NewDarkLoader
                     result = result.Replace("\"", "");
                 }
             }
-            //Logger.LogThisLine("\tValue: " + result);
 
             return result;
         }
@@ -1737,22 +1762,24 @@ namespace NewDarkLoader
         private string readmeTitleSearch()
         {
             string title = "";
-            string[] fileLines = File.ReadAllLines(readmePath);
-
-            if (fileIsRTF(fileLines))
+            if (readmePath != "")
             {
-                RichTextBox tempBox = new RichTextBox();
-                tempBox.Rtf = File.ReadAllText(readmePath);
-                string pText = tempBox.Text;
-                pText = pText.Replace("\t", "");
-                string[] plainLines = pText.Split('\n');
-                title = titleFromStringArray(plainLines);
-            }
-            else
-            {
-                title = titleFromStringArray(fileLines);
-            }
+                string[] fileLines = File.ReadAllLines(readmePath);
 
+                if (fileIsRTF(fileLines))
+                {
+                    RichTextBox tempBox = new RichTextBox();
+                    tempBox.Rtf = File.ReadAllText(readmePath);
+                    string pText = tempBox.Text;
+                    pText = pText.Replace("\t", "");
+                    string[] plainLines = pText.Split('\n');
+                    title = titleFromStringArray(plainLines);
+                }
+                else
+                {
+                    title = titleFromStringArray(fileLines);
+                }
+            }
             return title;
         }
 
@@ -2354,6 +2381,9 @@ namespace NewDarkLoader
         {
             if (File.Exists(readmePath))
             {
+                if (enableLog)
+                    WriteLog.AddEntry(logFilename, "Showing readme: " + readmePath);
+
                 if (readmePath.ToLower().EndsWith(".htm") || readmePath.ToLower().EndsWith(".html"))
                 {
                     webBrowser1.BringToFront();
@@ -2660,6 +2690,14 @@ namespace NewDarkLoader
 
             possibleReadmes.Sort(CompareReadmes);
 
+            if (enableLog)
+            {
+                foreach(string readme in possibleReadmes)
+                {
+                    WriteLog.AddEntry(logFilename, "Possible readme: " + readme);
+                }
+            }
+
             return possibleReadmes;
         }
 
@@ -2711,12 +2749,17 @@ namespace NewDarkLoader
         private void getFMDetails(int currentFMID, bool overwriteData, bool withUserSelection = false)
         {
             FanMission selFM = foundFMs[currentFMID];
+
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Getting details of " + selFM.sectionName);
+
             string selArchive = selFM.archive;
             string sectionName = selFM.sectionName;
             string subFolder = selFM.subFolder;
 
             if (File.Exists(fmArchivePath + subFolder + "\\" + selArchive) || Directory.Exists(fmInstalledPath + "\\" + selArchive))
             {
+                readmePath = ""; //reset this so it's not left with value from previously selected FM
                 fmExtractionFolder = selFM.extractionName;
 
                 bool fmIsArchive = false;
@@ -2758,14 +2801,17 @@ namespace NewDarkLoader
                     }
                 }
 
-                //Readme always needs to be scanned/extracted for display in the window
-                if (fmIsArchive)
+                if (infoFileFromINI != "")
                 {
-                    if (subFolder != "") subFolder += "\\";
-                    extractReadme(subFolder, selArchive, infoFileFromINI, sectionName);
+                    //Readme always needs to be scanned/extracted for display in the window
+                    if (fmIsArchive)
+                    {
+                        if (subFolder != "") subFolder += "\\";
+                        extractReadme(subFolder, selArchive, infoFileFromINI, sectionName);
+                    }
+                    else
+                        scanReadme(fmInstalledPath + "\\" + selArchive, infoFileFromINI, sectionName);
                 }
-                else
-                    scanReadme(fmInstalledPath + "\\" + selArchive, infoFileFromINI, sectionName);
 
                 string titleFromINI = i.IniReadValue(sectionName, kFm_title);
                 string tagsFromINI = i.IniReadValue(sectionName, kTags);
@@ -3933,13 +3979,13 @@ namespace NewDarkLoader
                 i.IniWriteValue(secOptions, kUnfinishedFilter, null);
 
             //Min date set
-            if (cbMinYear.SelectedIndex != 0)
+            if (cbMinYear.SelectedIndex > 0)
                 i.IniWriteValue(secOptions, kStartDateFilter, (cbMinMonth.SelectedIndex) + "," + cbMinYear.Items[cbMinYear.SelectedIndex]);
             else
                 i.IniWriteValue(secOptions, kStartDateFilter, null);
 
             //Max date set.
-            if (cbMaxYear.SelectedIndex != 0)
+            if (cbMaxYear.SelectedIndex > 0)
                 i.IniWriteValue(secOptions, kEndDateFilter, (cbMaxMonth.SelectedIndex) + "," + cbMaxYear.Items[cbMaxYear.SelectedIndex]);
             else
                 i.IniWriteValue(secOptions, kEndDateFilter, null);
@@ -4587,8 +4633,7 @@ namespace NewDarkLoader
         private void aprMessages()
         {
             if (DateTime.Today.Hour < 12 && DateTime.Today.Day == 1 && DateTime.Today.Month == 4)
-            {
-                //Logger.LogThisLine("\tYes you taffer!");
+            { 
                 string message = "The Trickster is behind you!";
                 toolTip1.SetToolTip(btnAddNewTag, message);
                 toolTip1.SetToolTip(btnAddExistTag, message);
@@ -4694,10 +4739,10 @@ namespace NewDarkLoader
             DateTime convToDate = DateTime.ParseExact(relDate, dateFormat, null);
 
             int fMonthMin = 1; //Default, Jan
-            if (cbMinMonth.SelectedIndex != 0)
+            if (cbMinMonth.SelectedIndex > 0)
                 fMonthMin = cbMinMonth.SelectedIndex;
             int fYearMin = 1066;
-            if (cbMinYear.SelectedIndex != 0)
+            if (cbMinYear.SelectedIndex > 0)
                 fYearMin = Convert.ToInt32(cbMinYear.Items[cbMinYear.SelectedIndex]);
 
             DateTime min = new DateTime(fYearMin, fMonthMin, 1);
@@ -4734,6 +4779,9 @@ namespace NewDarkLoader
 
         private void btnPlOriginal_Click(object sender, EventArgs e)
         {
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Playing original game");
+
             noLastFM();
             mainButtonClicked = true;
             if (!NDLRunFromDLL)
@@ -4773,6 +4821,9 @@ namespace NewDarkLoader
         private void userSelectsPlayFM()
         {
             userPlayFM = true;
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Playing: " + foundFMs[selFMID].sectionName);
+
             string installStatus = foundFMs[selFMID].installed;
             if (installStatus == "") //FM not installed
             {
@@ -4795,6 +4846,8 @@ namespace NewDarkLoader
             else
             {
                 uninstallFM();
+                if (enableLog)
+                    WriteLog.AddEntry(logFilename, "Uninstalling: " + foundFMs[selFMID].sectionName);
             }
         }
 
@@ -4814,6 +4867,10 @@ namespace NewDarkLoader
         private void installationChoice()
         {
             setExtractionPath();
+
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Installing: " + foundFMs[selFMID].sectionName);
+
             if (sevenZipGExe == "") //If 7zip not installed
             {
                 progBar.BringToFront();
@@ -5019,6 +5076,9 @@ namespace NewDarkLoader
             i.IniWriteValue(fm.sectionName, kLast_played, DateIntConverter.dateToHexString(lastPlayed));
             foundFMs[selFMID] = fm;
 
+            if(enableLog)
+                WriteLog.AddEntry(logFilename, "Playing " + fm.sectionName);
+
             if (!NDLRunFromDLL)
             {
                 Process p = new Process();
@@ -5046,6 +5106,9 @@ namespace NewDarkLoader
         private void uninstallFM()
         {
             FanMission fm = foundFMs[selFMID];
+
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Uninstalling " + fm.sectionName);
 
             string backupZipPath = fmArchivePath + fm.subFolder + "\\" + fm.saveBackupName;
             string currentFMPath = fmInstalledPath + "\\" + fm.extractionName;
@@ -5173,6 +5236,8 @@ namespace NewDarkLoader
 
         private void deleteFMFolder(string fmPath)
         {
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Deleting FM folder: " + fmPath);
 
             //clear all read only flags
             foreach (string file in Directory.GetFiles(fmPath, "*.*", SearchOption.AllDirectories))
