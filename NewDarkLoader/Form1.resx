@@ -3840,6 +3840,30 @@
   <data name="gbTags.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
   </data>
+  <data name="btnConvertOggs.Location" type="System.Drawing.Point, System.Drawing">
+    <value>283, 118</value>
+  </data>
+  <data name="btnConvertOggs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>117, 37</value>
+  </data>
+  <data name="btnConvertOggs.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="btnConvertOggs.Text" xml:space="preserve">
+    <value>Convert oggs in DCE</value>
+  </data>
+  <data name="&gt;&gt;btnConvertOggs.Name" xml:space="preserve">
+    <value>btnConvertOggs</value>
+  </data>
+  <data name="&gt;&gt;btnConvertOggs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnConvertOggs.Parent" xml:space="preserve">
+    <value>gbTags</value>
+  </data>
+  <data name="&gt;&gt;btnConvertOggs.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="btnTagPresets.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 18</value>
   </data>
@@ -3862,7 +3886,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;btnTagPresets.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="lbTags.Location" type="System.Drawing.Point, System.Drawing">
     <value>126, 37</value>
@@ -3889,7 +3913,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;lbTags.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="lblFMTags.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3916,7 +3940,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;lblFMTags.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="btnRemoveTags.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -3943,7 +3967,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;btnRemoveTags.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="tagTree.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -3967,7 +3991,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;tagTree.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="btnAddNewTag.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -3994,7 +4018,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;btnAddNewTag.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="tbAddTag.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -4018,7 +4042,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;tbAddTag.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="btnAddExistTag.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -4045,7 +4069,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;btnAddExistTag.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <metadata name="menuTags.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>397, 17</value>
@@ -4243,7 +4267,7 @@
     <value>gbTags</value>
   </data>
   <data name="&gt;&gt;menuTags.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="gbTags.Location" type="System.Drawing.Point, System.Drawing">
     <value>504, 29</value>

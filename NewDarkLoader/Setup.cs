@@ -44,9 +44,9 @@ namespace NewDarkLoader
         private INIFile i;
         private bool firstRun;
         private string fmInstalledPath = "";
-        private string folderRequired = "";
-        private string fldrRequiredTitle = "";
-        private string archIsFMsWarning = "";
+        private string folderRequired = "Archive folder required.";
+        private string fldrRequiredTitle = "Error";
+        private string archIsFMsWarning = "The selected archive folder is actually your installed FMs folder.";
 
         #region Key names
         private string secOptions = "";
@@ -181,8 +181,10 @@ namespace NewDarkLoader
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            string archivePathLCTest = tbFMArchivePath.Text.ToLower();
+            string installedPathLCTest = fmInstalledPath.ToLower();
             //check that archive root has been set
-            if (tbFMArchivePath.Text != "" && tbFMArchivePath.Text != fmInstalledPath)
+            if (tbFMArchivePath.Text != "" && archivePathLCTest != installedPathLCTest)
             {
                 sInfo.archiveDir = tbFMArchivePath.Text;
                 sInfo.lang = cBlang.SelectedIndex + 1;
@@ -233,7 +235,7 @@ namespace NewDarkLoader
             {
                 if (tbFMArchivePath.Text == "")
                     MessageBox.Show(folderRequired, fldrRequiredTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                else if (tbFMArchivePath.Text == fmInstalledPath)
+                else if (archivePathLCTest == installedPathLCTest)
                     MessageBox.Show(archIsFMsWarning, fldrRequiredTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
         }

@@ -131,6 +131,7 @@
             this.progBar = new System.Windows.Forms.ProgressBar();
             this.dlgSelectFixFile = new System.Windows.Forms.OpenFileDialog();
             this.dlgSaveFMINI = new System.Windows.Forms.SaveFileDialog();
+            this.btnConvertOggs = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -1503,6 +1504,7 @@
             // gbTags
             // 
             resources.ApplyResources(this.gbTags, "gbTags");
+            this.gbTags.Controls.Add(this.btnConvertOggs);
             this.gbTags.Controls.Add(this.btnTagPresets);
             this.gbTags.Controls.Add(this.lbTags);
             this.gbTags.Controls.Add(this.lblFMTags);
@@ -1958,6 +1960,13 @@
             this.dlgSaveFMINI.FileName = "fm.ini";
             resources.ApplyResources(this.dlgSaveFMINI, "dlgSaveFMINI");
             // 
+            // btnConvertOggs
+            // 
+            resources.ApplyResources(this.btnConvertOggs, "btnConvertOggs");
+            this.btnConvertOggs.Name = "btnConvertOggs";
+            this.btnConvertOggs.UseVisualStyleBackColor = true;
+            this.btnConvertOggs.Click += new System.EventHandler(this.btnConvertOggs_Click);
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -2089,6 +2098,7 @@
         private System.Windows.Forms.Button btnReadmeOK;
         private System.Windows.Forms.Label lblReadme;
         private System.Windows.Forms.Button btnNewFM;
+        private System.Windows.Forms.Button btnConvertOggs;
     }
 }
 

@@ -328,7 +328,7 @@ namespace NewDarkLoader
             cbMaxYear.SelectedIndex = 0;
 
             //If there are missing options
-            if (fmArchivePath == "" || dateFormat == "")
+            if (fmArchivePath == "" || dateFormat == "" || noFMsInArchiveRoot(fmArchivePath))
             {
                 showSetup(true, false);
             }
@@ -360,7 +360,45 @@ namespace NewDarkLoader
             restoreSortOrder();
             readAllTags();
             loadFilterFromIni();
+
+            if(NDLRunFromDLL) //Testing ogg conversion - not ready yet.
+            {
+                btnConvertOggs.Visible = false;
+            }
+
             aprMessages();
+        }
+
+        /// <summary>
+        /// True if there are no archives or the folder doesn't even exist (e.g. it's been moved).
+        /// </summary>
+        /// <param name="fmArchivePath">ArchiveRoot from ini file/setup.</param>
+        /// <returns></returns>
+        private bool noFMsInArchiveRoot(string fmArchivePath)
+        {
+            if (!Directory.Exists(fmArchivePath))
+            {
+                return true;
+            }
+            else
+            {
+                string[] files = Directory.GetFiles(fmArchivePath);
+                int foundArchives = 0;
+
+                for (int x = 0; x < files.Length; x++)
+                {
+                    if (validArchiveExtension(files[x]))
+                    {
+                        foundArchives++;
+                        break;
+                    }
+                }
+
+                if (foundArchives > 0)
+                    return false;
+                else
+                    return true;
+            }
         }
         #endregion
 
@@ -1339,17 +1377,33 @@ namespace NewDarkLoader
         /// </summary>
         private void selectLastPlayed()
         {
-            //Select previously played FM
-            string lastSelFM = "FM=" + i.IniReadValue(secOptions, kLast_fm);
-
-            if (enableLog)
-                WriteLog.AddEntry(logFilename, "Selecting in table: " + lastSelFM);
-
-            if (lastSelFM != "FM=" && lastSelFM != "")
+            if (foundFMs.Count > 0)
             {
-                selectRow(lastSelFM);
+                //Select previously played FM
+                string lastSelFM = "FM=" + i.IniReadValue(secOptions, kLast_fm);
+
+                if (lastSelFM != "FM=" && lastSelFM != "")
+                {
+                    if (enableLog)
+                    {
+                        WriteLog.AddEntry(logFilename, "Selecting in table: " + lastSelFM);
+                    }
+                    selectRow(lastSelFM);
+                }
+                else if (foundFMs.Count > 0)
+                {
+                    if (enableLog)
+                    {
+                        WriteLog.AddEntry(logFilename, "No 'last FM'. Selecting first row.");
+                    }
+                    selectRow(foundFMs[0].sectionName);
+                }
             }
-            else selectRow(foundFMs[0].sectionName);
+            else
+            {
+                if (enableLog)
+                    WriteLog.AddEntry(logFilename, "No FMs found.");
+            }
         }
 
         /// <summary>
@@ -5398,6 +5452,11 @@ namespace NewDarkLoader
 
             pnlReadmeList.SendToBack();
             refreshFMTable();
+        }
+
+        private void btnConvertOggs_Click(object sender, EventArgs e)
+        {
+            ConvertOGG newOggConverter = new ConvertOGG(); //testing - constructor perofrms conversion of DCE music files
         }
     }
 
