@@ -204,6 +204,9 @@ namespace NewDarkLoader
             return val;
         }
 
+        /// <summary>
+        /// Reads the ini file line by line and finds sections "[section name]" and the values of that section "key=value".
+        /// </summary>
         private void storeINIdata()
         {
             string[] fileLines = File.ReadAllLines(iniPath, Encoding.Default);

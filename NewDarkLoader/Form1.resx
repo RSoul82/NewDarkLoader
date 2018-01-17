@@ -118,15 +118,52 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="splitContainer1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="splitContainerTopHalf.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="splitContainer1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="splitContainerTopHalf.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="splitContainer1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
+  <data name="splitContainerTopHalf.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
     <value>Horizontal</value>
+  </data>
+  <data name="picLogging.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="picLogging.Location" type="System.Drawing.Point, System.Drawing">
+    <value>472, 223</value>
+  </data>
+  <data name="picLogging.Size" type="System.Drawing.Size, System.Drawing">
+    <value>20, 20</value>
+  </data>
+  <data name="picLogging.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>AutoSize</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="picLogging.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>300, 17</value>
+  </metadata>
+  <data name="picLogging.ToolTip" xml:space="preserve">
+    <value>Logging Enabled</value>
+  </data>
+  <data name="picLogging.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;picLogging.Name" xml:space="preserve">
+    <value>picLogging</value>
+  </data>
+  <data name="&gt;&gt;picLogging.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;picLogging.Parent" xml:space="preserve">
+    <value>splitContainerTopHalf.Panel1</value>
+  </data>
+  <data name="&gt;&gt;picLogging.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="btnNewFM.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -140,13 +177,9 @@
   <data name="btnNewFM.Size" type="System.Drawing.Size, System.Drawing">
     <value>26, 26</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="btnNewFM.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>300, 17</value>
-  </metadata>
   <data name="btnNewFM.ToolTip" xml:space="preserve">
     <value>New FM Folder</value>
   </data>
@@ -160,10 +193,10 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnNewFM.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;btnNewFM.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="cbMaxYear.Items" xml:space="preserve">
     <value />
@@ -1765,10 +1798,10 @@
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cbMaxYear.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMaxYear.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="cbMaxMonth.Items" xml:space="preserve">
     <value />
@@ -1825,10 +1858,10 @@
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cbMaxMonth.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMaxMonth.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="cbMinYear.Items" xml:space="preserve">
     <value />
@@ -3430,10 +3463,10 @@
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cbMinYear.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMinYear.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="cbMinMonth.Items" xml:space="preserve">
     <value />
@@ -3490,10 +3523,10 @@
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cbMinMonth.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMinMonth.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="lblArchive.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3598,10 +3631,10 @@
     <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pnlProgress.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;pnlProgress.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="fmTable.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -3748,10 +3781,10 @@
     <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;fmTable.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;fmTable.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="btnRefresh.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -3775,10 +3808,10 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnRefresh.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;btnRefresh.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -3802,10 +3835,10 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="btnHideTags.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
@@ -3832,10 +3865,10 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnHideTags.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;btnHideTags.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="gbTags.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
@@ -4288,10 +4321,10 @@
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;gbTags.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;gbTags.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="btnResetFilters.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -4312,10 +4345,10 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnResetFilters.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;btnResetFilters.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="lblTagFilter.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4339,10 +4372,10 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lblTagFilter.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;lblTagFilter.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="btnSetTagFilter.Location" type="System.Drawing.Point, System.Drawing">
     <value>735, 3</value>
@@ -4363,10 +4396,10 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnSetTagFilter.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;btnSetTagFilter.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="tbFilter.Location" type="System.Drawing.Point, System.Drawing">
     <value>111, 4</value>
@@ -4387,10 +4420,10 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tbFilter.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;tbFilter.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="chkUnfinished.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4414,27 +4447,27 @@
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;chkUnfinished.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;chkUnfinished.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
-  <data name="splitContainer1.Panel1.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
+  <data name="splitContainerTopHalf.Panel1.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>No</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel1.Name" xml:space="preserve">
-    <value>splitContainer1.Panel1</value>
+  <data name="&gt;&gt;splitContainerTopHalf.Panel1.Name" xml:space="preserve">
+    <value>splitContainerTopHalf.Panel1</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel1.Type" xml:space="preserve">
+  <data name="&gt;&gt;splitContainerTopHalf.Panel1.Type" xml:space="preserve">
     <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel1.Parent" xml:space="preserve">
-    <value>splitContainer1</value>
+  <data name="&gt;&gt;splitContainerTopHalf.Panel1.Parent" xml:space="preserve">
+    <value>splitContainerTopHalf</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;splitContainerTopHalf.Panel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="splitContainer1.Panel1MinSize" type="System.Int32, mscorlib">
+  <data name="splitContainerTopHalf.Panel1MinSize" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="lblReadme.AutoSize" type="System.Boolean, mscorlib">
@@ -4528,7 +4561,7 @@
     <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pnlReadmeList.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel2</value>
+    <value>splitContainerTopHalf.Panel2</value>
   </data>
   <data name="&gt;&gt;pnlReadmeList.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -4555,7 +4588,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnFullScreenReadme.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel2</value>
+    <value>splitContainerTopHalf.Panel2</value>
   </data>
   <data name="&gt;&gt;btnFullScreenReadme.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -4582,7 +4615,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnShowInBrowser.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel2</value>
+    <value>splitContainerTopHalf.Panel2</value>
   </data>
   <data name="&gt;&gt;btnShowInBrowser.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -4609,12 +4642,12 @@
     <value>System.Windows.Forms.WebBrowser, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;webBrowser1.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel2</value>
+    <value>splitContainerTopHalf.Panel2</value>
   </data>
   <data name="&gt;&gt;webBrowser1.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="lbReadmes.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="rtbReadmes.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
   <metadata name="rightClickReadme.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -4635,67 +4668,67 @@
   <data name="&gt;&gt;rightClickReadme.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="lbReadmes.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="rtbReadmes.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 3</value>
   </data>
-  <data name="lbReadmes.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbReadmes.Size" type="System.Drawing.Size, System.Drawing">
     <value>912, 280</value>
   </data>
-  <data name="lbReadmes.TabIndex" type="System.Int32, mscorlib">
+  <data name="rtbReadmes.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="lbReadmes.Text" xml:space="preserve">
+  <data name="rtbReadmes.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="&gt;&gt;lbReadmes.Name" xml:space="preserve">
-    <value>lbReadmes</value>
+  <data name="&gt;&gt;rtbReadmes.Name" xml:space="preserve">
+    <value>rtbReadmes</value>
   </data>
-  <data name="&gt;&gt;lbReadmes.Type" xml:space="preserve">
+  <data name="&gt;&gt;rtbReadmes.Type" xml:space="preserve">
     <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lbReadmes.Parent" xml:space="preserve">
-    <value>splitContainer1.Panel2</value>
+  <data name="&gt;&gt;rtbReadmes.Parent" xml:space="preserve">
+    <value>splitContainerTopHalf.Panel2</value>
   </data>
-  <data name="&gt;&gt;lbReadmes.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;rtbReadmes.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="splitContainer1.Panel2.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
+  <data name="splitContainerTopHalf.Panel2.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
     <value>No</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel2.Name" xml:space="preserve">
-    <value>splitContainer1.Panel2</value>
+  <data name="&gt;&gt;splitContainerTopHalf.Panel2.Name" xml:space="preserve">
+    <value>splitContainerTopHalf.Panel2</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel2.Type" xml:space="preserve">
+  <data name="&gt;&gt;splitContainerTopHalf.Panel2.Type" xml:space="preserve">
     <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel2.Parent" xml:space="preserve">
-    <value>splitContainer1</value>
+  <data name="&gt;&gt;splitContainerTopHalf.Panel2.Parent" xml:space="preserve">
+    <value>splitContainerTopHalf</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Panel2.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;splitContainerTopHalf.Panel2.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="splitContainer1.Panel2MinSize" type="System.Int32, mscorlib">
+  <data name="splitContainerTopHalf.Panel2MinSize" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="splitContainer1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="splitContainerTopHalf.Size" type="System.Drawing.Size, System.Drawing">
     <value>922, 539</value>
   </data>
-  <data name="splitContainer1.SplitterDistance" type="System.Int32, mscorlib">
+  <data name="splitContainerTopHalf.SplitterDistance" type="System.Int32, mscorlib">
     <value>249</value>
   </data>
-  <data name="splitContainer1.TabIndex" type="System.Int32, mscorlib">
+  <data name="splitContainerTopHalf.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Name" xml:space="preserve">
-    <value>splitContainer1</value>
+  <data name="&gt;&gt;splitContainerTopHalf.Name" xml:space="preserve">
+    <value>splitContainerTopHalf</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
+  <data name="&gt;&gt;splitContainerTopHalf.Type" xml:space="preserve">
     <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;splitContainerTopHalf.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;splitContainerTopHalf.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="btnPlOriginal.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -4720,7 +4753,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnPlOriginal.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;btnPlOriginal.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -4753,7 +4786,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnPlFM.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;btnPlFM.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -4780,7 +4813,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnExit.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;btnExit.ZOrder" xml:space="preserve">
     <value>6</value>
@@ -4816,7 +4849,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnWebSearch.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;btnWebSearch.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -4849,7 +4882,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnInstallOnly.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;btnInstallOnly.ZOrder" xml:space="preserve">
     <value>3</value>
@@ -4876,7 +4909,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnTools.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;btnTools.ZOrder" xml:space="preserve">
     <value>4</value>
@@ -4903,7 +4936,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnSetup.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;btnSetup.ZOrder" xml:space="preserve">
     <value>5</value>
@@ -4930,33 +4963,33 @@
     <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;progBar.Parent" xml:space="preserve">
-    <value>panel1</value>
+    <value>pnlTopHalf</value>
   </data>
   <data name="&gt;&gt;progBar.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="panel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="pnlTopHalf.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Bottom</value>
   </data>
-  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="pnlTopHalf.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 539</value>
   </data>
-  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="pnlTopHalf.Size" type="System.Drawing.Size, System.Drawing">
     <value>922, 44</value>
   </data>
-  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+  <data name="pnlTopHalf.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
   </data>
-  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
-    <value>panel1</value>
+  <data name="&gt;&gt;pnlTopHalf.Name" xml:space="preserve">
+    <value>pnlTopHalf</value>
   </data>
-  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+  <data name="&gt;&gt;pnlTopHalf.Type" xml:space="preserve">
     <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;pnlTopHalf.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;pnlTopHalf.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
   <metadata name="dlgSelectFixFile.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

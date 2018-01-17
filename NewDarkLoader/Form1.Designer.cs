@@ -37,7 +37,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainerTopHalf = new System.Windows.Forms.SplitContainer();
+            this.picLogging = new System.Windows.Forms.PictureBox();
             this.btnNewFM = new System.Windows.Forms.Button();
             this.cbMaxYear = new System.Windows.Forms.ComboBox();
             this.cbMaxMonth = new System.Windows.Forms.ComboBox();
@@ -67,6 +68,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnHideTags = new System.Windows.Forms.Button();
             this.gbTags = new System.Windows.Forms.GroupBox();
+            this.btnConvertOggs = new System.Windows.Forms.Button();
             this.btnTagPresets = new System.Windows.Forms.Button();
             this.lbTags = new System.Windows.Forms.ListBox();
             this.lblFMTags = new System.Windows.Forms.Label();
@@ -116,14 +118,14 @@
             this.btnFullScreenReadme = new System.Windows.Forms.Button();
             this.btnShowInBrowser = new System.Windows.Forms.Button();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
-            this.lbReadmes = new System.Windows.Forms.RichTextBox();
+            this.rtbReadmes = new System.Windows.Forms.RichTextBox();
             this.rightClickReadme = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.item1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnPlOriginal = new System.Windows.Forms.Button();
             this.btnPlFM = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlTopHalf = new System.Windows.Forms.Panel();
             this.btnWebSearch = new System.Windows.Forms.Button();
             this.btnInstallOnly = new System.Windows.Forms.Button();
             this.btnTools = new System.Windows.Forms.Button();
@@ -131,11 +133,11 @@
             this.progBar = new System.Windows.Forms.ProgressBar();
             this.dlgSelectFixFile = new System.Windows.Forms.OpenFileDialog();
             this.dlgSaveFMINI = new System.Windows.Forms.SaveFileDialog();
-            this.btnConvertOggs = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerTopHalf)).BeginInit();
+            this.splitContainerTopHalf.Panel1.SuspendLayout();
+            this.splitContainerTopHalf.Panel2.SuspendLayout();
+            this.splitContainerTopHalf.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogging)).BeginInit();
             this.pnlProgress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fmTable)).BeginInit();
             this.rightClickFM.SuspendLayout();
@@ -143,45 +145,55 @@
             this.menuTags.SuspendLayout();
             this.pnlReadmeList.SuspendLayout();
             this.rightClickReadme.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.pnlTopHalf.SuspendLayout();
             this.SuspendLayout();
             // 
-            // splitContainer1
+            // splitContainerTopHalf
             // 
-            this.splitContainer1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            resources.ApplyResources(this.splitContainer1, "splitContainer1");
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainerTopHalf.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            resources.ApplyResources(this.splitContainerTopHalf, "splitContainerTopHalf");
+            this.splitContainerTopHalf.Name = "splitContainerTopHalf";
             // 
-            // splitContainer1.Panel1
+            // splitContainerTopHalf.Panel1
             // 
-            this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Panel1.Controls.Add(this.btnNewFM);
-            this.splitContainer1.Panel1.Controls.Add(this.cbMaxYear);
-            this.splitContainer1.Panel1.Controls.Add(this.cbMaxMonth);
-            this.splitContainer1.Panel1.Controls.Add(this.cbMinYear);
-            this.splitContainer1.Panel1.Controls.Add(this.cbMinMonth);
-            this.splitContainer1.Panel1.Controls.Add(this.pnlProgress);
-            this.splitContainer1.Panel1.Controls.Add(this.fmTable);
-            this.splitContainer1.Panel1.Controls.Add(this.btnRefresh);
-            this.splitContainer1.Panel1.Controls.Add(this.label1);
-            this.splitContainer1.Panel1.Controls.Add(this.btnHideTags);
-            this.splitContainer1.Panel1.Controls.Add(this.gbTags);
-            this.splitContainer1.Panel1.Controls.Add(this.btnResetFilters);
-            this.splitContainer1.Panel1.Controls.Add(this.lblTagFilter);
-            this.splitContainer1.Panel1.Controls.Add(this.btnSetTagFilter);
-            this.splitContainer1.Panel1.Controls.Add(this.tbFilter);
-            this.splitContainer1.Panel1.Controls.Add(this.chkUnfinished);
-            resources.ApplyResources(this.splitContainer1.Panel1, "splitContainer1.Panel1");
+            this.splitContainerTopHalf.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.picLogging);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.btnNewFM);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.cbMaxYear);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.cbMaxMonth);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.cbMinYear);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.cbMinMonth);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.pnlProgress);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.fmTable);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.btnRefresh);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.label1);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.btnHideTags);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.gbTags);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.btnResetFilters);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.lblTagFilter);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.btnSetTagFilter);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.tbFilter);
+            this.splitContainerTopHalf.Panel1.Controls.Add(this.chkUnfinished);
+            resources.ApplyResources(this.splitContainerTopHalf.Panel1, "splitContainerTopHalf.Panel1");
             // 
-            // splitContainer1.Panel2
+            // splitContainerTopHalf.Panel2
             // 
-            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Panel2.Controls.Add(this.pnlReadmeList);
-            this.splitContainer1.Panel2.Controls.Add(this.btnFullScreenReadme);
-            this.splitContainer1.Panel2.Controls.Add(this.btnShowInBrowser);
-            this.splitContainer1.Panel2.Controls.Add(this.webBrowser1);
-            this.splitContainer1.Panel2.Controls.Add(this.lbReadmes);
-            resources.ApplyResources(this.splitContainer1.Panel2, "splitContainer1.Panel2");
+            this.splitContainerTopHalf.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainerTopHalf.Panel2.Controls.Add(this.pnlReadmeList);
+            this.splitContainerTopHalf.Panel2.Controls.Add(this.btnFullScreenReadme);
+            this.splitContainerTopHalf.Panel2.Controls.Add(this.btnShowInBrowser);
+            this.splitContainerTopHalf.Panel2.Controls.Add(this.webBrowser1);
+            this.splitContainerTopHalf.Panel2.Controls.Add(this.rtbReadmes);
+            resources.ApplyResources(this.splitContainerTopHalf.Panel2, "splitContainerTopHalf.Panel2");
+            // 
+            // picLogging
+            // 
+            resources.ApplyResources(this.picLogging, "picLogging");
+            this.picLogging.BackColor = System.Drawing.Color.Transparent;
+            this.picLogging.Image = global::NewDarkLoader.Properties.Resources.log;
+            this.picLogging.Name = "picLogging";
+            this.picLogging.TabStop = false;
+            this.toolTip1.SetToolTip(this.picLogging, resources.GetString("picLogging.ToolTip"));
             // 
             // btnNewFM
             // 
@@ -190,7 +202,7 @@
             this.btnNewFM.Name = "btnNewFM";
             this.toolTip1.SetToolTip(this.btnNewFM, resources.GetString("btnNewFM.ToolTip"));
             this.btnNewFM.UseVisualStyleBackColor = true;
-            this.btnNewFM.Click += new System.EventHandler(this.button1_Click);
+            this.btnNewFM.Click += new System.EventHandler(this.btnNewFM_Click);
             // 
             // cbMaxYear
             // 
@@ -1517,6 +1529,13 @@
             this.gbTags.Name = "gbTags";
             this.gbTags.TabStop = false;
             // 
+            // btnConvertOggs
+            // 
+            resources.ApplyResources(this.btnConvertOggs, "btnConvertOggs");
+            this.btnConvertOggs.Name = "btnConvertOggs";
+            this.btnConvertOggs.UseVisualStyleBackColor = true;
+            this.btnConvertOggs.Click += new System.EventHandler(this.btnConvertOggs_Click);
+            // 
             // btnTagPresets
             // 
             resources.ApplyResources(this.btnTagPresets, "btnTagPresets");
@@ -1857,14 +1876,14 @@
             resources.ApplyResources(this.webBrowser1, "webBrowser1");
             this.webBrowser1.Name = "webBrowser1";
             // 
-            // lbReadmes
+            // rtbReadmes
             // 
-            resources.ApplyResources(this.lbReadmes, "lbReadmes");
-            this.lbReadmes.ContextMenuStrip = this.rightClickReadme;
-            this.lbReadmes.Name = "lbReadmes";
-            this.lbReadmes.ReadOnly = true;
-            this.lbReadmes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
-            this.lbReadmes.MouseEnter += new System.EventHandler(this.readmeBox_MouseEnter);
+            resources.ApplyResources(this.rtbReadmes, "rtbReadmes");
+            this.rtbReadmes.ContextMenuStrip = this.rightClickReadme;
+            this.rtbReadmes.Name = "rtbReadmes";
+            this.rtbReadmes.ReadOnly = true;
+            this.rtbReadmes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
+            this.rtbReadmes.MouseEnter += new System.EventHandler(this.readmeBox_MouseEnter);
             // 
             // rightClickReadme
             // 
@@ -1903,18 +1922,18 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // panel1
+            // pnlTopHalf
             // 
-            this.panel1.Controls.Add(this.btnWebSearch);
-            this.panel1.Controls.Add(this.btnPlOriginal);
-            this.panel1.Controls.Add(this.btnPlFM);
-            this.panel1.Controls.Add(this.btnInstallOnly);
-            this.panel1.Controls.Add(this.btnTools);
-            this.panel1.Controls.Add(this.btnSetup);
-            this.panel1.Controls.Add(this.btnExit);
-            this.panel1.Controls.Add(this.progBar);
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            this.pnlTopHalf.Controls.Add(this.btnWebSearch);
+            this.pnlTopHalf.Controls.Add(this.btnPlOriginal);
+            this.pnlTopHalf.Controls.Add(this.btnPlFM);
+            this.pnlTopHalf.Controls.Add(this.btnInstallOnly);
+            this.pnlTopHalf.Controls.Add(this.btnTools);
+            this.pnlTopHalf.Controls.Add(this.btnSetup);
+            this.pnlTopHalf.Controls.Add(this.btnExit);
+            this.pnlTopHalf.Controls.Add(this.progBar);
+            resources.ApplyResources(this.pnlTopHalf, "pnlTopHalf");
+            this.pnlTopHalf.Name = "pnlTopHalf";
             // 
             // btnWebSearch
             // 
@@ -1960,19 +1979,12 @@
             this.dlgSaveFMINI.FileName = "fm.ini";
             resources.ApplyResources(this.dlgSaveFMINI, "dlgSaveFMINI");
             // 
-            // btnConvertOggs
-            // 
-            resources.ApplyResources(this.btnConvertOggs, "btnConvertOggs");
-            this.btnConvertOggs.Name = "btnConvertOggs";
-            this.btnConvertOggs.UseVisualStyleBackColor = true;
-            this.btnConvertOggs.Click += new System.EventHandler(this.btnConvertOggs_Click);
-            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.splitContainerTopHalf);
+            this.Controls.Add(this.pnlTopHalf);
             this.DoubleBuffered = true;
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuTags;
@@ -1980,11 +1992,12 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitContainerTopHalf.Panel1.ResumeLayout(false);
+            this.splitContainerTopHalf.Panel1.PerformLayout();
+            this.splitContainerTopHalf.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerTopHalf)).EndInit();
+            this.splitContainerTopHalf.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picLogging)).EndInit();
             this.pnlProgress.ResumeLayout(false);
             this.pnlProgress.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fmTable)).EndInit();
@@ -1996,15 +2009,15 @@
             this.pnlReadmeList.ResumeLayout(false);
             this.pnlReadmeList.PerformLayout();
             this.rightClickReadme.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.pnlTopHalf.ResumeLayout(false);
+            this.pnlTopHalf.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox lbReadmes;
+        private System.Windows.Forms.RichTextBox rtbReadmes;
         private System.Windows.Forms.ContextMenuStrip rightClickReadme;
         private System.Windows.Forms.ToolStripMenuItem item1;
         private System.Windows.Forms.DataGridView fmTable;
@@ -2018,7 +2031,7 @@
         private System.Windows.Forms.Button btnPlOriginal;
         private System.Windows.Forms.Button btnPlFM;
         private System.Windows.Forms.Button btnExit;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlTopHalf;
         private System.Windows.Forms.Button btnInstallOnly;
         private System.Windows.Forms.ProgressBar progBar;
         private System.Windows.Forms.Button btnSetup;
@@ -2078,7 +2091,7 @@
         private System.Windows.Forms.ToolStripMenuItem generateFMiniToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog dlgSaveFMINI;
         private System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainerTopHalf;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArchiveOrDir;
         private System.Windows.Forms.DataGridViewTextBoxColumn ArchiveSize;
         private System.Windows.Forms.DataGridViewTextBoxColumn TitleHeading;
@@ -2099,6 +2112,7 @@
         private System.Windows.Forms.Label lblReadme;
         private System.Windows.Forms.Button btnNewFM;
         private System.Windows.Forms.Button btnConvertOggs;
+        private System.Windows.Forms.PictureBox picLogging;
     }
 }
 

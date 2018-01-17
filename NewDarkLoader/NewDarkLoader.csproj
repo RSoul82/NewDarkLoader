@@ -36,7 +36,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>
     </DefineConstants>
-    <ErrorReport>queue</ErrorReport>
+    <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
     <Prefer32Bit>true</Prefer32Bit>
@@ -93,6 +93,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbsRel.cs" />
     <Compile Include="Add Existing Tag.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -328,6 +329,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="new_folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="log.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets" Condition="Exists('../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets')" />

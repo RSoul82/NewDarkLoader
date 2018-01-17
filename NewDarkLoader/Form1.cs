@@ -19,7 +19,7 @@ namespace NewDarkLoader
         #region Fields
         bool enableLog = false;
         /// <summary>
-        ///  fmInstalledPath + "\\ndlog.txt" - set after path has been read from ini file.
+        ///  fmInstalledPath + "ndlog.txt" - set after path has been read from ini file.
         /// </summary>
         string logFilename = "";
 
@@ -41,10 +41,10 @@ namespace NewDarkLoader
         const int DISABLED_MODS = 8;
         const int INSTALLED = 9;
 
-        string dirPath = Environment.CurrentDirectory; //No \\ at end
+        string dirPath = Environment.CurrentDirectory;
         string iniPath = "";
         /// <summary>
-        /// Full path of game folder. Does not end with \\
+        /// Full path of game folder.
         /// </summary>
         string gamePath = "";
         /// <summary>
@@ -59,12 +59,9 @@ namespace NewDarkLoader
         /// Full path to game's exe file. Used for running a new process.
         /// </summary>
         string exeFullPath = "";
-        /// <summary>
-        /// Does not end with \\
-        /// </summary>
         string fmArchivePath = "";
         /// <summary>
-        /// gamePath + \\FMs. Does not end with \\ OR value read from cam_mod.ini
+        /// gamePath + FMs. OR value read from cam_mod.ini
         /// </summary>
         string fmInstalledPath;
         /// <summary>
@@ -81,11 +78,7 @@ namespace NewDarkLoader
         string langGame = "english";
 
         int selFMID = -1;
-        //string runCommand = "";
-        /// <summary>
-        /// Ends with \\
-        /// </summary>
-        string userTempFolder = System.IO.Path.GetTempPath();
+        string userTempFolder = Path.GetTempPath();
         /// <summary>
         /// Readme stored in temp for archives, or FMs\[fm name] for directories
         /// </summary>
@@ -120,8 +113,11 @@ namespace NewDarkLoader
         /// Ignore leading The, An or A when sorting by title.
         /// </summary>
         bool sortIgnoreArticles = false;
+        /// <summary>
+        /// For the one person who has this on an external drive.
+        /// </summary>
+        bool useRelativePaths = false;
 
-        //int gameType = -1;
         private RichTextBoxStreamType readmeFileType = new RichTextBoxStreamType(); //rtf or txt
         private Size origReadmeSize;
         private Point origReadmeLoc;
@@ -215,6 +211,7 @@ namespace NewDarkLoader
         #region Key names
         const string secOptions = "Config";
         const string kGame_type = "Type";
+        const string kUseRelativePaths = "UseRelativePaths";
         const string kArchive_root = "ArchiveRoot";
         const string kReturn_type = "DebriefFM";
         const string kReturn_type_ed = "DebriefFMEd";
@@ -310,14 +307,17 @@ namespace NewDarkLoader
 
             setHTMLReadmeSizeLoc();
 
-            origReadmeLoc = lbReadmes.Location;
+            origReadmeLoc = rtbReadmes.Location;
             Size oSize = new Size();
-            oSize.Width = lbReadmes.Width;
-            oSize.Height = lbReadmes.Height; //This has to be measured at runtime because in VS it's very low.
+            oSize.Width = rtbReadmes.Width;
+            oSize.Height = rtbReadmes.Height; //This has to be measured at runtime because in VS it's very low.
             origReadmeSize = oSize;
 
             readINIFileToData(insPath);
             readINIData();
+
+            checkLogState();
+
             readGameLanguage();
 
             setInterfaceText();
@@ -328,8 +328,20 @@ namespace NewDarkLoader
             cbMaxYear.SelectedIndex = 0;
 
             //If there are missing options
-            if (fmArchivePath == "" || dateFormat == "" || noFMsInArchiveRoot(fmArchivePath))
+            if (fmArchivePath == "" || fmArchivePath == fmInstalledPath || dateFormat == "" || noFMsInArchiveRoot(fmArchivePath))
             {
+                if (enableLog)
+                {
+                    WriteLog.AddEntry(logFilename, "Auto entering setup.");
+                    if (fmArchivePath == "")
+                        WriteLog.AddEntry(logFilename, "Archive path blank.");
+                    if (fmArchivePath == fmInstalledPath)
+                        WriteLog.AddEntry(logFilename, "Archive path is installed path.");
+                    if (dateFormat == "")
+                        WriteLog.AddEntry(logFilename, "Date format is blank.");
+                    if (noFMsInArchiveRoot(fmArchivePath))
+                        WriteLog.AddEntry(logFilename, "No FMs in archive root");
+                }
                 showSetup(true, false);
             }
             else
@@ -366,7 +378,24 @@ namespace NewDarkLoader
                 btnConvertOggs.Visible = false;
             }
 
+            //Readme box requires special code to handle ctrl L
+            rtbReadmes.PreviewKeyDown += new PreviewKeyDownEventHandler(rtbReadmes_KeyPress);
+
             aprMessages();
+        }
+
+        /// <summary>
+        /// If logging is true, shrink the 'show/hide tags' button to reveal the log icon.
+        /// </summary>
+        /// <param name="withKeyPress">True if toggled with Ctrl L. Only enlarges the tags button if True.</param>
+        private void checkLogState(bool withKeyPress = false)
+        {
+            picLogging.Visible = enableLog;
+            if (enableLog)
+                btnHideTags.Size = new Size(btnHideTags.Width, btnHideTags.Height - picLogging.Height - 10);
+            else
+                if(withKeyPress)
+                    btnHideTags.Size = new Size(btnHideTags.Width, btnHideTags.Height += picLogging.Height + 10);
         }
 
         /// <summary>
@@ -410,12 +439,12 @@ namespace NewDarkLoader
             if (!gameIsThief3)
             {
                 string insCfg = "darkinst.cfg";
-                if (!File.Exists(gamePath + "\\" + insCfg))
+                if (!File.Exists(Path.Combine(gamePath, insCfg)))
                 {
                     insCfg = "install.cfg";
                 }
 
-                string insPath = gamePath + "\\" + insCfg;
+                string insPath = Path.Combine(gamePath, insCfg);
                 string[] fileLines = File.ReadAllLines(insPath);
 
                 foreach (string line in fileLines)
@@ -431,6 +460,8 @@ namespace NewDarkLoader
                     }
                 }
             }
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "Language is: " + langGame);
         }
 
         /// <summary>
@@ -438,7 +469,7 @@ namespace NewDarkLoader
         /// </summary>
         private void setInterfaceText()
         {
-            string langINIPath = fmInstalledPath + "\\" + langNDL + ".ini";
+            string langINIPath = Path.Combine(fmInstalledPath, langNDL + ".ini");
             if (File.Exists(langINIPath))
             {
                 string secCols = "Columns";
@@ -823,8 +854,8 @@ namespace NewDarkLoader
         /// </summary>
         private void setHTMLReadmeSizeLoc()
         {
-            webBrowser1.Location = lbReadmes.Location;
-            webBrowser1.Size = lbReadmes.Size;
+            webBrowser1.Location = rtbReadmes.Location;
+            webBrowser1.Size = rtbReadmes.Size;
         }
 
         /// <summary>
@@ -835,7 +866,7 @@ namespace NewDarkLoader
         private void showSetup(bool firstRun, bool alreadyRunning)
         {
             Setup setupWindow = new Setup(i, langIni, secOptions, kArchive_root, kLanguage, kDate_format, kBackup_type, k7zipG, 
-                kUse7zNoWin, currentReturnType, kAlwaysPlay, fmInstalledPath, sortIgnoreArticles, firstRun);
+                kUse7zNoWin, currentReturnType, kAlwaysPlay, fmInstalledPath, sortIgnoreArticles, useRelativePaths, firstRun);
             DialogResult dR = setupWindow.ShowDialog();
 
             if (dR == DialogResult.OK)
@@ -845,6 +876,7 @@ namespace NewDarkLoader
                 string oldDateFormat = dateFormat;
 
                 SetupInfo sInfo = setupWindow.getSetupInfo;
+                i.IniWriteValue(secOptions, kUseRelativePaths, sInfo.relativePaths.ToString());
                 i.IniWriteValue(secOptions, kArchive_root, sInfo.archiveDir);
                 i.IniWriteValue(secOptions, kLanguage, sInfo.lang.ToString());
                 i.IniWriteValue(secOptions, kDate_format, sInfo.dateFormat.ToString());
@@ -958,13 +990,25 @@ namespace NewDarkLoader
         {
             getExtensions();
 
+            string strUseRelativePaths = i.IniReadValue(secOptions, kUseRelativePaths);
+            if (strUseRelativePaths.ToLower() == "true")
+                useRelativePaths = true;
+            else
+                useRelativePaths = false;
+
             fmArchivePath = getStringFromINI(secOptions, kArchive_root, StringType.TextWithQuotesRemoved, i);
+            if (useRelativePaths)
+                fmArchivePath = AbsRel.RelativeToAbsolute(fmArchivePath);
+            
             langNDL = readLangFromINI();
             dateFormat = readDateFormatFromINI();
             backupType = getStringFromINI(secOptions, kBackup_type, StringType.TextWithQuotesRemoved, i);
             //returnType stays at 0 if string not found
             int.TryParse(getStringFromINI(secOptions, currentReturnType, StringType.SimpleNumber, i), out returnType);
             sevenZipGExe = getStringFromINI(secOptions, k7zipG, StringType.TextWithQuotesRemoved, i);
+            if (useRelativePaths)
+                sevenZipGExe = AbsRel.RelativeToAbsolute(sevenZipGExe);
+
             if (sevenZipGExe != "" && i.IniReadValue(secOptions, kUse7zNoWin) != "")
             {
                 use7zNoWin = true;
@@ -975,10 +1019,11 @@ namespace NewDarkLoader
             if (dblClick != "" && dblClick != "0")
                 alwaysPlayOnDC = true;
 
-            //Logger.LogThisLine("Reading 'Ignore Articles' option.");
             string sortNoArticles = i.IniReadValue(secOptions, "SortIgnoreArticles");
             if (sortNoArticles.ToLower() == "true")
                 sortIgnoreArticles = true;
+            else
+                sortIgnoreArticles = false;
 
             string sort = i.IniReadValue(secOptions, kSortOrder);
             if (sort == "2")
@@ -990,8 +1035,8 @@ namespace NewDarkLoader
                 double newDist;
                 if (double.TryParse(splitString, out newDist))
                 {
-                    int realDist = Convert.ToInt32(Math.Round(splitContainer1.Height * newDist, 0));
-                    splitContainer1.SplitterDistance = realDist;
+                    int realDist = Convert.ToInt32(Math.Round(splitContainerTopHalf.Height * newDist, 0));
+                    splitContainerTopHalf.SplitterDistance = realDist;
                 }
                 else
                     defaultSplit();
@@ -1004,7 +1049,7 @@ namespace NewDarkLoader
             if (logValue == "1")
             {
                 enableLog = true; //default = false
-                logFilename = fmInstalledPath + "\\ndlog.txt";
+                logFilename = Path.Combine(fmInstalledPath, "ndlog.txt");
 
                 if (File.Exists(logFilename))
                 {
@@ -1020,9 +1065,9 @@ namespace NewDarkLoader
 
         private void defaultSplit()
         {
-            double def = splitContainer1.Height * 0.45;
+            double def = splitContainerTopHalf.Height * 0.45;
             int rounded = Convert.ToInt32(Math.Round(def, 0));
-            splitContainer1.SplitterDistance = rounded;
+            splitContainerTopHalf.SplitterDistance = rounded;
         }
 
         /// <summary>
@@ -1030,7 +1075,7 @@ namespace NewDarkLoader
         /// </summary>
         private void readINIFileToData(string t3insFMPath)
         {
-            fmInstalledPath = gamePath + "\\FMs"; // default
+            fmInstalledPath = Path.Combine(gamePath, "FMs"); // default
 
             if (gameIsThief3)
             {
@@ -1043,7 +1088,7 @@ namespace NewDarkLoader
                 if (newFMInstalledPath != "")
                     fmInstalledPath = newFMInstalledPath;
 
-                titlesStr = userTempFolder + "titles.str";
+                titlesStr = Path.Combine(userTempFolder, "titles.str");
             }
 
             if (!Directory.Exists(fmInstalledPath))
@@ -1051,11 +1096,10 @@ namespace NewDarkLoader
                 Directory.CreateDirectory(fmInstalledPath);
             }
 
-            iniPath = fmInstalledPath + "\\NewDarkLoader.ini";
+            iniPath = Path.Combine(fmInstalledPath, "NewDarkLoader.ini");
 
             if (!File.Exists(iniPath))
             {
-                //Logger.LogThisLine("iniPath does not exist. Writing new file.");
                 File.WriteAllText(iniPath, "[" + secOptions + "]");
             }
 
@@ -1065,15 +1109,13 @@ namespace NewDarkLoader
         private string getFMInsPathFromCam_Mod()
         {
             string userPath = "";
-            string camModPath = gamePath + "\\cam_mod.ini";
-            //Logger.LogThisLine("Reading cam_mod for alternate fm path.");
+            string camModPath = Path.Combine(gamePath, "cam_mod.ini");
             string[] fileLines = File.ReadAllLines(camModPath, Encoding.Default);
 
             foreach (string line in fileLines)
             {
                 if (line.ToLower().StartsWith("fm_path"))
                 {
-                    //Logger.LogThisLine("Found alternate fm path.");
                     int firstSpace = line.IndexOf(' ');
                     string pathFromIni = line.Substring(firstSpace + 1);
                     userPath = Path.GetFullPath(pathFromIni); //Only works when run from the .dll in the game's folder.
@@ -1087,6 +1129,8 @@ namespace NewDarkLoader
                     break;
                 }
             }
+            if (enableLog)
+                WriteLog.AddEntry(logFilename, "User defined installed FMs path: " + userPath);
             return userPath;
         }
 
@@ -1095,7 +1139,6 @@ namespace NewDarkLoader
         /// </summary>
         private void getExtensions()
         {
-            //Logger.LogThisLine("Getting list of valid archive extensions.");
             string extString = i.IniReadValue(secOptions, kExtensions);
 
             if (extString == "")
@@ -1108,13 +1151,11 @@ namespace NewDarkLoader
             foreach (string ext in allExts)
             {
                 archiveExtensions.Add("." + ext);
-                //Logger.LogThisLine("Archive extension: " + ext);
             }
         }
 
         private string readDateFormatFromINI()
         {
-            //Logger.LogThisLine("Reading date from ini.");
             string readDate = i.IniReadValue(secOptions, kDate_format);
 
             if (readDate == "2")
@@ -1183,13 +1224,16 @@ namespace NewDarkLoader
                 }
             }
 
-            fmTable.RowCount = foundFMs.Count;
+            if (foundFMs.Count > 0)
+            {
+                fmTable.RowCount = foundFMs.Count;
 
-            #endregion
+                #endregion
 
-            restoreSortOrder();
+                restoreSortOrder();
 
-            fmTable.Select(); //allows uer to immediately use cursor keys to scroll down the table
+                fmTable.Select(); //allows uer to immediately use cursor keys to scroll down the table
+            }
         }
 
         /// <summary>
@@ -1249,7 +1293,7 @@ namespace NewDarkLoader
             nFM.lastPlayedHex = getStringFromINI(sectionName, kLast_played, StringType.TextWithQuotesRemoved, i);
             nFM.comment = getStringFromINI(sectionName, kComment, StringType.TextWithQuotesRemoved, i);
             nFM.disabledMods = getStringFromINI(sectionName, kNo_mods, StringType.TextWithQuotesRemoved, i);
-            if (Directory.Exists(fmInstalledPath + "\\" + ArchiveExtract.ArchiveExtracedFolderName(simpleName)))
+            if (Directory.Exists(Path.Combine(fmInstalledPath, ArchiveExtract.ArchiveExtracedFolderName(simpleName))))
                 nFM.installed = colInstalled;
             else
                 nFM.installed = "";
@@ -1268,47 +1312,6 @@ namespace NewDarkLoader
             nFM.fmTags = getFMTags(nFM.sectionName);
 
             foundFMs.Add(nFM);
-        }
-
-        /// <summary>
-        /// Sets tooltips for all cells, and right click hint.
-        /// </summary>
-        private void updateAllCellTips()
-        {
-            for (int x = 0; x < fmTable.Rows.Count; x++)
-            {
-                for (int y = 0; y < fmTable.Rows[x].Cells.Count; y++)
-                {
-                    setCellTip(x, y);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Sets tooltip for specific cell, and right click hint.
-        /// </summary>
-        /// <param name="row">Row index.</param>
-        /// <param name="col">Column index.</param>
-        private void setCellTip(int row, int col)
-        {
-            //string tip = rightClickTip;
-            //string content = "";
-            //if(cellString(col, row) !=null)
-            //{
-            //    string cellValue = "";
-            //    if (col == FINISHED)
-            //    {
-            //        cellValue = getFinishedText(cellString(FINISHED_ID, row));
-            //    }
-            //    else
-            //    {
-            //        cellValue = cellString(col, row);
-            //    }
-
-            //    if (cellValue != "")
-            //        content = cellValue + "\n";
-            //}
-            //fmTable.Rows[row].Cells[col].ToolTipText = content + tip + "\n" + refresh;
         }
 
         /// <summary>
@@ -1427,9 +1430,7 @@ namespace NewDarkLoader
 
             if (fmTable.Rows[rowID].Visible)
             {
-                //fmTable.Rows[rowID].Selected = true;
                 fmTable.CurrentCell = fmTable.Rows[rowID].Cells[0];
-                //fmTable.FirstDisplayedScrollingRowIndex = fmTable.SelectedRows[0].Index;
             }
             else
             {
@@ -1438,7 +1439,6 @@ namespace NewDarkLoader
                     if (fmTable.Rows[x].Visible)
                     {
                         fmTable.CurrentCell = fmTable.Rows[x].Cells[0];
-                        //fmTable.FirstDisplayedScrollingRowIndex = fmTable.SelectedRows[0].Index;
                         break;
                     }
                 }
@@ -1567,7 +1567,7 @@ namespace NewDarkLoader
 
         public string getFMNameFromDir(string fmFolderName, string sectionName, bool overwriteTitle = false)
         {
-            string fmFolderPath = fmInstalledPath + "\\" + fmFolderName;
+            string fmFolderPath = Path.Combine(fmInstalledPath, fmFolderName);
             string foundName = "";
             //Look for niceName in ini file
             string niceName = i.IniReadValue(sectionName, kFm_title);
@@ -1611,7 +1611,7 @@ namespace NewDarkLoader
             //look for language first
             foreach (FileInfo fI in allFiles)
             {
-                if (fI.FullName.ToLower().EndsWith("strings\\" + langGame.ToLower() + "\\titles.str"))
+                if (fI.FullName.ToLower().EndsWith(Path.Combine("strings", langGame.ToLower(), "titles.str")))
                 {
                     titlesStr = fI.FullName;
                     found = true;
@@ -1624,7 +1624,7 @@ namespace NewDarkLoader
             {
                 foreach (FileInfo fI in allFiles)
                 {
-                    if (fI.FullName.ToLower().EndsWith("strings\\titles.str"))
+                    if (fI.FullName.ToLower().EndsWith(Path.Combine("strings", "titles.str")))
                     {
                         titlesStr = fI.FullName;
                         break;
@@ -1635,7 +1635,7 @@ namespace NewDarkLoader
             //look for missflag.str
             foreach (FileInfo fI in allFiles)
             {
-                if (fI.FullName.ToLower().EndsWith("strings\\missflag.str"))
+                if (fI.FullName.ToLower().EndsWith(Path.Combine("strings", "missflag.str")))
                 {
                     missflagStr = fI.FullName;
                     break;
@@ -1693,21 +1693,16 @@ namespace NewDarkLoader
             return foundName;
         }
 
-        //private string getT3FMTitle(string simpleFilename, string sectionName, string fNameWithExt, string subFolder)
-        //{
-        //    return "Something";
-        //}
-
         private string getT3FMTitle(string simpleFilename, string sectionName, string fNameWithExt, string subFolder)
         {
-            SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + fNameWithExt);
+            SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, fNameWithExt));
 
             //FM ini already looked for
             //NDL ini already looked in
             //Look for GLML file and GLTITLE tags
             //Extract glml file
             string foundTitle = "";
-            string glFile = userTempFolder + "readme.glml";
+            string glFile = Path.Combine(userTempFolder, "readme.glml");
             bool found = false;
             for (int x = 0; x < ext.ArchiveFileNames.Count; x++)
             {
@@ -1723,9 +1718,9 @@ namespace NewDarkLoader
                     {
                         SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, fNameWithExt, userTempFolder, ext.ArchiveFileNames[x], false);
                         //Filename coulde be "folder\\something.glml" or just something.glml
-                        string[] fNameSplit = ext.ArchiveFileNames[x].Split('\\');
+                        string[] fNameSplit = ext.ArchiveFileNames[x].Split(Path.DirectorySeparatorChar);
                         string basicFilename = fNameSplit[fNameSplit.Length - 1]; //get the last part, even if there's only 1 element.
-                        glFile = userTempFolder + basicFilename;
+                        glFile = Path.Combine(userTempFolder, basicFilename);
                     }
 
                     //read the glml file to find the GLTITLe tags
@@ -1797,11 +1792,11 @@ namespace NewDarkLoader
         private string getTitleFromText(SevenZipExtractor ext, string archiveFilename, int fileIndex, string sectionName)
         {
             string title = "";
-            string archPath = userTempFolder + archiveFilename;
+            string archPath = Path.Combine(userTempFolder, archiveFilename);
 
-            string[] fNameSplit = ext.ArchiveFileNames[fileIndex].Split('\\');
+            string[] fNameSplit = ext.ArchiveFileNames[fileIndex].Split(Path.DirectorySeparatorChar);
             string basicFilename = fNameSplit[fNameSplit.Length - 1]; //get the last part, even if there's only 1 element.
-            string readmeFilename = userTempFolder + basicFilename;
+            string readmeFilename = Path.Combine(userTempFolder, basicFilename);
 
             extractReadme(archiveFilename, readmeFilename, sectionName);
 
@@ -1867,9 +1862,9 @@ namespace NewDarkLoader
         /// <param name="fileNameWithExt">FM's archvie filename, no path.</param>
         private void extractTitlesStr(string subFolder, string fNameWithExt)
         {
-            if (File.Exists(fmArchivePath + subFolder + "\\" + fNameWithExt))
+            if(File.Exists(Path.Combine(fmArchivePath, subFolder, fNameWithExt)))
             {
-                SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + fNameWithExt);
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, fNameWithExt));
 
                 //Find titles.str - extraction is case sensitive so the exact name must be found first
                 List<string> fnames = new List<string>(); //dummy list, only needed for below
@@ -1885,24 +1880,24 @@ namespace NewDarkLoader
 
                 bool extracted = false;
 
-                extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, "strings\\" + langGame.ToLower() + "\\titles.str");
+                extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, Path.Combine("strings", langGame.ToLower(), "titles.str"));
 
                 //only look for non-language specific if language str is not found
                 if (!extracted)
                 {
-                    extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, "strings\\titles.str");
+                    extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, Path.Combine("strings", "titles.str"));
                 }
 
                 //if still not found, look in English
                 if (!extracted)
                 {
-                    extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, "strings\\english\\titles.str");
+                    extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, Path.Combine("strings", "english", "titles.str"));
                 }
 
                 //look for missflag.str
                 for (int x = 0; x < fnames.Count; x++)
                 {
-                    if (fnames[x].ToLower() == "strings\\missflag.str")
+                    if (fnames[x].ToLower() == Path.Combine("strings", "missflag.str"))
                     {
                         correctStrName(ext, x, strType.missflag);
                         if (sevenZipGExe == "")
@@ -1982,8 +1977,8 @@ namespace NewDarkLoader
         /// <param name="fileIndex"></param>
         private void correctStrName(SevenZipExtractor ext, int fileIndex, strType titlesOrMissflag)
         {
-            string[] split = ext.ArchiveFileNames[fileIndex].Split('\\');
-            string correctStrPath = userTempFolder + split[split.Length - 1];
+            string[] split = ext.ArchiveFileNames[fileIndex].Split(Path.DirectorySeparatorChar);
+            string correctStrPath = Path.Combine(userTempFolder, split[split.Length - 1]);
 
             if (titlesOrMissflag == strType.titles)
                 titlesStr = correctStrPath;
@@ -2102,10 +2097,10 @@ namespace NewDarkLoader
             int count = 0;
             int max = 0;
             List<int> numbers = new List<int>();
-            if (File.Exists(fmArchivePath + subFolder + "\\" + archive))
+            if (File.Exists(Path.Combine(fmArchivePath, subFolder, archive)))
             {
                 misFileNumber = 0;
-                SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + archive);
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, archive));
 
                 //Get list of all files in archive
                 List<string> fnames = new List<string>();
@@ -2147,7 +2142,7 @@ namespace NewDarkLoader
             }
             else //readme can be in root or specific subfolder.
             {
-                if (filePathInArchive.ToLower().Replace(" ", "").StartsWith("fanmissionextras\\") || !filePathInArchive.Contains("\\"))
+                if (filePathInArchive.ToLower().Replace(" ", "").StartsWith("fanmissionextras" + Path.DirectorySeparatorChar) || !filePathInArchive.Contains(Path.DirectorySeparatorChar))
                     correctRoot = true;
             }
             return correctRoot;
@@ -2164,7 +2159,7 @@ namespace NewDarkLoader
             }
             else //T3
             {
-                if (fI.DirectoryName.ToLower().Replace(" ", "") == fmInstPath.ToLower().Replace(" ", "") + "\\fanmissionextras"
+                if (fI.DirectoryName.ToLower().Replace(" ", "") == Path.Combine(fmInstPath.ToLower().Replace(" ", ""), "fanmissionextras")
                     || fI.DirectoryName.ToLower() == fmInstPath.ToLower())
                 {
                     correctRoot = true;
@@ -2213,7 +2208,7 @@ namespace NewDarkLoader
             {
                 fName = htmlFiles[0].fileName;
                 releaseDate = htmlFiles[0].lastModified;
-                htmlReadmePath = readmeDir + "\\" + fName;
+                htmlReadmePath = Path.Combine(readmeDir, fName);
             }
             else
             {
@@ -2227,7 +2222,7 @@ namespace NewDarkLoader
                 i.IniWriteValue(sectionName, kInfoFile, fName);
 
             //Set full path of readme file
-            readmePath = readmeDir + "\\" + fName;
+            readmePath = Path.Combine(readmeDir, fName);
             return;
 
         noreadme:
@@ -2243,10 +2238,10 @@ namespace NewDarkLoader
         /// <returns></returns>
         private void extractReadme(string subFolder, string archive, string readmeFilename, string sectionName = "")
         {
-            if (File.Exists(fmArchivePath + subFolder + "\\" + archive))
+            if (File.Exists(Path.Combine(fmArchivePath, subFolder, archive)))
             {
                 //Prepare to extract files
-                SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + archive);
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, archive));
 
                 //Get list of all rtf and txt and html files in archive
                 List<string> fnames = new List<string>();
@@ -2267,7 +2262,7 @@ namespace NewDarkLoader
                         if (s == readmeFilename)
                         {
                             fName = ext.ArchiveFileNames[fileIndex];
-                            readmePath = userTempFolder + fName;
+                            readmePath = Path.Combine(userTempFolder, fName);
                             releaseDate = ext.ArchiveFileData[fileIndex].LastWriteTime;
                             vldFiles.Add(fileIndex);
                             break;
@@ -2276,7 +2271,7 @@ namespace NewDarkLoader
 
                     if (fName.ToLower().EndsWith(".html") || fName.ToLower().EndsWith(".htm"))
                     {
-                        htmlReadmePath = userTempFolder + fName;
+                        htmlReadmePath = Path.Combine(userTempFolder, fName);
                         html = true;
                         webBrowser1.Url = null;
                     }
@@ -2320,10 +2315,10 @@ namespace NewDarkLoader
             {
                 for (int x = 0; x < ext.ArchiveFileNames.Count; x++)
                 {
-                    if (ext.ArchiveFileNames[x].StartsWith("r_data\\"))
+                    if (ext.ArchiveFileNames[x].StartsWith("r_data" + Path.DirectorySeparatorChar))
                     {
-                        if (!Directory.Exists(userTempFolder + "r_data"))
-                            Directory.CreateDirectory(userTempFolder + "r_data");
+                        if (!Directory.Exists(Path.Combine(userTempFolder, "r_data")))
+                            Directory.CreateDirectory(Path.Combine(userTempFolder, "r_data"));
 
                         vldFiles.Add(x);
                     }
@@ -2341,7 +2336,7 @@ namespace NewDarkLoader
                 }
                 catch
                 {
-                    File.WriteAllText(userTempFolder + ext.ArchiveFileNames[validFiles[0]], badReadme);
+                    File.WriteAllText(Path.Combine(userTempFolder, ext.ArchiveFileNames[validFiles[0]]), badReadme);
                 }
             }
         }
@@ -2418,7 +2413,7 @@ namespace NewDarkLoader
         /// </summary>
         private void dummyReadme()
         {
-            readmePath = userTempFolder + "readme.txt";
+            readmePath = Path.Combine(userTempFolder, "readme.txt");
             File.WriteAllText(readmePath, noReadme);
         }
 
@@ -2452,11 +2447,11 @@ namespace NewDarkLoader
                     else
                         readmeFileType = RichTextBoxStreamType.PlainText;
 
-                    lbReadmes.BringToFront();
-                    lbReadmes.LoadFile(readmePath, readmeFileType);
+                    rtbReadmes.BringToFront();
+                    rtbReadmes.LoadFile(readmePath, readmeFileType);
                     btnShowInBrowser.SendToBack();
 
-                    lbReadmes.ScrollToCaret();
+                    rtbReadmes.ScrollToCaret();
 
                     if (deleteAfterShowing && File.Exists(readmePath))
                         FullDelete.DeleteFile(readmePath);
@@ -2487,24 +2482,24 @@ namespace NewDarkLoader
                 if (File.Exists(htmlReadmePath))
                     FullDelete.DeleteFile(htmlReadmePath);
 
-                if (Directory.Exists(userTempFolder + "r_data"))
+                if (Directory.Exists(Path.Combine(userTempFolder, "r_data")))
                 {
-                    DirectoryInfo dI = new DirectoryInfo(userTempFolder + "r_data");
+                    DirectoryInfo dI = new DirectoryInfo(Path.Combine(userTempFolder, "r_data"));
                     FileInfo[] dFiles = dI.GetFiles();
 
                     foreach (FileInfo fI in dFiles)
                     {
                         FullDelete.DeleteFile(fI.FullName);
                     }
-                    FullDelete.DeleteDir(userTempFolder + "r_data");
+                    FullDelete.DeleteDir(Path.Combine(userTempFolder, "r_data"));
                 }
             }
         }
 
         private void item1_Click(object sender, EventArgs e)
         {
-            if (lbReadmes.SelectedText != "")
-                Clipboard.SetText(lbReadmes.SelectedText);
+            if (rtbReadmes.SelectedText != "")
+                Clipboard.SetText(rtbReadmes.SelectedText);
         }
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -2528,9 +2523,9 @@ namespace NewDarkLoader
         /// <returns></returns>
         private fmIniData extractFMini(string subFolder, string archive)
         {
-            string path = fmArchivePath + subFolder + "\\" + archive;
+            string path = Path.Combine(fmArchivePath, subFolder, archive);
             string fmIni = "fm.ini";
-            string extractedIni = userTempFolder + fmIni;
+            string extractedIni = Path.Combine(userTempFolder, fmIni);
             bool foundIni = false;
             fmIniData data = null;
 
@@ -2571,7 +2566,7 @@ namespace NewDarkLoader
         /// <returns></returns>
         private fmIniData readFMini(string simpleFolder)
         {
-            string path = fmInstalledPath + "\\" + simpleFolder + "\\fm.ini";
+            string path = Path.Combine(fmInstalledPath, simpleFolder, "fm.ini");
             fmIniData data = null;
 
             if (File.Exists(path))
@@ -2715,7 +2710,7 @@ namespace NewDarkLoader
             List<string> possibleReadmes = new List<string>();
             if (isArchive)
             {
-                SevenZipExtractor ext = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + selArchive);
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, selArchive));
 
                 List<string> fnames = new List<string>();
                 System.Collections.ObjectModel.ReadOnlyCollection<string> archFiles = new System.Collections.ObjectModel.ReadOnlyCollection<string>(fnames);
@@ -2731,7 +2726,7 @@ namespace NewDarkLoader
             }
             else //if folder only
             {
-                string[] allFiles = Directory.GetFiles(fmInstalledPath + "\\" + subFolder + selArchive, "*.*", SearchOption.AllDirectories);
+                string[] allFiles = Directory.GetFiles(Path.Combine(fmInstalledPath, subFolder, selArchive), "*.*", SearchOption.AllDirectories);
 
                 foreach(string s in allFiles)
                 {
@@ -2811,7 +2806,7 @@ namespace NewDarkLoader
             string sectionName = selFM.sectionName;
             string subFolder = selFM.subFolder;
 
-            if (File.Exists(fmArchivePath + subFolder + "\\" + selArchive) || Directory.Exists(fmInstalledPath + "\\" + selArchive))
+            if (File.Exists(Path.Combine(fmArchivePath, subFolder, selArchive)) || Directory.Exists(Path.Combine(fmInstalledPath, selArchive)))
             {
                 readmePath = ""; //reset this so it's not left with value from previously selected FM
                 fmExtractionFolder = selFM.extractionName;
@@ -2850,7 +2845,7 @@ namespace NewDarkLoader
                     else
                     {
                         dummyReadme();
-                        FileInfo fI = new FileInfo(fmArchivePath + subFolder + "\\" + selArchive);
+                        FileInfo fI = new FileInfo(Path.Combine(fmArchivePath, subFolder, selArchive));
                         releaseDate = fI.LastWriteTime;
                     }
                 }
@@ -2860,11 +2855,10 @@ namespace NewDarkLoader
                     //Readme always needs to be scanned/extracted for display in the window
                     if (fmIsArchive)
                     {
-                        if (subFolder != "") subFolder += "\\";
                         extractReadme(subFolder, selArchive, infoFileFromINI, sectionName);
                     }
                     else
-                        scanReadme(fmInstalledPath + "\\" + selArchive, infoFileFromINI, sectionName);
+                        scanReadme(Path.Combine(fmInstalledPath, selArchive), infoFileFromINI, sectionName);
                 }
 
                 string titleFromINI = i.IniReadValue(sectionName, kFm_title);
@@ -2979,8 +2973,8 @@ namespace NewDarkLoader
                 string lastPlayedFromINI = i.IniReadValue(sectionName, kLast_played);
                 if (overwriteData) //Don't check for ini being "" because some players will want to reset it.
                 {
-                    string saveBackupPath = fmArchivePath + subFolder + "\\" + selFM.saveBackupName;
-                    string fmPath = fmInstalledPath + "\\" + selFM.extractionName;
+                    string saveBackupPath = Path.Combine(fmArchivePath, subFolder, selFM.saveBackupName);
+                    string fmPath = Path.Combine(fmInstalledPath, selFM.extractionName);
                     if (DateFromSavegames.FMHasSaves(fmPath, saveBackupPath, gameIsThief3))
                     {
                         bool compareDates = false; //Date in table can only be compared with if it's already been set.
@@ -3020,13 +3014,13 @@ namespace NewDarkLoader
                     long sizeInBytes = 0;
                     if (fmIsArchive)
                     {
-                        FileInfo fI = new FileInfo(fmArchivePath + subFolder + "\\" + selArchive);
+                        FileInfo fI = new FileInfo(Path.Combine(fmArchivePath, subFolder, selArchive));
                         sizeInBytes = fI.Length;
                     }
                     else
                     {
                         //Get size of folder
-                        string[] fmFiles = Directory.GetFiles(fmInstalledPath + "\\" + selArchive, "*.*", SearchOption.AllDirectories);
+                        string[] fmFiles = Directory.GetFiles(Path.Combine(fmInstalledPath, selArchive), "*.*", SearchOption.AllDirectories);
 
                         foreach (string s in fmFiles)
                         {
@@ -3071,7 +3065,7 @@ namespace NewDarkLoader
                 if (selFM.archiveOrDirectory == FMType.Archive)
                     foundFMs.RemoveAt(currentFMID);
                 else
-                    if (!Directory.Exists(fmInstalledPath + "\\" + selFM.archive))
+                    if (!Directory.Exists(Path.Combine(fmInstalledPath, selFM.archive)))
                     foundFMs.RemoveAt(currentFMID);
                 fmTable.Refresh();
             }
@@ -3124,7 +3118,7 @@ namespace NewDarkLoader
             if (fmIsArchive)
             {
                 //Run this anyway to get the date
-                FileInfo fI = new FileInfo(fmArchivePath + subFolder + "\\" + selArchive);
+                FileInfo fI = new FileInfo(Path.Combine(fmArchivePath, subFolder, selArchive));
                 string foundTitle = getFMNameFromArchive(fI.Name.Replace(fI.Extension, ""), sectionName, fI.Name, subFolder, overwriteData);
                 if (overwriteData || titleFromINI == "") //Don't update title if release date is the only blank thing.
                 {
@@ -3254,22 +3248,13 @@ namespace NewDarkLoader
         /// </summary>
         private void readAllTags()
         {
-            ////Logger.LogThisLine("Reading tags for each FM.");
-            ////reset everything
-            //allFMTags.Clear();
-            //allFMCats.Clear();
+            //reset everything
             globalCatItems.Clear();
             globalCategories.Clear();
 
             string result = i.getAllTags(emptyTag);
 
             generateTagData(result, globalCatItems, globalCategories);
-
-            //for(int x = 0; x < fmTable.Rows.Count; x++)
-            //{
-            //    string sectionName = cellString(SECTION_NAME, x);
-            //    allFMTags.Add(getFMTags(sectionName));
-            //}
         }
 
         /// <summary>
@@ -3280,7 +3265,6 @@ namespace NewDarkLoader
         /// <param name="uniqueCategories">List of categories only.</param>
         private void generateTagData(string tagsFromINI, List<catItem> catItemList, List<string> uniqueCategories)
         {
-            //Logger.LogThisLine("Generating tag data from " + tagsFromINI);
             //example
             //author:author:cardia1,author:someone else,contest:NewDark 64 cubed,campaign,myMission
             //Get list of tree roots (categories)
@@ -3397,9 +3381,9 @@ namespace NewDarkLoader
         {
             List<string> textFiles = new List<string>();
 
-            if (File.Exists(fmArchivePath + subFolder + "\\" + archiveFilename))
+            if (File.Exists(Path.Combine(fmArchivePath, subFolder, archiveFilename)))
             {
-                SevenZipExtractor ex = new SevenZipExtractor(fmArchivePath + subFolder + "\\" + archiveFilename);
+                SevenZipExtractor ex = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, archiveFilename));
                 foreach (string s in ex.ArchiveFileNames)
                 {
                     if (readmeRootArchive(s))
@@ -3407,13 +3391,13 @@ namespace NewDarkLoader
                             textFiles.Add(s);
                 }
             }
-            else if (Directory.Exists(fmInstalledPath + "\\" + archiveFilename))
+            else if (Directory.Exists(Path.Combine(fmInstalledPath, archiveFilename)))
             {
-                string[] allFiles = Directory.GetFiles(fmInstalledPath + "\\" + archiveFilename);
+                string[] allFiles = Directory.GetFiles(Path.Combine(fmInstalledPath, archiveFilename));
 
                 foreach (string s in allFiles)
                 {
-                    if (readmeRootDir(s, fmInstalledPath + "\\" + archiveFilename))
+                    if (readmeRootDir(s, Path.Combine(fmInstalledPath, archiveFilename)))
                     {
                         if (readmeExtension(s))
                         {
@@ -3439,8 +3423,8 @@ namespace NewDarkLoader
 
             EditFM edFM = new EditFM(langIni, fm.title, fm.rating, fm.finishedID, fm.comment, fm.disabledMods, fm.relDateHex,
                 fm.lastPlayedHex, fmTextFiles, i.IniReadValue(secName, kInfoFile), gameIsThief3,
-                fmArchivePath + fm.subFolder + "\\" + fm.saveBackupName,
-                fmInstalledPath + "\\" + fm.extractionName, notPlayed);
+                Path.Combine(fmArchivePath, fm.subFolder, fm.saveBackupName),
+                Path.Combine(fmInstalledPath, fm.extractionName), notPlayed);
 
             DialogResult dR = edFM.ShowDialog();
 
@@ -3454,7 +3438,7 @@ namespace NewDarkLoader
                     if (fmIsArchive)
                         extractReadme(fm.subFolder, fm.archive, editedData.fmReadme);
                     else
-                        scanReadme(fmInstalledPath + "\\" + fm.extractionName, edFM.EditedData.fmReadme, secName);
+                        scanReadme(Path.Combine(fmInstalledPath, fm.extractionName), edFM.EditedData.fmReadme, secName);
 
                     //update release date
                     string dHex = editedData.hexRelDate;
@@ -3532,11 +3516,6 @@ namespace NewDarkLoader
 
                 foundFMs[selFMID] = fm;
 
-                //update tooltips for each cell in this row
-                for (int y = 0; y < fmTable.Columns.Count; y++)
-                {
-                    setCellTip(selFMID, y);
-                }
                 fmTable.Refresh();
             }
         }
@@ -3598,13 +3577,13 @@ namespace NewDarkLoader
             if (!fullReadme) //Enlarge
             {
                 fullReadme = true;
-                splCurrentDist = splitContainer1.SplitterDistance;
-                splitContainer1.SplitterDistance = 0;
+                splCurrentDist = splitContainerTopHalf.SplitterDistance;
+                splitContainerTopHalf.SplitterDistance = 0;
             }
             else //Shrink
             {
                 fullReadme = false;
-                splitContainer1.SplitterDistance = splCurrentDist;
+                splitContainerTopHalf.SplitterDistance = splCurrentDist;
                 fmTable.Select();
             }
 #endregion
@@ -3831,7 +3810,6 @@ namespace NewDarkLoader
         private void addLanguageTag(object senderFromMenu)
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)senderFromMenu;
-            //addTag(languageToolStripMenuItem.Text + menuItem.Text);
             addCustomTag(languageToolStripMenuItem.Text + menuItem.Text);
         }
 
@@ -4079,6 +4057,13 @@ namespace NewDarkLoader
                     this.Location.X + "," +
                     this.Location.Y);
             }
+
+            //If readme is big enough to cover all the FMs in the table, reset it
+            int minViewSize = fmTable.Location.Y + fmTable.ColumnHeadersHeight + fmTable.Rows.GetRowsHeight(DataGridViewElementStates.None)/fmTable.Rows.GetRowCount(DataGridViewElementStates.None);
+            if (splitContainerTopHalf.SplitterDistance < minViewSize)
+            {
+                i.IniWriteValue(secOptions, kSplitDist, "0.5");
+            }
         }
 
         private void storeColumnWidths()
@@ -4146,6 +4131,7 @@ namespace NewDarkLoader
             }
             btnHideTags.Text = ">";
             btnRefresh.Location = new Point(bHPos, btnRefresh.Location.Y);
+            btnNewFM.Location = new Point(bHPos, btnNewFM.Location.Y);
         }
 
         private void hideTags()
@@ -4157,6 +4143,7 @@ namespace NewDarkLoader
             btnHideTags.Text = "<";
 
             btnRefresh.Location = new Point(bHPos, btnRefresh.Location.Y);
+            btnNewFM.Location = new Point(bHPos, btnNewFM.Location.Y);
         }
 
         private void dtMin_MonthChanged(object sender, EventArgs e)
@@ -4375,7 +4362,7 @@ namespace NewDarkLoader
             this.MaximumSize = new Size(5000, 5000);
             bool Result = MoveWindow(this.Handle, this.Left, this.Top, 1980, 1080, true);
 #endif
-            splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
+            splitContainerTopHalf.SplitterMoved += splitContainer1_SplitterMoved;
             selectLastPlayed();
         }
 
@@ -4465,7 +4452,7 @@ namespace NewDarkLoader
 
             if (fm.installed == colInstalled)
             {
-                dlgSaveFMINI.InitialDirectory = fmInstalledPath + "\\" + fm.extractionName;
+                dlgSaveFMINI.InitialDirectory = Path.Combine(fmInstalledPath, fm.extractionName);
             }
 
             DialogResult dR = dlgSaveFMINI.ShowDialog();
@@ -4473,6 +4460,31 @@ namespace NewDarkLoader
             if (dR == DialogResult.OK)
             {
                 File.WriteAllText(dlgSaveFMINI.FileName, generate.ToString());
+            }
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Up)
+            {
+                // Handle key at form level.
+                MessageBox.Show("Up");
+                // Do not send event to focused control by returning true.
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        /// <summary>
+        /// Ctrl L needs this code to work when the readme is active.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rtbReadmes_KeyPress(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.Modifiers ==Keys.Control && e.KeyCode == Keys.L)
+            {
+                toggleLog();
             }
         }
 
@@ -4555,7 +4567,7 @@ namespace NewDarkLoader
                         foreach (string file in dlgSelectFixFile.FileNames)
                         {
                             FileInfo f = new FileInfo(file);
-                            File.Copy(file, fixPath + "\\" + f.Name, true);
+                            File.Copy(file, Path.Combine(fixPath, f.Name), true);
                         }
 
                         string doneMessage = fixesCopied2 + " " + fixPath + "\n" + fixesCopied3 + "\n\n" + fixesCopied4;
@@ -4564,11 +4576,25 @@ namespace NewDarkLoader
                     }
                 }
             }
+            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.L)
+            {
+                toggleLog();
+            }
 
             else if (e.KeyCode == Keys.F5)
             {
                 refreshFMTable();
             }
+
+            e.Handled = true;
+        }
+
+        private void toggleLog()
+        {
+            enableLog = !enableLog; //toggle logging state
+            checkLogState(true);
+
+            i.IniWriteValue(secOptions, "Log", enableLog ? "1" : "0");
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -4576,7 +4602,7 @@ namespace NewDarkLoader
             refreshFMTable();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnNewFM_Click(object sender, EventArgs e)
         {
             NewFMFolder newFMFol = new NewFMFolder(langIni, fmInstalledPath);
             DialogResult dR = newFMFol.ShowDialog();
@@ -4617,7 +4643,7 @@ namespace NewDarkLoader
 
         private void readmeBox_MouseEnter(object sender, EventArgs e)
         {
-            lbReadmes.Focus();
+            rtbReadmes.Focus();
         }
 
         /// <summary>
@@ -4864,7 +4890,7 @@ namespace NewDarkLoader
 
         private void setExtractionPath()
         {
-            extractToPath = fmInstalledPath + "\\" + foundFMs[selFMID].extractionName;
+            extractToPath = Path.Combine(fmInstalledPath, foundFMs[selFMID].extractionName);
         }
 
         private void btnPlFM_Click(object sender, EventArgs e)
@@ -4954,7 +4980,7 @@ namespace NewDarkLoader
             FanMission fm = foundFMs[selFMID];
             externalInstallation = false;
             //Extract archive
-            string archiveFullPath = fmArchivePath + fm.subFolder + "\\" + fm.archive;
+            string archiveFullPath = Path.Combine(fmArchivePath, fm.subFolder, fm.archive);
 
             if (!Directory.Exists(extractToPath))
                 Directory.CreateDirectory(extractToPath);
@@ -4982,7 +5008,7 @@ namespace NewDarkLoader
             FanMission fm = foundFMs[selFMID];
             convertMp3s();
             //When FM has been extracted, look for saves file and extract that.
-            string saveArchivePath = fmArchivePath + fm.subFolder + "\\" + fm.saveBackupName;
+            string saveArchivePath = Path.Combine(fmArchivePath, fm.subFolder, fm.saveBackupName);
             if (File.Exists(saveArchivePath))
             {
                 SevenZipExtractor saveExtract = new SevenZipExtractor(saveArchivePath);
@@ -5071,7 +5097,7 @@ namespace NewDarkLoader
             if (fInfo.Extension.Length != 0)
                 basicName = fInfo.Name.Replace(fInfo.Extension, "");
             else basicName = fInfo.Name; //use folder name if there's no archive
-            string fmFixPath = fmArchivePath + "\\.fix\\" + basicName;
+            string fmFixPath = Path.Combine(fmArchivePath, ".fix", basicName);
             return fmFixPath;
         }
 
@@ -5094,16 +5120,16 @@ namespace NewDarkLoader
             externalInstallation = true;
             string fmArchiveName = fm.archive;
             string subfolder = fm.subFolder;
-            string fmExtractionPath = fmInstalledPath + "\\" + fm.extractionName;
-            SevenZipGExtract.ExtractArchive(sevenZipGExe, fmArchivePath, subfolder + "\\" + fmArchiveName, fmExtractionPath);
+            string fmExtractionPath = Path.Combine(fmInstalledPath, fm.extractionName);
+            SevenZipGExtract.ExtractArchive(sevenZipGExe, fmArchivePath, Path.Combine(subfolder, fmArchiveName), fmExtractionPath);
 
             convertMp3s();
 
-            string savesFile = fmArchivePath + subfolder + "\\" + fm.saveBackupName;
+            string savesFile = Path.Combine(fmArchivePath, subfolder, fm.saveBackupName);
 
             if (File.Exists(savesFile))
             {
-                SevenZipGExtract.ExtractArchive(sevenZipGExe, fmArchivePath + subfolder, fm.saveBackupName, fmExtractionPath);
+                SevenZipGExtract.ExtractArchive(sevenZipGExe, Path.Combine(fmArchivePath, subfolder), fm.saveBackupName, fmExtractionPath);
             }
 
             checkForFixes();
@@ -5164,8 +5190,8 @@ namespace NewDarkLoader
             if (enableLog)
                 WriteLog.AddEntry(logFilename, "Uninstalling " + fm.sectionName);
 
-            string backupZipPath = fmArchivePath + fm.subFolder + "\\" + fm.saveBackupName;
-            string currentFMPath = fmInstalledPath + "\\" + fm.extractionName;
+            string backupZipPath = Path.Combine(fmArchivePath, fm.subFolder, fm.saveBackupName);
+            string currentFMPath = Path.Combine(fmInstalledPath, fm.extractionName);
 
             string savesPath = "";
             string screensPath = "";
@@ -5173,15 +5199,15 @@ namespace NewDarkLoader
             if (!gameIsThief3)
             {
                 if (gameIsShock2)
-                    savesPath = currentFMPath + "\\save_"; //save_## (0 - 14)
+                    savesPath = Path.Combine(currentFMPath, "save_"); //save_## (0 - 14)
                 else
-                    savesPath = currentFMPath + "\\saves";
-                screensPath = currentFMPath + "\\screenshots";
+                    savesPath = Path.Combine(currentFMPath, "saves");
+                screensPath = Path.Combine(currentFMPath, "screenshots");
             }
             else
             {
-                savesPath = currentFMPath + "\\SaveGames";
-                screensPath = currentFMPath + "\\ScreenShots";
+                savesPath = Path.Combine(currentFMPath, "SaveGames");
+                screensPath = Path.Combine(currentFMPath, "ScreenShots");
             }
 
             //Check if FM is from an archive or folder only
@@ -5346,7 +5372,7 @@ namespace NewDarkLoader
 
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
-            double pos = (double)splitContainer1.SplitterDistance / (double)splitContainer1.Height;
+            double pos = (double)splitContainerTopHalf.SplitterDistance / (double)splitContainerTopHalf.Height;
             double rounded = Math.Round(pos, 2);
 
             i.IniWriteValue(secOptions, kSplitDist, rounded.ToString());
@@ -5454,6 +5480,7 @@ namespace NewDarkLoader
             refreshFMTable();
         }
 
+        //Started, but not much success.
         private void btnConvertOggs_Click(object sender, EventArgs e)
         {
             ConvertOGG newOggConverter = new ConvertOGG(); //testing - constructor perofrms conversion of DCE music files

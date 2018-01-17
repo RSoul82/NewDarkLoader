@@ -57,12 +57,13 @@
             this.gbDblClick = new System.Windows.Forms.GroupBox();
             this.chkDblClickDontAsk = new System.Windows.Forms.CheckBox();
             this.gbWebSearch = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkSortIncludeArticles = new System.Windows.Forms.CheckBox();
             this.lblNoSite = new System.Windows.Forms.Label();
             this.lblSpecialWords = new System.Windows.Forms.Label();
             this.tbSpecialWords = new System.Windows.Forms.TextBox();
             this.tbWebSearch = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.chkRelaitvePaths = new System.Windows.Forms.CheckBox();
             this.gbLang.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.gbDateFormat.SuspendLayout();
@@ -77,7 +78,7 @@
             // gbLang
             // 
             this.gbLang.Controls.Add(this.cBlang);
-            this.gbLang.Location = new System.Drawing.Point(9, 70);
+            this.gbLang.Location = new System.Drawing.Point(9, 90);
             this.gbLang.Name = "gbLang";
             this.gbLang.Size = new System.Drawing.Size(357, 52);
             this.gbLang.TabIndex = 1;
@@ -139,7 +140,7 @@
             // 
             this.gbDateFormat.Controls.Add(this.rdoMDY);
             this.gbDateFormat.Controls.Add(this.rdoDMY);
-            this.gbDateFormat.Location = new System.Drawing.Point(8, 128);
+            this.gbDateFormat.Location = new System.Drawing.Point(8, 148);
             this.gbDateFormat.Name = "gbDateFormat";
             this.gbDateFormat.Size = new System.Drawing.Size(357, 70);
             this.gbDateFormat.TabIndex = 2;
@@ -258,7 +259,7 @@
             // 
             this.gbSaveBackup.Controls.Add(this.rdoBkAlways);
             this.gbSaveBackup.Controls.Add(this.rdoBkAsk);
-            this.gbSaveBackup.Location = new System.Drawing.Point(8, 204);
+            this.gbSaveBackup.Location = new System.Drawing.Point(8, 222);
             this.gbSaveBackup.Name = "gbSaveBackup";
             this.gbSaveBackup.Size = new System.Drawing.Size(357, 69);
             this.gbSaveBackup.TabIndex = 3;
@@ -334,7 +335,7 @@
             // gbDblClick
             // 
             this.gbDblClick.Controls.Add(this.chkDblClickDontAsk);
-            this.gbDblClick.Location = new System.Drawing.Point(8, 279);
+            this.gbDblClick.Location = new System.Drawing.Point(8, 296);
             this.gbDblClick.Name = "gbDblClick";
             this.gbDblClick.Size = new System.Drawing.Size(358, 43);
             this.gbDblClick.TabIndex = 4;
@@ -353,7 +354,7 @@
             // 
             // gbWebSearch
             // 
-            this.gbWebSearch.Controls.Add(this.checkBox1);
+            this.gbWebSearch.Controls.Add(this.chkSortIncludeArticles);
             this.gbWebSearch.Controls.Add(this.lblNoSite);
             this.gbWebSearch.Controls.Add(this.lblSpecialWords);
             this.gbWebSearch.Controls.Add(this.tbSpecialWords);
@@ -365,15 +366,15 @@
             this.gbWebSearch.TabStop = false;
             this.gbWebSearch.Text = "Web Search Site";
             // 
-            // checkBox1
+            // chkSortIncludeArticles
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(182, 57);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(173, 17);
-            this.checkBox1.TabIndex = 15;
-            this.checkBox1.Text = "Ignore when sorting the FM list.";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.chkSortIncludeArticles.AutoSize = true;
+            this.chkSortIncludeArticles.Location = new System.Drawing.Point(182, 57);
+            this.chkSortIncludeArticles.Name = "chkSortIncludeArticles";
+            this.chkSortIncludeArticles.Size = new System.Drawing.Size(173, 17);
+            this.chkSortIncludeArticles.TabIndex = 15;
+            this.chkSortIncludeArticles.Text = "Ignore when sorting the FM list.";
+            this.chkSortIncludeArticles.UseVisualStyleBackColor = true;
             // 
             // lblNoSite
             // 
@@ -417,6 +418,17 @@
             this.toolTip1.InitialDelay = 200;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // chkRelaitvePaths
+            // 
+            this.chkRelaitvePaths.AutoSize = true;
+            this.chkRelaitvePaths.Location = new System.Drawing.Point(18, 69);
+            this.chkRelaitvePaths.Name = "chkRelaitvePaths";
+            this.chkRelaitvePaths.Size = new System.Drawing.Size(101, 17);
+            this.chkRelaitvePaths.TabIndex = 8;
+            this.chkRelaitvePaths.Text = "Relative Paths?";
+            this.chkRelaitvePaths.UseVisualStyleBackColor = true;
+            this.chkRelaitvePaths.CheckedChanged += new System.EventHandler(this.chkRelaitvePaths_CheckedChanged);
+            // 
             // Setup
             // 
             this.AcceptButton = this.btnOK;
@@ -424,6 +436,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(740, 381);
+            this.Controls.Add(this.chkRelaitvePaths);
             this.Controls.Add(this.gbWebSearch);
             this.Controls.Add(this.gbDblClick);
             this.Controls.Add(this.gbReturn);
@@ -456,6 +469,7 @@
             this.gbWebSearch.ResumeLayout(false);
             this.gbWebSearch.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -494,6 +508,7 @@
         private System.Windows.Forms.Label lblSpecialWords;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label lblNoSite;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkSortIncludeArticles;
+        private System.Windows.Forms.CheckBox chkRelaitvePaths;
     }
 }

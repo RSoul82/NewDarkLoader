@@ -9,7 +9,7 @@ namespace NewDarkLoader
     {
         public Setup(INIFile iniFile, INIFile langIni, string optionsSecName, string archiveRootKeyName, string languageKeyName, 
             string dateFormatKeyName, string backupTypeKeyName, string sevenZipGKeyName, string noWin7ZKeyName, 
-            string returnTypeKeyName, string dcDontAskKeyName, string installedFMsPath, bool sortNoArticles, bool _firstRun)
+            string returnTypeKeyName, string dcDontAskKeyName, string installedFMsPath, bool sortNoArticles, bool relativePaths, bool _firstRun)
         {
             InitializeComponent();
 
@@ -33,7 +33,8 @@ namespace NewDarkLoader
             kDCDontAsk = dcDontAskKeyName;
 
             fmInstalledPath = installedFMsPath;
-            checkBox1.Checked = sortNoArticles;
+            chkSortIncludeArticles.Checked = sortNoArticles;
+            chkRelaitvePaths.Checked = relativePaths;
 
             readLangINI(langIni);
             readFromINI();
@@ -61,7 +62,7 @@ namespace NewDarkLoader
         #endregion
 
         /// <summary>
-        /// Sets the interface text from the optional language ini file
+        /// Sets the interface text from the optional language ini file.
         /// </summary>
         /// <param name="langIni"></param>
         private void readLangINI(INIFile langIni)
@@ -186,6 +187,8 @@ namespace NewDarkLoader
             //check that archive root has been set
             if (tbFMArchivePath.Text != "" && archivePathLCTest != installedPathLCTest)
             {
+                sInfo.relativePaths = chkRelaitvePaths.Checked;
+
                 sInfo.archiveDir = tbFMArchivePath.Text;
                 sInfo.lang = cBlang.SelectedIndex + 1;
                 if (rdoDMY.Checked)
@@ -212,7 +215,7 @@ namespace NewDarkLoader
 
                 sInfo.webSearchSite = tbWebSearch.Text;
                 sInfo.specialWords = tbSpecialWords.Text;
-                sInfo.sortIgnoreArticles = checkBox1.Checked;
+                sInfo.sortIgnoreArticles = chkSortIncludeArticles.Checked;
 
                 sInfo.sevenZipGExe = tb7zGexe.Text;
 
@@ -220,7 +223,7 @@ namespace NewDarkLoader
                 {
                     FileInfo fInfo = new FileInfo(tb7zGexe.Text);
                     string parentDir = fInfo.DirectoryName;
-                    sInfo.sevenZNoWinExe = parentDir + "\\7z.exe";
+                    sInfo.sevenZNoWinExe = Path.Combine(parentDir, "7z.exe");
 
                     if (chkUseNoWinExe.Checked)
                         sInfo.useNoWinExe = true;
@@ -256,6 +259,10 @@ namespace NewDarkLoader
             if (dR == DialogResult.OK)
             {
                 tbFMArchivePath.Text = brDir.SelectedPath;
+                if (chkRelaitvePaths.Checked)
+                {
+                    tbFMArchivePath.Text = AbsRel.AbsoluteToRelative(tbFMArchivePath.Text);
+                }
             }
         }
 
@@ -266,6 +273,20 @@ namespace NewDarkLoader
             if (dR == DialogResult.OK)
             {
                 tb7zGexe.Text = br7zGExe.FileName;
+            }
+        }
+
+        private void chkRelaitvePaths_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkRelaitvePaths.Checked)
+            {
+                tbFMArchivePath.Text = AbsRel.AbsoluteToRelative(tbFMArchivePath.Text);
+                tb7zGexe.Text = AbsRel.AbsoluteToRelative(tb7zGexe.Text);
+            }
+            else
+            {
+                tbFMArchivePath.Text = AbsRel.RelativeToAbsolute(tbFMArchivePath.Text);
+                tb7zGexe.Text = AbsRel.RelativeToAbsolute(tb7zGexe.Text);
             }
         }
     }
@@ -284,5 +305,6 @@ namespace NewDarkLoader
         public string webSearchSite;
         public string specialWords;
         public bool sortIgnoreArticles;
+        public bool relativePaths;
     }
 }

@@ -17,12 +17,23 @@ namespace NewDarkLoader
     {
         public Form2()
         {
-            InitializeComponent();           
+            InitializeComponent();
+
+            updateFields();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnUpdate_Click(object sender, EventArgs e)
         {
-            textBox1.Text = 1.CompareTo(2).ToString();
+            updateFields();
+        }
+
+        private void updateFields()
+        {
+            lblAbsolute.Text = Path.Combine(Environment.CurrentDirectory, "NewDarkLoader.dll");
+
+            tbCurrentDir.Text = Environment.CurrentDirectory;
+            tbToRelative.Text = AbsRel.AbsoluteToRelative(tbOtherPath.Text);
+            tbToAbsolute.Text = AbsRel.RelativeToAbsolute(tbToRelative.Text);
         }
     }
 }
