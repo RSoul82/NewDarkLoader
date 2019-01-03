@@ -1,0 +1,31 @@
+I was able to speed up extractFMini by about 3.5x on average (over my 364 FM collection) by changing the for loop to a FirstOrDefault type thing. Can I make a pull request for this?
+- Fen
+
+example
+SevenZipExtractor iniExtract = new SevenZipExtractor(path); //use this to look in the file
+            
+//Hello Fen
+var iniQuery = from element in iniExtract.ArchiveFileNames
+			   where element.EndsWith(fmIni)
+			   select element;
+string archiveIniPath = iniQuery.FirstOrDefault();
+
+if (archiveIniPath != null)
+{
+	if (sevenZipGExe == "")
+	{
+		FileStream iniStream = new FileStream(extractedIni, FileMode.Create);
+		iniExtract.ExtractFile(archiveIniPath, iniStream);
+		iniStream.Close();
+	}
+	else
+	{
+		SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchiveDir, archive, userTempFolder, archiveIniPath, false);
+	}
+	foundIni = true;
+}
+
+if (foundIni)
+{
+	//read file
+}

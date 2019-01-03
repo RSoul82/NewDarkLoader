@@ -39,8 +39,6 @@
             this.rdoMDY = new System.Windows.Forms.RadioButton();
             this.rdoDMY = new System.Windows.Forms.RadioButton();
             this.gbFMArchive = new System.Windows.Forms.GroupBox();
-            this.btnBrArchivePath = new System.Windows.Forms.Button();
-            this.tbFMArchivePath = new System.Windows.Forms.TextBox();
             this.gb7z = new System.Windows.Forms.GroupBox();
             this.chkUseNoWinExe = new System.Windows.Forms.CheckBox();
             this.lbl7zHelp = new System.Windows.Forms.Label();
@@ -63,7 +61,13 @@
             this.tbSpecialWords = new System.Windows.Forms.TextBox();
             this.tbWebSearch = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabStandard = new System.Windows.Forms.TabPage();
             this.chkRelaitvePaths = new System.Windows.Forms.CheckBox();
+            this.tabExtra = new System.Windows.Forms.TabPage();
+            this.lbFMArchivePaths = new System.Windows.Forms.ListBox();
+            this.btnAddArchivePath = new System.Windows.Forms.Button();
+            this.btnRemArchivePath = new System.Windows.Forms.Button();
             this.gbLang.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.gbDateFormat.SuspendLayout();
@@ -73,12 +77,15 @@
             this.gbReturn.SuspendLayout();
             this.gbDblClick.SuspendLayout();
             this.gbWebSearch.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabStandard.SuspendLayout();
+            this.tabExtra.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbLang
             // 
             this.gbLang.Controls.Add(this.cBlang);
-            this.gbLang.Location = new System.Drawing.Point(9, 90);
+            this.gbLang.Location = new System.Drawing.Point(6, 157);
             this.gbLang.Name = "gbLang";
             this.gbLang.Size = new System.Drawing.Size(357, 52);
             this.gbLang.TabIndex = 1;
@@ -101,7 +108,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.btnCancel, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnOK, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 344);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(-159, 544);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -140,7 +147,7 @@
             // 
             this.gbDateFormat.Controls.Add(this.rdoMDY);
             this.gbDateFormat.Controls.Add(this.rdoDMY);
-            this.gbDateFormat.Location = new System.Drawing.Point(8, 148);
+            this.gbDateFormat.Location = new System.Drawing.Point(5, 215);
             this.gbDateFormat.Name = "gbDateFormat";
             this.gbDateFormat.Size = new System.Drawing.Size(357, 70);
             this.gbDateFormat.TabIndex = 2;
@@ -172,31 +179,15 @@
             // 
             // gbFMArchive
             // 
-            this.gbFMArchive.Controls.Add(this.btnBrArchivePath);
-            this.gbFMArchive.Controls.Add(this.tbFMArchivePath);
-            this.gbFMArchive.Location = new System.Drawing.Point(9, 12);
+            this.gbFMArchive.Controls.Add(this.btnRemArchivePath);
+            this.gbFMArchive.Controls.Add(this.btnAddArchivePath);
+            this.gbFMArchive.Controls.Add(this.lbFMArchivePaths);
+            this.gbFMArchive.Location = new System.Drawing.Point(6, 6);
             this.gbFMArchive.Name = "gbFMArchive";
-            this.gbFMArchive.Size = new System.Drawing.Size(357, 52);
+            this.gbFMArchive.Size = new System.Drawing.Size(357, 125);
             this.gbFMArchive.TabIndex = 0;
             this.gbFMArchive.TabStop = false;
-            this.gbFMArchive.Text = "FM Archive Folder (zip, 7z, rar...)";
-            // 
-            // btnBrArchivePath
-            // 
-            this.btnBrArchivePath.Location = new System.Drawing.Point(262, 18);
-            this.btnBrArchivePath.Name = "btnBrArchivePath";
-            this.btnBrArchivePath.Size = new System.Drawing.Size(86, 26);
-            this.btnBrArchivePath.TabIndex = 1;
-            this.btnBrArchivePath.Text = "Browse...";
-            this.btnBrArchivePath.UseVisualStyleBackColor = true;
-            this.btnBrArchivePath.Click += new System.EventHandler(this.btnBrowseArchivePath_Click);
-            // 
-            // tbFMArchivePath
-            // 
-            this.tbFMArchivePath.Location = new System.Drawing.Point(9, 22);
-            this.tbFMArchivePath.Name = "tbFMArchivePath";
-            this.tbFMArchivePath.Size = new System.Drawing.Size(247, 20);
-            this.tbFMArchivePath.TabIndex = 0;
+            this.gbFMArchive.Text = "FM Archive Folders (zip, 7z, rar...)";
             // 
             // gb7z
             // 
@@ -204,7 +195,7 @@
             this.gb7z.Controls.Add(this.lbl7zHelp);
             this.gb7z.Controls.Add(this.btnBr7zGexe);
             this.gb7z.Controls.Add(this.tb7zGexe);
-            this.gb7z.Location = new System.Drawing.Point(372, 185);
+            this.gb7z.Location = new System.Drawing.Point(6, 92);
             this.gb7z.Name = "gb7z";
             this.gb7z.Size = new System.Drawing.Size(357, 154);
             this.gb7z.TabIndex = 7;
@@ -259,7 +250,7 @@
             // 
             this.gbSaveBackup.Controls.Add(this.rdoBkAlways);
             this.gbSaveBackup.Controls.Add(this.rdoBkAsk);
-            this.gbSaveBackup.Location = new System.Drawing.Point(8, 222);
+            this.gbSaveBackup.Location = new System.Drawing.Point(5, 289);
             this.gbSaveBackup.Name = "gbSaveBackup";
             this.gbSaveBackup.Size = new System.Drawing.Size(357, 69);
             this.gbSaveBackup.TabIndex = 3;
@@ -293,7 +284,7 @@
             this.gbReturn.Controls.Add(this.rdoRetAlways);
             this.gbReturn.Controls.Add(this.rdoRetAfterFM);
             this.gbReturn.Controls.Add(this.rdoRetNever);
-            this.gbReturn.Location = new System.Drawing.Point(372, 12);
+            this.gbReturn.Location = new System.Drawing.Point(6, 412);
             this.gbReturn.Name = "gbReturn";
             this.gbReturn.Size = new System.Drawing.Size(357, 81);
             this.gbReturn.TabIndex = 5;
@@ -335,7 +326,7 @@
             // gbDblClick
             // 
             this.gbDblClick.Controls.Add(this.chkDblClickDontAsk);
-            this.gbDblClick.Location = new System.Drawing.Point(8, 296);
+            this.gbDblClick.Location = new System.Drawing.Point(5, 363);
             this.gbDblClick.Name = "gbDblClick";
             this.gbDblClick.Size = new System.Drawing.Size(358, 43);
             this.gbDblClick.TabIndex = 4;
@@ -359,7 +350,7 @@
             this.gbWebSearch.Controls.Add(this.lblSpecialWords);
             this.gbWebSearch.Controls.Add(this.tbSpecialWords);
             this.gbWebSearch.Controls.Add(this.tbWebSearch);
-            this.gbWebSearch.Location = new System.Drawing.Point(372, 99);
+            this.gbWebSearch.Location = new System.Drawing.Point(6, 6);
             this.gbWebSearch.Name = "gbWebSearch";
             this.gbWebSearch.Size = new System.Drawing.Size(357, 82);
             this.gbWebSearch.TabIndex = 6;
@@ -418,10 +409,37 @@
             this.toolTip1.InitialDelay = 200;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabStandard);
+            this.tabControl1.Controls.Add(this.tabExtra);
+            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(378, 524);
+            this.tabControl1.TabIndex = 9;
+            // 
+            // tabStandard
+            // 
+            this.tabStandard.Controls.Add(this.gbFMArchive);
+            this.tabStandard.Controls.Add(this.chkRelaitvePaths);
+            this.tabStandard.Controls.Add(this.gbLang);
+            this.tabStandard.Controls.Add(this.gbDateFormat);
+            this.tabStandard.Controls.Add(this.gbDblClick);
+            this.tabStandard.Controls.Add(this.gbSaveBackup);
+            this.tabStandard.Controls.Add(this.gbReturn);
+            this.tabStandard.Location = new System.Drawing.Point(4, 22);
+            this.tabStandard.Name = "tabStandard";
+            this.tabStandard.Padding = new System.Windows.Forms.Padding(3);
+            this.tabStandard.Size = new System.Drawing.Size(370, 498);
+            this.tabStandard.TabIndex = 0;
+            this.tabStandard.Text = "Standard";
+            this.tabStandard.UseVisualStyleBackColor = true;
+            // 
             // chkRelaitvePaths
             // 
             this.chkRelaitvePaths.AutoSize = true;
-            this.chkRelaitvePaths.Location = new System.Drawing.Point(18, 69);
+            this.chkRelaitvePaths.Location = new System.Drawing.Point(15, 137);
             this.chkRelaitvePaths.Name = "chkRelaitvePaths";
             this.chkRelaitvePaths.Size = new System.Drawing.Size(101, 17);
             this.chkRelaitvePaths.TabIndex = 8;
@@ -429,23 +447,55 @@
             this.chkRelaitvePaths.UseVisualStyleBackColor = true;
             this.chkRelaitvePaths.CheckedChanged += new System.EventHandler(this.chkRelaitvePaths_CheckedChanged);
             // 
+            // tabExtra
+            // 
+            this.tabExtra.Controls.Add(this.gbWebSearch);
+            this.tabExtra.Controls.Add(this.gb7z);
+            this.tabExtra.Location = new System.Drawing.Point(4, 22);
+            this.tabExtra.Name = "tabExtra";
+            this.tabExtra.Padding = new System.Windows.Forms.Padding(3);
+            this.tabExtra.Size = new System.Drawing.Size(370, 498);
+            this.tabExtra.TabIndex = 1;
+            this.tabExtra.Text = "Extra";
+            this.tabExtra.UseVisualStyleBackColor = true;
+            // 
+            // lbFMArchivePaths
+            // 
+            this.lbFMArchivePaths.FormattingEnabled = true;
+            this.lbFMArchivePaths.Location = new System.Drawing.Point(9, 19);
+            this.lbFMArchivePaths.Name = "lbFMArchivePaths";
+            this.lbFMArchivePaths.Size = new System.Drawing.Size(247, 95);
+            this.lbFMArchivePaths.TabIndex = 2;
+            // 
+            // btnAddArchivePath
+            // 
+            this.btnAddArchivePath.Location = new System.Drawing.Point(262, 19);
+            this.btnAddArchivePath.Name = "btnAddArchivePath";
+            this.btnAddArchivePath.Size = new System.Drawing.Size(86, 23);
+            this.btnAddArchivePath.TabIndex = 3;
+            this.btnAddArchivePath.Text = "Add...";
+            this.btnAddArchivePath.UseVisualStyleBackColor = true;
+            this.btnAddArchivePath.Click += new System.EventHandler(this.btnAddArchivePath_Click);
+            // 
+            // btnRemArchivePath
+            // 
+            this.btnRemArchivePath.Location = new System.Drawing.Point(262, 48);
+            this.btnRemArchivePath.Name = "btnRemArchivePath";
+            this.btnRemArchivePath.Size = new System.Drawing.Size(86, 23);
+            this.btnRemArchivePath.TabIndex = 4;
+            this.btnRemArchivePath.Text = "Remove...";
+            this.btnRemArchivePath.UseVisualStyleBackColor = true;
+            this.btnRemArchivePath.Click += new System.EventHandler(this.btnRemArchivePath_Click);
+            // 
             // Setup
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(740, 381);
-            this.Controls.Add(this.chkRelaitvePaths);
-            this.Controls.Add(this.gbWebSearch);
-            this.Controls.Add(this.gbDblClick);
-            this.Controls.Add(this.gbReturn);
-            this.Controls.Add(this.gbSaveBackup);
-            this.Controls.Add(this.gb7z);
-            this.Controls.Add(this.gbFMArchive);
-            this.Controls.Add(this.gbDateFormat);
+            this.ClientSize = new System.Drawing.Size(407, 581);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.gbLang);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -457,7 +507,6 @@
             this.gbDateFormat.ResumeLayout(false);
             this.gbDateFormat.PerformLayout();
             this.gbFMArchive.ResumeLayout(false);
-            this.gbFMArchive.PerformLayout();
             this.gb7z.ResumeLayout(false);
             this.gb7z.PerformLayout();
             this.gbSaveBackup.ResumeLayout(false);
@@ -468,8 +517,11 @@
             this.gbDblClick.PerformLayout();
             this.gbWebSearch.ResumeLayout(false);
             this.gbWebSearch.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabStandard.ResumeLayout(false);
+            this.tabStandard.PerformLayout();
+            this.tabExtra.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -485,8 +537,6 @@
         private System.Windows.Forms.RadioButton rdoMDY;
         private System.Windows.Forms.RadioButton rdoDMY;
         private System.Windows.Forms.GroupBox gbFMArchive;
-        private System.Windows.Forms.Button btnBrArchivePath;
-        private System.Windows.Forms.TextBox tbFMArchivePath;
         private System.Windows.Forms.GroupBox gb7z;
         private System.Windows.Forms.Label lbl7zHelp;
         private System.Windows.Forms.Button btnBr7zGexe;
@@ -509,6 +559,12 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label lblNoSite;
         private System.Windows.Forms.CheckBox chkSortIncludeArticles;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabStandard;
         private System.Windows.Forms.CheckBox chkRelaitvePaths;
+        private System.Windows.Forms.TabPage tabExtra;
+        private System.Windows.Forms.Button btnRemArchivePath;
+        private System.Windows.Forms.Button btnAddArchivePath;
+        private System.Windows.Forms.ListBox lbFMArchivePaths;
     }
 }

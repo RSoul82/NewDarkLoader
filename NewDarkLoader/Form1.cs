@@ -11,6 +11,7 @@ using SevenZip;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace NewDarkLoader
 {
@@ -59,10 +60,14 @@ namespace NewDarkLoader
         /// Full path to game's exe file. Used for running a new process.
         /// </summary>
         string exeFullPath = "";
-        string fmArchivePath = "";
+        /// <summary>
+        /// Primary location of FM zip/7z files
+        /// </summary>
+        string orig_fmArchivePath = "";
         /// <summary>
         /// gamePath + FMs. OR value read from cam_mod.ini
         /// </summary>
+        List<string> allFMArchivePaths = new List<string>();
         string fmInstalledPath;
         /// <summary>
         /// Short name, e.t. 3DA-v0_4
@@ -122,7 +127,13 @@ namespace NewDarkLoader
         private Size origReadmeSize;
         private Point origReadmeLoc;
 
+        /// <summary>
+        /// Path to titles.str. Either in temp or installed FM dir.
+        /// </summary>
         string titlesStr = "";
+        /// <summary>
+        /// Path to missflag.str. Either in temp or installed FM dir.
+        /// </summary>
         string missflagStr = "";
         int misFileNumber = 0;
 
@@ -213,6 +224,7 @@ namespace NewDarkLoader
         const string kGame_type = "Type";
         const string kUseRelativePaths = "UseRelativePaths";
         const string kArchive_root = "ArchiveRoot";
+        const string kArchive_root_extra = "AdditionalArchiveRoots";
         const string kReturn_type = "DebriefFM";
         const string kReturn_type_ed = "DebriefFMEd";
         const string kCWidths = "ColumnWidths";
@@ -328,18 +340,18 @@ namespace NewDarkLoader
             cbMaxYear.SelectedIndex = 0;
 
             //If there are missing options
-            if (fmArchivePath == "" || fmArchivePath == fmInstalledPath || dateFormat == "" || noFMsInArchiveRoot(fmArchivePath))
+            if (orig_fmArchivePath == "" || allFMArchivePaths.Count == 0 || allFMArchivePaths.Contains(fmInstalledPath) || dateFormat == "" || noFMArchives())
             {
                 if (enableLog)
                 {
                     WriteLog.AddEntry(logFilename, "Auto entering setup.");
-                    if (fmArchivePath == "")
+                    if (orig_fmArchivePath == "")
                         WriteLog.AddEntry(logFilename, "Archive path blank.");
-                    if (fmArchivePath == fmInstalledPath)
+                    if (orig_fmArchivePath == fmInstalledPath)
                         WriteLog.AddEntry(logFilename, "Archive path is installed path.");
                     if (dateFormat == "")
                         WriteLog.AddEntry(logFilename, "Date format is blank.");
-                    if (noFMsInArchiveRoot(fmArchivePath))
+                    if (noFMArchives())
                         WriteLog.AddEntry(logFilename, "No FMs in archive root");
                 }
                 showSetup(true, false);
@@ -403,31 +415,29 @@ namespace NewDarkLoader
         /// </summary>
         /// <param name="fmArchivePath">ArchiveRoot from ini file/setup.</param>
         /// <returns></returns>
-        private bool noFMsInArchiveRoot(string fmArchivePath)
+        private bool noFMArchives()
         {
-            if (!Directory.Exists(fmArchivePath))
+            int foundArchives = 0;
+            foreach (string archDir in allFMArchivePaths)
             {
-                return true;
-            }
-            else
-            {
-                string[] files = Directory.GetFiles(fmArchivePath);
-                int foundArchives = 0;
-
-                for (int x = 0; x < files.Length; x++)
+                if (Directory.Exists(archDir))
                 {
-                    if (validArchiveExtension(files[x]))
+                    string[] files = Directory.GetFiles(archDir);                    
+
+                    for (int x = 0; x < files.Length; x++)
                     {
-                        foundArchives++;
-                        break;
+                        if (validArchiveExtension(files[x]))
+                        {
+                            foundArchives++;
+                            break;
+                        }
                     }
                 }
-
-                if (foundArchives > 0)
-                    return false;
-                else
-                    return true;
             }
+            if (foundArchives > 0)
+                return false;
+            else
+                return true;
         }
         #endregion
 
@@ -865,19 +875,22 @@ namespace NewDarkLoader
         /// <param name="alreadyRunning">True if the user has run setup via the button. Prevents file being re-read.</param>
         private void showSetup(bool firstRun, bool alreadyRunning)
         {
-            Setup setupWindow = new Setup(i, langIni, secOptions, kArchive_root, kLanguage, kDate_format, kBackup_type, k7zipG, 
+            Setup setupWindow = new Setup(i, langIni, secOptions, kArchive_root, kArchive_root_extra, kLanguage, kDate_format, kBackup_type, k7zipG, 
                 kUse7zNoWin, currentReturnType, kAlwaysPlay, fmInstalledPath, sortIgnoreArticles, useRelativePaths, firstRun);
             DialogResult dR = setupWindow.ShowDialog();
 
             if (dR == DialogResult.OK)
             {
                 //Remember previous values
-                string oldArchiveRoot = fmArchivePath;
+                //string oldArchiveRoot = fmArchivePath;
+                List<string> oldArchiveRootList = new List<string>(allFMArchivePaths);
+
                 string oldDateFormat = dateFormat;
 
                 SetupInfo sInfo = setupWindow.getSetupInfo;
                 i.IniWriteValue(secOptions, kUseRelativePaths, sInfo.relativePaths.ToString());
-                i.IniWriteValue(secOptions, kArchive_root, sInfo.archiveDir);
+                i.IniWriteValue(secOptions, kArchive_root, sInfo.legacyArchiveDir);
+                i.IniWriteValue(secOptions, kArchive_root_extra, sInfo.allArchiveDirs);
                 i.IniWriteValue(secOptions, kLanguage, sInfo.lang.ToString());
                 i.IniWriteValue(secOptions, kDate_format, sInfo.dateFormat.ToString());
                 if (sInfo.dcDontAsk)
@@ -907,8 +920,12 @@ namespace NewDarkLoader
                 sortIgnoreArticles = sInfo.sortIgnoreArticles;
 
                 readINIData();
+                
+                //Check if archive list has changed
+                HashSet<string> set1 = new HashSet<string>(oldArchiveRootList);
+                HashSet<string> set2 = new HashSet<string>(allFMArchivePaths);
 
-                if (oldArchiveRoot != fmArchivePath || oldDateFormat != dateFormat)
+                if (!set1.SetEquals(set2)|| oldDateFormat != dateFormat)
                 {
                     //reset table
                     fmTable.ClearSelection();
@@ -996,10 +1013,26 @@ namespace NewDarkLoader
             else
                 useRelativePaths = false;
 
-            fmArchivePath = getStringFromINI(secOptions, kArchive_root, StringType.TextWithQuotesRemoved, i);
-            if (useRelativePaths)
-                fmArchivePath = AbsRel.RelativeToAbsolute(fmArchivePath);
+            orig_fmArchivePath = getStringFromINI(secOptions, kArchive_root, StringType.TextWithQuotesRemoved, i);
             
+            string allArchivePathsFromINI  = getStringFromINI(secOptions, kArchive_root_extra, StringType.TextWithQuotesRemoved, i);
+            if (allArchivePathsFromINI != "")
+                allFMArchivePaths = allArchivePathsFromINI.Split(';').ToList();
+            else if (orig_fmArchivePath != "")
+            {
+                allFMArchivePaths.Add(orig_fmArchivePath);
+                i.IniWriteValue(secOptions, kArchive_root_extra, orig_fmArchivePath);
+            }
+
+            if (useRelativePaths)
+            {
+                orig_fmArchivePath = AbsRel.RelativeToAbsolute(orig_fmArchivePath);
+                for (int x = 0; x < allFMArchivePaths.Count; x++)
+                {
+                    allFMArchivePaths[x] = AbsRel.RelativeToAbsolute(allFMArchivePaths[x]);
+                }
+            }
+
             langNDL = readLangFromINI();
             dateFormat = readDateFormatFromINI();
             backupType = getStringFromINI(secOptions, kBackup_type, StringType.TextWithQuotesRemoved, i);
@@ -1058,7 +1091,9 @@ namespace NewDarkLoader
 
                 File.WriteAllText(logFilename, "Log file: " + DateTime.Now);
                 WriteLog.AddEntry(logFilename, "Game: " + exeFullPath);
-                WriteLog.AddEntry(logFilename, "Archive Path: " + fmArchivePath);
+                WriteLog.AddEntry(logFilename, "Archive Path: " + orig_fmArchivePath);
+                foreach (string arcPath in allFMArchivePaths)
+                    WriteLog.AddEntry(logFilename, "Archive Path List Entry: " + arcPath);
                 WriteLog.AddEntry(logFilename, "Installed FMs: " + fmInstalledPath);
             }
         }
@@ -1194,16 +1229,16 @@ namespace NewDarkLoader
             foundFMs.Clear();
 
             #region Archives
-            string[] fullPaths = Directory.GetFiles(fmArchivePath, "*.*", SearchOption.AllDirectories);
+            string[] fullPaths = getAllFullPaths();// = Directory.GetFiles(fmArchivePath, "*.*", SearchOption.AllDirectories);
             for (int x = 0; x < fullPaths.Length; x++)
             {
                 string simpleName = Path.GetFileNameWithoutExtension(fullPaths[x]);
                 string extension = Path.GetExtension(fullPaths[x]);
-                string subFolder = Path.GetDirectoryName(fullPaths[x]).Replace(fmArchivePath, "").TrimEnd('\\');
+                string fullPath = Path.GetDirectoryName(fullPaths[x]).TrimEnd('\\'); //Path.GetDirectoryName(fullPaths[x]).Replace(fmArchivePath, "").TrimEnd('\\');
                 string sectionName = "FM=" + ArchiveExtract.ArchiveExtracedFolderName(simpleName);
 
-                if (!simpleName.ToLower().Contains("fmselbak") && validArchiveExtension(simpleName + extension) && !subFolder.Contains(".fix"))
-                    addFMToList(simpleName, subFolder, extension, sectionName, FMType.Archive);
+                if (!simpleName.ToLower().Contains("fmselbak") && validArchiveExtension(simpleName + extension) && !fullPath.Contains(".fix"))
+                    addFMToList(simpleName, fullPath, extension, sectionName, FMType.Archive);
             }
             #endregion
 
@@ -1237,6 +1272,21 @@ namespace NewDarkLoader
         }
 
         /// <summary>
+        /// Gets a list of all filles in all specified archive directories, including subfolders.
+        /// </summary>
+        /// <returns></returns>
+        private string[] getAllFullPaths()
+        {
+            List<string> paths = new List<string>();
+            foreach (string s in allFMArchivePaths)
+            {
+                string[] localPaths = Directory.GetFiles(s, "*.*", SearchOption.AllDirectories);
+                paths.AddRange(localPaths);
+            }
+            return paths.ToArray();
+        }
+
+        /// <summary>
         /// Fills fmTable using the contents of the foundFMs list
         /// </summary>
         private void listToTable()
@@ -1254,7 +1304,7 @@ namespace NewDarkLoader
                     fmTable.Rows.Add(fm.archive, fm.sizeMB, fm.title, ratingString, fm.imgFinished, fm.relDateString, fm.lastPlayedString,
                        fm.comment, fm.disabledMods, fm.installed, fm.sectionName, fm.gameID, fm.finishedID,
                        fm.relDateHex, fm.archiveOrDirectory, fm.extractionName, fm.saveBackupName, fm.darkloaderSaves, fm.lastPlayedHex,
-                       fm.subFolder, fm.sizeBytes);
+                       fm.fullPath, fm.sizeBytes);
                 }
                 existingFMs.Add(fm.sectionName); //Prevents duplicates
             }
@@ -1264,10 +1314,10 @@ namespace NewDarkLoader
         /// Adds the found FM to the foundFM list.
         /// </summary>
         /// <param name="simpleName">Archive name without extension, or folder name.</param>
-        /// <param name="subFolder">Folders relative to fmArchivePath. Starts with \\, does not end with \\</param>
+        /// <param name="fullFolderPath">Full path to folder containg FM archive.</param>
         /// <param name="extension">.zip, .7z etc.</param>
         /// <param name="sectionName">Value for the ini file.</param>
-        private void addFMToList(string simpleName, string subFolder, string extension, string sectionName, FMType archOrDir)
+        private void addFMToList(string simpleName, string fullFolderPath, string extension, string sectionName, FMType archOrDir)
         {
             if (enableLog)
                 WriteLog.AddEntry(logFilename, "Adding FM: " + simpleName);
@@ -1308,7 +1358,7 @@ namespace NewDarkLoader
             }
             nFM.saveBackupName = simpleName + ".FMSelBak.zip";
             nFM.darkloaderSaves = simpleName + "_saves.zip";
-            nFM.subFolder = subFolder;
+            nFM.fullPath = fullFolderPath;
             nFM.fmTags = getFMTags(nFM.sectionName);
 
             foundFMs.Add(nFM);
@@ -1693,9 +1743,9 @@ namespace NewDarkLoader
             return foundName;
         }
 
-        private string getT3FMTitle(string simpleFilename, string sectionName, string fNameWithExt, string subFolder)
+        private string getT3FMTitle(string simpleFilename, string sectionName, string fNameWithExt, string fmArchiveDir)
         {
-            SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, fNameWithExt));
+            SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchiveDir, fNameWithExt));
 
             //FM ini already looked for
             //NDL ini already looked in
@@ -1716,7 +1766,7 @@ namespace NewDarkLoader
                     }
                     else
                     {
-                        SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, fNameWithExt, userTempFolder, ext.ArchiveFileNames[x], false);
+                        SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchiveDir, fNameWithExt, userTempFolder, ext.ArchiveFileNames[x], false);
                         //Filename coulde be "folder\\something.glml" or just something.glml
                         string[] fNameSplit = ext.ArchiveFileNames[x].Split(Path.DirectorySeparatorChar);
                         string basicFilename = fNameSplit[fNameSplit.Length - 1]; //get the last part, even if there's only 1 element.
@@ -1724,7 +1774,7 @@ namespace NewDarkLoader
                     }
 
                     //read the glml file to find the GLTITLe tags
-                    string[] fileLines = File.ReadAllLines(glFile);
+                    string[] fileLines = File.ReadAllLines(glFile, Encoding.Default);
                     foreach (string line in fileLines)
                     {
                         if (line.Contains("GLTITLE"))
@@ -1813,7 +1863,7 @@ namespace NewDarkLoader
             string title = "";
             if (readmePath != "")
             {
-                string[] fileLines = File.ReadAllLines(readmePath);
+                string[] fileLines = File.ReadAllLines(readmePath, Encoding.Default);
 
                 if (fileIsRTF(fileLines))
                 {
@@ -1860,11 +1910,11 @@ namespace NewDarkLoader
         /// Extract titles.str to temp folder. Also extracts missflag in case that's needed.
         /// </summary>
         /// <param name="fileNameWithExt">FM's archvie filename, no path.</param>
-        private void extractTitlesStr(string subFolder, string fNameWithExt)
+        private void extractTitlesStr(string fmArchiveDir, string fNameWithExt)
         {
-            if(File.Exists(Path.Combine(fmArchivePath, subFolder, fNameWithExt)))
+            if(File.Exists(Path.Combine(fmArchiveDir, fNameWithExt)))
             {
-                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, fNameWithExt));
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchiveDir, fNameWithExt));
 
                 //Find titles.str - extraction is case sensitive so the exact name must be found first
                 List<string> fnames = new List<string>(); //dummy list, only needed for below
@@ -1880,19 +1930,22 @@ namespace NewDarkLoader
 
                 bool extracted = false;
 
-                extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, Path.Combine("strings", langGame.ToLower(), "titles.str"));
+                Stopwatch sw = Stopwatch.StartNew();
+                extracted = findTitlesInArchive(fmArchiveDir, fNameWithExt, ext, fnames, Path.Combine("strings", langGame.ToLower(), "titles.str"));
 
                 //only look for non-language specific if language str is not found
                 if (!extracted)
                 {
-                    extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, Path.Combine("strings", "titles.str"));
+                    extracted = findTitlesInArchive(fmArchiveDir, fNameWithExt, ext, fnames, Path.Combine("strings", "titles.str"));
                 }
 
                 //if still not found, look in English
                 if (!extracted)
                 {
-                    extracted = findTitlesInArchive(subFolder, fNameWithExt, ext, fnames, Path.Combine("strings", "english", "titles.str"));
+                    extracted = findTitlesInArchive(fmArchiveDir, fNameWithExt, ext, fnames, Path.Combine("strings", "english", "titles.str"));
                 }
+                sw.Stop();
+                long t = sw.ElapsedMilliseconds;
 
                 //look for missflag.str
                 for (int x = 0; x < fnames.Count; x++)
@@ -1905,32 +1958,46 @@ namespace NewDarkLoader
                             extractStrInternal(ext, x, strType.missflag);
                         }
                         else
-                            extractStrExternal(subFolder, fNameWithExt, ext, x, strType.missflag);
+                            extractStrExternal(fmArchiveDir, fNameWithExt, ext, x, strType.missflag);
                         break;
                     }
                 }
             }
         }
 
-        private bool findTitlesInArchive(string subFolder, string fNameWithExt, SevenZipExtractor ext, List<string> fnames, string titlesPathInArchive)
+        /// <summary>
+        /// Attempt to extract "titles.str" from fm archive. Return True if successful.
+        /// </summary>
+        /// <param name="fmArchiveDir">Directory of archive.</param>
+        /// <param name="fNameWithExt">File name with extension.</param>
+        /// <param name="fnames">Archive filenames list</param>
+        /// <param name="titlesPathInArchive">lanuage/titles.str or just titles.str</param>
+        /// <returns></returns>
+        private bool findTitlesInArchive(string fmArchiveDir, string fNameWithExt, SevenZipExtractor ext, List<string> fnames, string titlesPathInArchive)
         {
             bool extracted = false;
-            //look for language first
-            for (int x = 0; x < fnames.Count; x++)
+
+            //Path titles.str in archive
+            string foundTitlesStr = null;
+
+            var strQuery = from element in ext.ArchiveFileNames
+                           where element.EndsWith(titlesPathInArchive, StringComparison.CurrentCulture)
+                           select element;
+            foundTitlesStr = strQuery.FirstOrDefault();
+
+            if (foundTitlesStr != null)
             {
-                if (fnames[x].ToLower() == titlesPathInArchive)
+                if (sevenZipGExe == "")
                 {
-                    correctStrName(ext, x, strType.titles);
-                    extracted = true;
-                    if (sevenZipGExe == "")
-                    {
-                        extractStrInternal(ext, x, strType.titles);
-                    }
-                    else
-                        extractStrExternal(subFolder, fNameWithExt, ext, x, strType.titles);
-                    break;
+                    extractStrInternal(ext, foundTitlesStr, strType.titles);
                 }
+                else
+                    extractStrExternal(fmArchiveDir, fNameWithExt, ext, foundTitlesStr, strType.titles);
+
+                titlesStr = Path.Combine(userTempFolder, foundTitlesStr);
+                extracted = true;
             }
+
             return extracted;
         }
 
@@ -1948,15 +2015,33 @@ namespace NewDarkLoader
 
         private enum strType { titles, missflag }
 
-        private void extractStrExternal(string subFolder, string fNameWithExt, SevenZipExtractor ext, int fileIndex, strType titlesOrMissflag)
+        /// <summary>
+        /// Use external 7z installation to handle extractions
+        /// </summary>
+        private void extractStrExternal(string fmArchiveDir, string fNameWithExt, SevenZipExtractor ext, int fileIndex, strType titlesOrMissflag)
         {
-            int exitCode = SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, fNameWithExt, userTempFolder, ext.ArchiveFileNames[fileIndex], false);
+            int exitCode = SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchiveDir, fNameWithExt, userTempFolder, ext.ArchiveFileNames[fileIndex], false);
             if (exitCode != 0)
             {
                 extractStrInternal(ext, fileIndex, titlesOrMissflag);
             }
         }
 
+        /// <summary>
+        /// Use external 7z installation to handle extractions
+        /// </summary>
+        private void extractStrExternal(string fmArchiveDir, string fNameWithExt, SevenZipExtractor ext, string filePathInArchive, strType titlesOrMissflag)
+        {
+            int exitCode = SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchiveDir, fNameWithExt, userTempFolder, filePathInArchive, false);
+            if (exitCode != 0)
+            {
+                extractStrInternal(ext, filePathInArchive, titlesOrMissflag);
+            }
+        }
+
+        /// <summary>
+        /// Use c# 7z dll to handle extractions
+        /// </summary>
         private void extractStrInternal(SevenZipExtractor ext, int fileIndex, strType titlesOrMissflag)
         {
             string extPath = "";
@@ -1967,6 +2052,22 @@ namespace NewDarkLoader
 
             FileStream fS_str = new FileStream(extPath, FileMode.Create);
             ext.ExtractFile(fileIndex, fS_str);
+            fS_str.Close();
+        }
+
+        /// <summary>
+        /// Use c# 7z dll to handle extractions.
+        /// </summary>
+        private void extractStrInternal(SevenZipExtractor ext, string filePathInArchive, strType titlesOrMissflag)
+        {
+            string extPath = "";
+            if (titlesOrMissflag == strType.titles)
+                extPath = titlesStr;
+            else
+                extPath = missflagStr;
+
+            FileStream fS_str = new FileStream(extPath, FileMode.Create);
+            ext.ExtractFile(filePathInArchive, fS_str);
             fS_str.Close();
         }
 
@@ -1988,7 +2089,7 @@ namespace NewDarkLoader
 
         private string getNameFromTitlesStr(int numMisFiles, int maxMission, bool missflagFromArchive)
         {
-            string[] fileLines = File.ReadAllLines(titlesStr);
+            string[] fileLines = File.ReadAllLines(titlesStr, Encoding.Default);
 
             string maxTitle = "";
             foreach (string s in fileLines)
@@ -2092,15 +2193,15 @@ namespace NewDarkLoader
         /// </summary>
         /// <param name="archive">FM archive.</param>
         /// <returns></returns>
-        private Point numMisFilesInArchive(string subFolder, string archive)
+        private Point numMisFilesInArchive(string fmArchiveDir, string archive)
         {
             int count = 0;
             int max = 0;
             List<int> numbers = new List<int>();
-            if (File.Exists(Path.Combine(fmArchivePath, subFolder, archive)))
+            if (File.Exists(Path.Combine(fmArchiveDir, archive)))
             {
                 misFileNumber = 0;
-                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, archive));
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchiveDir, archive));
 
                 //Get list of all files in archive
                 List<string> fnames = new List<string>();
@@ -2236,12 +2337,12 @@ namespace NewDarkLoader
         /// <param name="archive">Filename with extension. Path relative to fmArchivePath.</param>
         /// <param name="readmeFilename">readme.txt, info.rtf, etc. Can be "".</param>
         /// <returns></returns>
-        private void extractReadme(string subFolder, string archive, string readmeFilename, string sectionName = "")
+        private void extractReadme(string fmArchiveDir, string archive, string readmeFilename, string sectionName = "")
         {
-            if (File.Exists(Path.Combine(fmArchivePath, subFolder, archive)))
+            if (File.Exists(Path.Combine(fmArchiveDir, archive)))
             {
                 //Prepare to extract files
-                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, archive));
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchiveDir, archive));
 
                 //Get list of all rtf and txt and html files in archive
                 List<string> fnames = new List<string>();
@@ -2288,21 +2389,21 @@ namespace NewDarkLoader
                 }
                 else
                 {
-                    int exitCode = extractReadmeExternal(subFolder, archive, fName, html);
+                    int exitCode = extractReadmeExternal(fmArchiveDir, archive, fName, html);
                     if (exitCode != 0)
                         extractReadmeInternal(ext, vldFiles, html);
                 }
             }
         }
 
-        private int extractReadmeExternal(string subFolder, string archive, string fName, bool html)
+        private int extractReadmeExternal(string fmArchiveDir, string archive, string fName, bool html)
         {
             int exitCode1 = 0;
             int exitCode2 = 0;
-            exitCode1 = SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, archive, userTempFolder, fName);
+            exitCode1 = SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchiveDir, archive, userTempFolder, fName);
             if (html)
             {
-                exitCode2 = SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, archive, userTempFolder, "r_data\\*");
+                exitCode2 = SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchiveDir, archive, userTempFolder, "r_data\\*");
             }
 
             return exitCode1 + exitCode2;
@@ -2447,6 +2548,7 @@ namespace NewDarkLoader
                     else
                         readmeFileType = RichTextBoxStreamType.PlainText;
 
+
                     rtbReadmes.BringToFront();
                     rtbReadmes.LoadFile(readmePath, readmeFileType);
                     btnShowInBrowser.SendToBack();
@@ -2521,34 +2623,38 @@ namespace NewDarkLoader
         /// </summary>
         /// <param name="archive">Archive's filename.</param>
         /// <returns></returns>
-        private fmIniData extractFMini(string subFolder, string archive)
+        private fmIniData extractFMini(string fmArchiveDir, string archive)
         {
-            string path = Path.Combine(fmArchivePath, subFolder, archive);
+            string path = Path.Combine(fmArchiveDir, archive);
             string fmIni = "fm.ini";
             string extractedIni = Path.Combine(userTempFolder, fmIni);
             bool foundIni = false;
             fmIniData data = null;
 
             SevenZipExtractor iniExtract = new SevenZipExtractor(path); //use this to look in the file
-            for (int x = 0; x < iniExtract.ArchiveFileNames.Count; x++)
+            
+            //Hello Fen
+            var iniQuery = from element in iniExtract.ArchiveFileNames
+                           where element.EndsWith(fmIni)
+                           select element;
+            string archiveIniPath = iniQuery.FirstOrDefault();
+
+            if (archiveIniPath != null)
             {
-                if (iniExtract.ArchiveFileNames[x].ToLower().EndsWith(fmIni)) //EndsWith allows for the file in a subfolder
+                if (sevenZipGExe == "")
                 {
-                    if (sevenZipGExe == "")
-                    {
-                        FileStream iniStream = new FileStream(extractedIni, FileMode.Create);
-                        iniExtract.ExtractFile(x, iniStream);
-                        iniStream.Close();
-                    }
-                    else
-                    {
-                        SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchivePath, subFolder, archive,
-                            userTempFolder, iniExtract.ArchiveFileNames[x], false);
-                    }
-                    foundIni = true;
-                    break;
+                    FileStream iniStream = new FileStream(extractedIni, FileMode.Create);
+                    iniExtract.ExtractFile(archiveIniPath, iniStream);
+                    iniStream.Close();
                 }
+                else
+                {
+                    SevenZipGExtract.ExtractFile(choose7ZProg(), fmArchiveDir, archive,
+                        userTempFolder, archiveIniPath, false);
+                }
+                foundIni = true;
             }
+
             if (foundIni)
             {
                 data = getDataFromFMini(data, extractedIni);
@@ -2701,16 +2807,16 @@ namespace NewDarkLoader
         /// <summary>
         /// Returns a list of all possible readme filenames within the archive/folder.
         /// </summary>
-        /// <param name="subFolder">Read from table.</param>
+        /// <param name="fmArchiveDir">Read from table.</param>
         /// <param name="selArchive">Read from table.</param>
         /// <param name="isArchive"></param>
         /// <returns></returns>
-        private List<string> getPossibleReadmes(string subFolder, string selArchive, bool isArchive)
+        private List<string> getPossibleReadmes(string fmArchiveDir, string selArchive, bool isArchive)
         {
             List<string> possibleReadmes = new List<string>();
             if (isArchive)
             {
-                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, selArchive));
+                SevenZipExtractor ext = new SevenZipExtractor(Path.Combine(fmArchiveDir, selArchive));
 
                 List<string> fnames = new List<string>();
                 System.Collections.ObjectModel.ReadOnlyCollection<string> archFiles = new System.Collections.ObjectModel.ReadOnlyCollection<string>(fnames);
@@ -2726,7 +2832,7 @@ namespace NewDarkLoader
             }
             else //if folder only
             {
-                string[] allFiles = Directory.GetFiles(Path.Combine(fmInstalledPath, subFolder, selArchive), "*.*", SearchOption.AllDirectories);
+                string[] allFiles = Directory.GetFiles(Path.Combine(fmInstalledPath, fmArchiveDir, selArchive), "*.*", SearchOption.AllDirectories);
 
                 foreach(string s in allFiles)
                 {
@@ -2804,9 +2910,11 @@ namespace NewDarkLoader
 
             string selArchive = selFM.archive;
             string sectionName = selFM.sectionName;
-            string subFolder = selFM.subFolder;
+            string fmArchiveDir = selFM.fullPath;
 
-            if (File.Exists(Path.Combine(fmArchivePath, subFolder, selArchive)) || Directory.Exists(Path.Combine(fmInstalledPath, selArchive)))
+            readGameLanguage();
+
+            if (File.Exists(Path.Combine(fmArchiveDir, selArchive)) || Directory.Exists(Path.Combine(fmInstalledPath, selArchive)))
             {
                 readmePath = ""; //reset this so it's not left with value from previously selected FM
                 fmExtractionFolder = selFM.extractionName;
@@ -2821,8 +2929,7 @@ namespace NewDarkLoader
                 List<string> possibleReadmes = new List<string>();
                 if (withUserSelection && infoFileFromINI == "")
                 {
-                    possibleReadmes = getPossibleReadmes(subFolder, selArchive, fmIsArchive);
-#if readmeChoice
+                    possibleReadmes = getPossibleReadmes(fmArchiveDir, selArchive, fmIsArchive);
                     if(possibleReadmes.Count > 1)
                     {
                         lbReadmeList.Items.Clear();
@@ -2835,17 +2942,10 @@ namespace NewDarkLoader
                     {
                         infoFileFromINI = possibleReadmes[0];
                     }
-
-#else //Original behaviour. Mostly fine except when a spoiler file is loaded instead.
-                    if (possibleReadmes.Count != 1)
-                    {
-                        infoFileFromINI = possibleReadmes[0]; //original behaviour - first rtf, first txt, or first html
-                    }
-#endif
                     else
                     {
                         dummyReadme();
-                        FileInfo fI = new FileInfo(Path.Combine(fmArchivePath, subFolder, selArchive));
+                        FileInfo fI = new FileInfo(Path.Combine(fmArchiveDir, selArchive));
                         releaseDate = fI.LastWriteTime;
                     }
                 }
@@ -2855,7 +2955,7 @@ namespace NewDarkLoader
                     //Readme always needs to be scanned/extracted for display in the window
                     if (fmIsArchive)
                     {
-                        extractReadme(subFolder, selArchive, infoFileFromINI, sectionName);
+                        extractReadme(fmArchiveDir, selArchive, infoFileFromINI, sectionName);
                     }
                     else
                         scanReadme(Path.Combine(fmInstalledPath, selArchive), infoFileFromINI, sectionName);
@@ -2871,7 +2971,7 @@ namespace NewDarkLoader
                     fmIniData fmIni = null;
                     //read fm.ini
                     if (fmIsArchive)
-                        fmIni = extractFMini(subFolder, selArchive); //Only do this if a value is missing, or user is re-scanning
+                        fmIni = extractFMini(fmArchiveDir, selArchive); //Only do this if a value is missing, or user is re-scanning
                     else
                         fmIni = readFMini(selArchive);//Only do this if a value is missing, or user is re-scanning
 #region If fm.ini exists
@@ -2896,7 +2996,7 @@ namespace NewDarkLoader
                         {
                             if (overwriteData || titleFromINI == "")
                             {
-                                selFM.title = setFMNameFromEither(currentFMID, overwriteData, selArchive, subFolder, sectionName, fmIsArchive, titleFromINI);
+                                selFM.title = setFMNameFromEither(currentFMID, overwriteData, selArchive, fmArchiveDir, sectionName, fmIsArchive, titleFromINI);
                             }
                         }
                         if (fmIni.relDateHex != null && fmIni.relDateHex != ""
@@ -2938,7 +3038,7 @@ namespace NewDarkLoader
                     {
                         if (overwriteData || titleFromINI == "" || releaseDateFromINI == "") //If title or date are missing or re-scanning
                         {
-                            selFM.title = setFMNameFromEither(currentFMID, overwriteData, selArchive, subFolder, sectionName, fmIsArchive, titleFromINI);
+                            selFM.title = setFMNameFromEither(currentFMID, overwriteData, selArchive, fmArchiveDir, sectionName, fmIsArchive, titleFromINI);
 
                             if (overwriteData || releaseDateFromINI == "") //Don't update rel date if title was the only blank thing.
                             {
@@ -2973,7 +3073,7 @@ namespace NewDarkLoader
                 string lastPlayedFromINI = i.IniReadValue(sectionName, kLast_played);
                 if (overwriteData) //Don't check for ini being "" because some players will want to reset it.
                 {
-                    string saveBackupPath = Path.Combine(fmArchivePath, subFolder, selFM.saveBackupName);
+                    string saveBackupPath = Path.Combine(fmArchiveDir, selFM.saveBackupName);
                     string fmPath = Path.Combine(fmInstalledPath, selFM.extractionName);
                     if (DateFromSavegames.FMHasSaves(fmPath, saveBackupPath, gameIsThief3))
                     {
@@ -3014,7 +3114,7 @@ namespace NewDarkLoader
                     long sizeInBytes = 0;
                     if (fmIsArchive)
                     {
-                        FileInfo fI = new FileInfo(Path.Combine(fmArchivePath, subFolder, selArchive));
+                        FileInfo fI = new FileInfo(Path.Combine(fmArchiveDir, selArchive));
                         sizeInBytes = fI.Length;
                     }
                     else
@@ -3118,7 +3218,7 @@ namespace NewDarkLoader
             if (fmIsArchive)
             {
                 //Run this anyway to get the date
-                FileInfo fI = new FileInfo(Path.Combine(fmArchivePath, subFolder, selArchive));
+                FileInfo fI = new FileInfo(Path.Combine(subFolder, selArchive));
                 string foundTitle = getFMNameFromArchive(fI.Name.Replace(fI.Extension, ""), sectionName, fI.Name, subFolder, overwriteData);
                 if (overwriteData || titleFromINI == "") //Don't update title if release date is the only blank thing.
                 {
@@ -3377,13 +3477,13 @@ namespace NewDarkLoader
         /// </summary>
         /// <param name="archiveFilename">No path.</param>
         /// <returns></returns>
-        private List<string> getFMTextFiles(string subFolder, string archiveFilename)
+        private List<string> getFMTextFiles(string fmArchiveDir, string archiveFilename)
         {
             List<string> textFiles = new List<string>();
 
-            if (File.Exists(Path.Combine(fmArchivePath, subFolder, archiveFilename)))
+            if (File.Exists(Path.Combine(fmArchiveDir, archiveFilename)))
             {
-                SevenZipExtractor ex = new SevenZipExtractor(Path.Combine(fmArchivePath, subFolder, archiveFilename));
+                SevenZipExtractor ex = new SevenZipExtractor(Path.Combine(fmArchiveDir, archiveFilename));
                 foreach (string s in ex.ArchiveFileNames)
                 {
                     if (readmeRootArchive(s))
@@ -3414,7 +3514,7 @@ namespace NewDarkLoader
         private void editFMDetails_Click(object sender, EventArgs e)
         {
             FanMission fm = foundFMs[selFMID];
-            List<string> fmTextFiles = getFMTextFiles(fm.subFolder, fm.archive);
+            List<string> fmTextFiles = getFMTextFiles(fm.fullPath, fm.archive);
             string secName = fm.sectionName;
 
             bool fmIsArchive = true;
@@ -3423,7 +3523,7 @@ namespace NewDarkLoader
 
             EditFM edFM = new EditFM(langIni, fm.title, fm.rating, fm.finishedID, fm.comment, fm.disabledMods, fm.relDateHex,
                 fm.lastPlayedHex, fmTextFiles, i.IniReadValue(secName, kInfoFile), gameIsThief3,
-                Path.Combine(fmArchivePath, fm.subFolder, fm.saveBackupName),
+                Path.Combine(fm.fullPath, fm.saveBackupName),
                 Path.Combine(fmInstalledPath, fm.extractionName), notPlayed);
 
             DialogResult dR = edFM.ShowDialog();
@@ -3436,7 +3536,7 @@ namespace NewDarkLoader
                 if (editedData.fmReadme != "")
                 {
                     if (fmIsArchive)
-                        extractReadme(fm.subFolder, fm.archive, editedData.fmReadme);
+                        extractReadme(fm.fullPath, fm.archive, editedData.fmReadme);
                     else
                         scanReadme(Path.Combine(fmInstalledPath, fm.extractionName), edFM.EditedData.fmReadme, secName);
 
@@ -3662,7 +3762,7 @@ namespace NewDarkLoader
             keys.LastPlayedInt = kLast_played;
             keys.Comment = kComment;
 
-            Tools nTools = new Tools(gamePath, fmArchivePath, sevenZipGExe, userTempFolder, dataList, keys, i, langIni, archiveExtensions, gameIsShock2);
+            Tools nTools = new Tools(gamePath, allFMArchivePaths, sevenZipGExe, userTempFolder, dataList, keys, i, langIni, archiveExtensions, gameIsShock2);
 
             nTools.ShowDialog();
 
@@ -4058,11 +4158,14 @@ namespace NewDarkLoader
                     this.Location.Y);
             }
 
-            //If readme is big enough to cover all the FMs in the table, reset it
-            int minViewSize = fmTable.Location.Y + fmTable.ColumnHeadersHeight + fmTable.Rows.GetRowsHeight(DataGridViewElementStates.None)/fmTable.Rows.GetRowCount(DataGridViewElementStates.None);
-            if (splitContainerTopHalf.SplitterDistance < minViewSize)
+            if (foundFMs.Count > 0)
             {
-                i.IniWriteValue(secOptions, kSplitDist, "0.5");
+                //If readme is big enough to cover all the FMs in the table, reset it
+                int minViewSize = fmTable.Location.Y + fmTable.ColumnHeadersHeight + fmTable.Rows.GetRowsHeight(DataGridViewElementStates.None) / fmTable.Rows.GetRowCount(DataGridViewElementStates.None);
+                if (splitContainerTopHalf.SplitterDistance < minViewSize)
+                {
+                    i.IniWriteValue(secOptions, kSplitDist, "0.5");
+                }
             }
         }
 
@@ -4242,6 +4345,10 @@ namespace NewDarkLoader
                     fmTable.Rows[hti.RowIndex].Selected = true;
             }
         }
+
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+        private const int WM_SETREDRAW = 11;
 
         private void scanAllFMsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -4685,6 +4792,7 @@ namespace NewDarkLoader
                     e.Value = fm.comment;
                     break;
                 case "NoMod":
+                    //e.Value = fm.disabledMods;
                     e.Value = fm.disabledMods;
                     break;
                 case "Ins":
@@ -4980,7 +5088,7 @@ namespace NewDarkLoader
             FanMission fm = foundFMs[selFMID];
             externalInstallation = false;
             //Extract archive
-            string archiveFullPath = Path.Combine(fmArchivePath, fm.subFolder, fm.archive);
+            string archiveFullPath = Path.Combine(fm.fullPath, fm.archive);
 
             if (!Directory.Exists(extractToPath))
                 Directory.CreateDirectory(extractToPath);
@@ -5008,7 +5116,7 @@ namespace NewDarkLoader
             FanMission fm = foundFMs[selFMID];
             convertMp3s();
             //When FM has been extracted, look for saves file and extract that.
-            string saveArchivePath = Path.Combine(fmArchivePath, fm.subFolder, fm.saveBackupName);
+            string saveArchivePath = Path.Combine(fm.fullPath, fm.saveBackupName);
             if (File.Exists(saveArchivePath))
             {
                 SevenZipExtractor saveExtract = new SevenZipExtractor(saveArchivePath);
@@ -5092,12 +5200,8 @@ namespace NewDarkLoader
         /// <returns></returns>
         private string setFMFixPath()
         {
-            FileInfo fInfo = new FileInfo(foundFMs[selFMID].archive);
-            string basicName = "";
-            if (fInfo.Extension.Length != 0)
-                basicName = fInfo.Name.Replace(fInfo.Extension, "");
-            else basicName = fInfo.Name; //use folder name if there's no archive
-            string fmFixPath = Path.Combine(fmArchivePath, ".fix", basicName);
+            string arcFilename = Path.GetFileNameWithoutExtension(foundFMs[selFMID].archive);
+            string fmFixPath = Path.Combine(foundFMs[selFMID].fullPath, ".fix", arcFilename);
             return fmFixPath;
         }
 
@@ -5119,17 +5223,17 @@ namespace NewDarkLoader
             FanMission fm = foundFMs[selFMID];
             externalInstallation = true;
             string fmArchiveName = fm.archive;
-            string subfolder = fm.subFolder;
+            string fmArchiveDir = fm.fullPath;
             string fmExtractionPath = Path.Combine(fmInstalledPath, fm.extractionName);
-            SevenZipGExtract.ExtractArchive(sevenZipGExe, fmArchivePath, Path.Combine(subfolder, fmArchiveName), fmExtractionPath);
+            SevenZipGExtract.ExtractArchive(sevenZipGExe, Path.Combine(fmArchiveDir, fmArchiveName), fmExtractionPath);
 
             convertMp3s();
 
-            string savesFile = Path.Combine(fmArchivePath, subfolder, fm.saveBackupName);
+            string savesFile = Path.Combine(fmArchiveDir, fm.saveBackupName);
 
             if (File.Exists(savesFile))
             {
-                SevenZipGExtract.ExtractArchive(sevenZipGExe, Path.Combine(fmArchivePath, subfolder), fm.saveBackupName, fmExtractionPath);
+                SevenZipGExtract.ExtractArchive(sevenZipGExe, Path.Combine(fmArchiveDir, fm.saveBackupName), fmExtractionPath);
             }
 
             checkForFixes();
@@ -5190,7 +5294,7 @@ namespace NewDarkLoader
             if (enableLog)
                 WriteLog.AddEntry(logFilename, "Uninstalling " + fm.sectionName);
 
-            string backupZipPath = Path.Combine(fmArchivePath, fm.subFolder, fm.saveBackupName);
+            string backupZipPath = Path.Combine(fm.fullPath, fm.saveBackupName);
             string currentFMPath = Path.Combine(fmInstalledPath, fm.extractionName);
 
             string savesPath = "";
@@ -5542,7 +5646,7 @@ namespace NewDarkLoader
         public string saveBackupName;//
         public string darkloaderSaves;//
         public string lastPlayedHex;//
-        public string subFolder;
+        public string fullPath;
         public long sizeBytes;//
         public List<catItem> fmTags;
     }

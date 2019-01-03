@@ -7,7 +7,7 @@ namespace NewDarkLoader
 {
     public partial class Setup : Form
     {
-        public Setup(INIFile iniFile, INIFile langIni, string optionsSecName, string archiveRootKeyName, string languageKeyName, 
+        public Setup(INIFile iniFile, INIFile langIni, string optionsSecName, string archiveRootKeyName, string archiveRootExtraKeyName, string languageKeyName, 
             string dateFormatKeyName, string backupTypeKeyName, string sevenZipGKeyName, string noWin7ZKeyName, 
             string returnTypeKeyName, string dcDontAskKeyName, string installedFMsPath, bool sortNoArticles, bool relativePaths, bool _firstRun)
         {
@@ -24,6 +24,7 @@ namespace NewDarkLoader
             //set key names
             secOptions = optionsSecName;
             kArchive_root = archiveRootKeyName;
+            kArchive_root_extra = archiveRootExtraKeyName;
             kLanguage = languageKeyName;
             kDate_format = dateFormatKeyName;
             kBackup_type = backupTypeKeyName;
@@ -47,11 +48,12 @@ namespace NewDarkLoader
         private string fmInstalledPath = "";
         private string folderRequired = "Archive folder required.";
         private string fldrRequiredTitle = "Error";
-        private string archIsFMsWarning = "The selected archive folder is actually your installed FMs folder.";
+        private string archIsFMsWarning = "One of the selected archive folders is actually your installed FMs folder.";
 
         #region Key names
         private string secOptions = "";
         private string kArchive_root = "";
+        private string kArchive_root_extra = "";
         private string kLanguage = "";
         private string kDate_format = "";
         private string kBackup_type = "";
@@ -71,9 +73,15 @@ namespace NewDarkLoader
             {
                 string secSetup = "Setup";
                 Text = langIni.IniReadValue(secSetup, "SetupTitle");
+                string readTabStandard = langIni.IniReadValue(secSetup, "StandardTab");
+                if (readTabStandard != "")
+                    tabStandard.Text = readTabStandard;
+
+                string readTabExtra = langIni.IniReadValue(secSetup, "ExtraTab");
+                if (readTabExtra != "")
+                    tabExtra.Text = readTabExtra;
                 gbFMArchive.Text = langIni.IniReadValue(secSetup, "FmArchFolderBox");
                 archIsFMsWarning = langIni.IniReadValue(secSetup, "FolderIsFMsWarning");
-                btnBrArchivePath.Text = langIni.IniReadValue(secSetup, "BrowseButton");
                 gbLang.Text = langIni.IniReadValue(secSetup, "LangBox");
                 gbDateFormat.Text = langIni.IniReadValue(secSetup, "DateFormatBox");
                 rdoDMY.Text = langIni.IniReadValue(secSetup, "DmyChk");
@@ -107,15 +115,27 @@ namespace NewDarkLoader
                 fldrRequiredTitle = langIni.IniReadValue(secSetup, "FldrRequiredTitle");
 
                 gbWebSearch.Text = langIni.IniReadValue(secSetup, "WebSearchSite");
-                lblNoSite.Text = langIni.IniReadValue(secSetup, "NoSiteLabel");
                 lblSpecialWords.Text = langIni.IniReadValue(secSetup, "ArticleLabel");
                 toolTip1.SetToolTip(tbSpecialWords, langIni.IniReadValue(secSetup, "ArticleTip"));
+                lblNoSite.Text = langIni.IniReadValue(secSetup, "NoSiteLabel");
+            }
+        }
+
+        private void listArchiveRoots()
+        {
+            string archiveListString = i.IniReadValue(secOptions, kArchive_root_extra);
+            string[] split = archiveListString.Split(';');
+            foreach(string s in split)
+            {
+                if (s != "")
+                    lbFMArchivePaths.Items.Add(s);
             }
         }
 
         private void readFromINI()
         {
-            tbFMArchivePath.Text = i.IniReadValue(secOptions, kArchive_root);
+            //lbFMArchivePaths.Items.Add(i.IniReadValue(secOptions, kArchive_root));
+            listArchiveRoots();
 
             //Read language, stored in ini as int, 1 indexed
             string readLang = i.IniReadValue(secOptions, kLanguage);
@@ -180,16 +200,58 @@ namespace NewDarkLoader
             }
         }
 
+        /// <summary>
+        /// True if none of the selected archive dirs are also Thief2\FMs
+        /// </summary>
+        /// <returns></returns>
+        private bool noArchivePathsInInstalledFMPath()
+        {
+            bool notInstalledPath = true;
+            string installedPath = fmInstalledPath.ToLower();
+            foreach(string archivePath in lbFMArchivePaths.Items)
+            {
+                string pathLowercase = archivePath.ToLower();
+                if(pathLowercase == installedPath)
+                {
+                    notInstalledPath = false;
+                    break;
+                }
+            }
+            return notInstalledPath;
+        }
+
+        /// <summary>
+        /// First item of archive list is the original archive root. All others are converted to their own key
+        /// </summary>
+        /// <returns></returns>
+        private string allArchiveDirs()
+        {
+            StringBuilder archList = new StringBuilder();
+            int count = lbFMArchivePaths.Items.Count;
+            if (count > 0)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    archList.Append(lbFMArchivePaths.Items[i].ToString());
+                    if (i < count - 1)
+                        archList.Append(";");
+                }
+            }
+            return archList.ToString();
+        }
+
         private void btnOK_Click(object sender, EventArgs e)
         {
-            string archivePathLCTest = tbFMArchivePath.Text.ToLower();
-            string installedPathLCTest = fmInstalledPath.ToLower();
-            //check that archive root has been set
-            if (tbFMArchivePath.Text != "" && archivePathLCTest != installedPathLCTest)
+            bool notInFMsDir = noArchivePathsInInstalledFMPath();
+            //check that archive root has been set and none are in Thief2\FMs
+            if (lbFMArchivePaths.Items.Count != 0 && lbFMArchivePaths.Items[0].ToString() != "" && notInFMsDir)
             {
                 sInfo.relativePaths = chkRelaitvePaths.Checked;
 
-                sInfo.archiveDir = tbFMArchivePath.Text;
+                sInfo.legacyArchiveDir = lbFMArchivePaths.Items[0].ToString();
+
+                sInfo.allArchiveDirs = allArchiveDirs();
+                
                 sInfo.lang = cBlang.SelectedIndex + 1;
                 if (rdoDMY.Checked)
                     sInfo.dateFormat = 1;
@@ -236,9 +298,9 @@ namespace NewDarkLoader
             }
             else
             {
-                if (tbFMArchivePath.Text == "")
+                if (lbFMArchivePaths.Items.Count == 0)
                     MessageBox.Show(folderRequired, fldrRequiredTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                else if (archivePathLCTest == installedPathLCTest)
+                else if (!notInFMsDir)
                     MessageBox.Show(archIsFMsWarning, fldrRequiredTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
         }
@@ -252,16 +314,57 @@ namespace NewDarkLoader
             }
         }
 
-        private void btnBrowseArchivePath_Click(object sender, EventArgs e)
+        private void btnAddArchivePath_Click(object sender, EventArgs e)
         {
             DialogResult dR = brDir.ShowDialog();
 
             if (dR == DialogResult.OK)
             {
-                tbFMArchivePath.Text = brDir.SelectedPath;
+                string selectedPath = brDir.SelectedPath;
                 if (chkRelaitvePaths.Checked)
                 {
-                    tbFMArchivePath.Text = AbsRel.AbsoluteToRelative(tbFMArchivePath.Text);
+                    selectedPath = AbsRel.AbsoluteToRelative(selectedPath);
+                }
+
+                if (!parentExits(selectedPath))
+                {
+                    if (!lbFMArchivePaths.Items.Contains(selectedPath))
+                        lbFMArchivePaths.Items.Add(selectedPath);
+                }
+                else
+                {
+                    MessageBox.Show(selectedPath + "\n\nCannot add path. Parent or child folder already selected. NewDarkLoader already reads subdfolders", "Halt!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        /// <summary>
+        /// True if specified path is a subdir or parent dir of one of the existing paths
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
+        private bool parentExits(string newPath)
+        {
+            bool parentExists = false;
+            foreach(string existing in lbFMArchivePaths.Items)
+            {
+                if (newPath.Contains(existing) || existing.Contains(newPath))
+                {
+                    parentExists = true;
+                    break;
+                }
+            }
+            return parentExists;
+        }
+
+        private void btnRemArchivePath_Click(object sender, EventArgs e)
+        {
+            if(lbFMArchivePaths.SelectedIndex != -1)
+            {
+                DialogResult dR = MessageBox.Show("Confirm", "Remove Directory?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if(dR == DialogResult.Yes)
+                {
+                    lbFMArchivePaths.Items.RemoveAt(lbFMArchivePaths.SelectedIndex);
                 }
             }
         }
@@ -280,12 +383,19 @@ namespace NewDarkLoader
         {
             if (chkRelaitvePaths.Checked)
             {
-                tbFMArchivePath.Text = AbsRel.AbsoluteToRelative(tbFMArchivePath.Text);
+                for(int i = 0; i < lbFMArchivePaths.Items.Count; i++)
+                {
+                    lbFMArchivePaths.Items[i] = AbsRel.AbsoluteToRelative(lbFMArchivePaths.Items[i].ToString());
+                }
+
                 tb7zGexe.Text = AbsRel.AbsoluteToRelative(tb7zGexe.Text);
             }
             else
             {
-                tbFMArchivePath.Text = AbsRel.RelativeToAbsolute(tbFMArchivePath.Text);
+                for (int i = 0; i < lbFMArchivePaths.Items.Count; i++)
+                {
+                    lbFMArchivePaths.Items[i] = AbsRel.RelativeToAbsolute(lbFMArchivePaths.Items[i].ToString());
+                }
                 tb7zGexe.Text = AbsRel.RelativeToAbsolute(tb7zGexe.Text);
             }
         }
@@ -293,7 +403,8 @@ namespace NewDarkLoader
 
     public struct SetupInfo
     {
-        public string archiveDir;
+        public string legacyArchiveDir;
+        public string allArchiveDirs;
         public int lang;
         public int dateFormat;
         public string sevenZipGExe;

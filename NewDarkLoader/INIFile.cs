@@ -147,6 +147,12 @@ namespace NewDarkLoader
             return tagList;
         }
 
+        /// <summary>
+        /// Attempt to read a key's value from a specified section of an ini file. Returns blank string if not found.
+        /// </summary>
+        /// <param name="Section">[section_name]</param>
+        /// <param name="Key">Key name.</param>
+        /// <returns></returns>
         public string IniReadValue(string Section, string Key)
         {
             bool found = false;

@@ -1803,6 +1803,114 @@
   <data name="&gt;&gt;cbMaxYear.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="lblArchive.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblArchive.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 39</value>
+  </data>
+  <data name="lblArchive.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 13</value>
+  </data>
+  <data name="lblArchive.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lblArchive.Text" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;lblArchive.Name" xml:space="preserve">
+    <value>lblArchive</value>
+  </data>
+  <data name="&gt;&gt;lblArchive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblArchive.Parent" xml:space="preserve">
+    <value>pnlProgress</value>
+  </data>
+  <data name="&gt;&gt;lblArchive.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblProgress.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblProgress.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 21</value>
+  </data>
+  <data name="lblProgress.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 13</value>
+  </data>
+  <data name="lblProgress.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="lblProgress.Text" xml:space="preserve">
+    <value>label3</value>
+  </data>
+  <data name="&gt;&gt;lblProgress.Name" xml:space="preserve">
+    <value>lblProgress</value>
+  </data>
+  <data name="&gt;&gt;lblProgress.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblProgress.Parent" xml:space="preserve">
+    <value>pnlProgress</value>
+  </data>
+  <data name="&gt;&gt;lblProgress.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblProgressTitle.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblProgressTitle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblProgressTitle.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="lblProgressTitle.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 13</value>
+  </data>
+  <data name="lblProgressTitle.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblProgressTitle.Text" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="&gt;&gt;lblProgressTitle.Name" xml:space="preserve">
+    <value>lblProgressTitle</value>
+  </data>
+  <data name="&gt;&gt;lblProgressTitle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblProgressTitle.Parent" xml:space="preserve">
+    <value>pnlProgress</value>
+  </data>
+  <data name="&gt;&gt;lblProgressTitle.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="pnlProgress.Location" type="System.Drawing.Point, System.Drawing">
+    <value>89, 91</value>
+  </data>
+  <data name="pnlProgress.Size" type="System.Drawing.Size, System.Drawing">
+    <value>304, 82</value>
+  </data>
+  <data name="pnlProgress.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="pnlProgress.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;pnlProgress.Name" xml:space="preserve">
+    <value>pnlProgress</value>
+  </data>
+  <data name="&gt;&gt;pnlProgress.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pnlProgress.Parent" xml:space="preserve">
+    <value>splitContainerTopHalf.Panel1</value>
+  </data>
+  <data name="&gt;&gt;pnlProgress.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="cbMaxMonth.Items" xml:space="preserve">
     <value />
   </data>
@@ -1861,7 +1969,7 @@
     <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMaxMonth.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="cbMinYear.Items" xml:space="preserve">
     <value />
@@ -3466,7 +3574,7 @@
     <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMinYear.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="cbMinMonth.Items" xml:space="preserve">
     <value />
@@ -3526,114 +3634,6 @@
     <value>splitContainerTopHalf.Panel1</value>
   </data>
   <data name="&gt;&gt;cbMinMonth.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="lblArchive.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblArchive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 39</value>
-  </data>
-  <data name="lblArchive.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 13</value>
-  </data>
-  <data name="lblArchive.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="lblArchive.Text" xml:space="preserve">
-    <value>label3</value>
-  </data>
-  <data name="&gt;&gt;lblArchive.Name" xml:space="preserve">
-    <value>lblArchive</value>
-  </data>
-  <data name="&gt;&gt;lblArchive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblArchive.Parent" xml:space="preserve">
-    <value>pnlProgress</value>
-  </data>
-  <data name="&gt;&gt;lblArchive.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lblProgress.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblProgress.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 21</value>
-  </data>
-  <data name="lblProgress.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 13</value>
-  </data>
-  <data name="lblProgress.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="lblProgress.Text" xml:space="preserve">
-    <value>label3</value>
-  </data>
-  <data name="&gt;&gt;lblProgress.Name" xml:space="preserve">
-    <value>lblProgress</value>
-  </data>
-  <data name="&gt;&gt;lblProgress.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblProgress.Parent" xml:space="preserve">
-    <value>pnlProgress</value>
-  </data>
-  <data name="&gt;&gt;lblProgress.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="lblProgressTitle.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblProgressTitle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lblProgressTitle.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="lblProgressTitle.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 13</value>
-  </data>
-  <data name="lblProgressTitle.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="lblProgressTitle.Text" xml:space="preserve">
-    <value>Progress</value>
-  </data>
-  <data name="&gt;&gt;lblProgressTitle.Name" xml:space="preserve">
-    <value>lblProgressTitle</value>
-  </data>
-  <data name="&gt;&gt;lblProgressTitle.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblProgressTitle.Parent" xml:space="preserve">
-    <value>pnlProgress</value>
-  </data>
-  <data name="&gt;&gt;lblProgressTitle.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="pnlProgress.Location" type="System.Drawing.Point, System.Drawing">
-    <value>32, 88</value>
-  </data>
-  <data name="pnlProgress.Size" type="System.Drawing.Size, System.Drawing">
-    <value>304, 82</value>
-  </data>
-  <data name="pnlProgress.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="pnlProgress.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;pnlProgress.Name" xml:space="preserve">
-    <value>pnlProgress</value>
-  </data>
-  <data name="&gt;&gt;pnlProgress.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pnlProgress.Parent" xml:space="preserve">
-    <value>splitContainerTopHalf.Panel1</value>
-  </data>
-  <data name="&gt;&gt;pnlProgress.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
   <data name="fmTable.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -5007,6 +5007,9 @@
   <data name="dlgSaveFMINI.Filter" xml:space="preserve">
     <value>ini file|*.ini</value>
   </data>
+  <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>767, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -5306,6 +5309,12 @@
   </data>
   <data name="&gt;&gt;dlgSaveFMINI.Type" xml:space="preserve">
     <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;backgroundWorker1.Name" xml:space="preserve">
+    <value>backgroundWorker1</value>
+  </data>
+  <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Form1</value>

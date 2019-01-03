@@ -1,0 +1,571 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<style>
+h1,h2
+{
+	text-align: center;
+}
+.left
+{
+	text-align: left;
+	margin-left: 20%;
+}
+.credits
+{
+	text-align: center;
+	font-style: italic;
+}
+.compact
+{
+	margin-left: 20%;
+	margin-right: 20%;
+}
+p
+{
+	margin-left: 20%;
+	margin-right: 20%;
+}
+.note
+{
+	margin-left: 25%;
+	margin-right: 25%;
+}
+h3,h4
+{
+	margin-left: 20%;
+}
+ol
+{
+	margin-left: 20%;
+	margin-right: 20%;
+}
+.spaced
+{
+	margin: 1em 0;
+}
+hr
+{
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
+</style>
+<title>NewDarkLoader</title>
+</head>
+<body bgcolor=#bcdcff>
+<h1>NewDarkLoader 1.6.0</h1>
+
+<p class=credits>Created by R Soul (Robin Collier)</br>
+Beta Testers: Brethren, Dahenjo, fxdwg, ItalianThief, JoergA, The Phantom, SlyFoxx</p>
+
+<hr>
+
+<h2 class=left>Contents</h2>
+<ul class=compact>
+<li><a href=#s1><strong>Section 1: Things you need to know</strong></a></li>
+<li><a href=#requirements>Requirements</a></li>
+<li><a href=#install>Installation</a></li>
+<li><a href=#startup>First Startup/Setup Window</a></li>
+<li><a href=#dlimport>Import from Darkloader</a></li>
+<li><a href=#playfm>Playing FMs</a></li>
+<li><a href=#uninstall>Uninstall</a></li>
+<li><a href=#resize>Resizing</a></li>
+<li><a href=#filltable>Filling the FM Table</li>
+<li><a href=#editdata>Edit FM Data</a></li>
+<li><a href=#s2><strong>Section 2: Things that are optional but worth looking at</strong></a></li>
+<li><a href=#fmfix>FM Fixes</a></li>
+<li><a href=#tags>Tags</a></li>
+<li><a href=#filter>Filter</a></li>
+<li><a href=#fmini>fm.ini</a></li>
+<li><a href=#langini>[language].ini</a></li>
+<li><a href=#log>Logging</a></li>
+<li><a href=#tribute>And Finally, a Tribute</a></li>
+<li><a href=#changes><strong>Changes</strong></a></li>
+</ul>
+
+<hr>
+
+<h2><a name=s1>Section 1: Things you need to know</a></h2>
+<p>This is a Thief 1/2/3 & System Shock 2 Fan Mission installer that combines the best features of Darkloader and of FMSel into one program, and has a few of its own tricks up its sleeve.</p>
+
+<hr>
+<h3><a name=requirements>Requirements</a></h3>
+<ul class=compact>
+<li>OS: Definitely works on Windows Vista and above. Should also work on XP but may take some fiddling.</li>
+<li>Microsoft .NET Framework version 4.5. For some versions of Windows this will be installed by default. For other versions it'll be a part of Windows Update, and for older versions you'll have to install it yourself (e.g. XP).</li>
+</ul>
+
+<hr>
+
+<h3><a name=install>Installation</a></h3>
+<ol>
+<li class=spaced>Extract <strong>NewDarkLoader.dll</strong>, <strong>SevenZipSharp.dll</strong> and <strong>NAudio.dll</strong> to your Thief2 folder (or Thief, or Shock2, or Thief3\System). <strong>English.ini</strong> is optional - see the end of section 2 for details.</br>
+<em>The file 7z.dll should already be in the destination folder, but is included just in case you don't already have it</em></li>
+<li class=spaced>Open up <strong>cam_mod.ini</strong> with any text editor.</br>
+<em>(For Thief 3, it's SneakyOptions.ini)</em></li>
+<li class=spaced>Remove the <strong>;</strong> from the line that reads <strong>;fm</strong></br>
+<em>If you have already been using FMSel, this will not be necessary</em></li>
+<li class=spaced>On any other line, type in this, or copy and paste from here:</br>
+<strong>fm_selector NewDarkLoader.dll</strong></br>
+<em>(For Thief 3, change <strong>ExternalSelector=...</strong> from FMSel.dll to <strong>NewDarkLoader.dll)</strong></em></li>
+</ol>
+
+<p>Steps 5 and 6 are for <strong>Darkloader</strong> users only.</p>
+
+<ol start=5>
+<li class=spaced>Use Darkloader to uninstall whatever FM is currently installed.</li>
+<li class=spaced>From now on, instead of running your Darkloader shortcut, <strong>use your Thief 2 (or other game) shortcut instead</strong>, and NewDarkLoader will start automatically (if you did steps 1 - 4).</li>
+<li class=spaced>For multiple games (e.g. Thief 2 and Thief 1), you should perform the above steps for each game's folder.</li>
+<li class=spaced>You should use one folder for Thief 2 FMs, another one for Thief 1 FMs, etc, instead of putting them all in one folder.</br>
+<em>You <strong>can</strong> keep the FMs all mixed together if you want, but it's up to you to make sure you don't try to play a T1 FM after running your T2 shortcut.</em></li>
+<ul><li>Tip: you can use the <a href=#tags>tags feature</a> to show/hide certain FMs.</li>
+</ol>
+
+<hr>
+
+<h3><a name=startup>First Startup/Setup Window</a></h3>
+<p class=note><em>If you've been using FMSel</em> you can easily transfer its data (FM names, disabled mods etc) to NewDarkLoader. Open your <game>\FMs folder (or for T3, ...\Installed FMs), make a copy of FMSel.ini and rename the copy to NewDarkLoader.ini.</p>
+
+<p>The first time you run your game, NewDarkLoader's <strong>Setup</strong> window will appear. You need to <strong>set the FM Archive folder</strong>. If you copied FMSel.ini, this will already have been set, but Setup will still show in order to set some other options. All the other options can be left at their default values, and they can be changed at any time.</p>
+
+<p>The <strong>Language</strong> option is used to allow NewDarkLoader to look for a 'language name'.ini file which changes the interface text (button text, messages etc). See the included English.ini file to see an example. <em>There is further info about this in section 2</em>.</p>
+
+<p>The <strong>Web Search Site</strong> is to make use of the Web Search button in the main window. This searches Google and limits the results to the specified website (example <em>"fm title" site:ttlg.com</em>). Leave blank for an ordinary Google search.</p>
+
+<p>The <strong>Article list</strong> field is used if the website is thiefmissions.com. For this site, if an FM's name begins with any of the words in this box (e.g. 'the', 'an', 'a'), that word is moved to the end of the title, e.g. Last Lighthouse Keeper, The.</p>
+
+<p>The checkbox below allows you to have those words ignored when sorting the FM list by title, e.g. The Box is listed in the B section, not T.</p>
+
+<p>The <strong>7zG.exe</strong> options are recommended for a slight increase in performance (or a big increase with large FMs that are in saved in the "7z" format).</p>
+
+<hr>
+
+<h3><a name=dlimport>Import from Darkloader (optional)</a></h3>
+<p>Once you've left Setup, you can use the <strong>Old Darkloader Tools</strong> button to import some data (FM names, last played, comments etc), which will hopefully save you a bit of effort.</p>
+
+<p>Another useful feature is to <strong>import savegame backups</strong>. NewDarkLoader uses a slightly different system, the same as FMSel. <strong>Import Darkloader Saves</strong> makes copies of the old-style backups and stores them in the new format, so you can keep playing FMs where you left off.</p>
+
+<hr>
+
+<h3><a name=playfm>Playing FMs</a></h3>
+<p>This is the easy bit. Click on an FM in the table, and click on the <strong>Play &lt;fm name&gt;</strong> button at the bottom. You can also double-click or press Enter. The latter two will show a yes/no box in case it was an accident, but you can permanently hide it. <em>Enter won't always work, e.g. if you've clicked on one of the buttons, Enter will then activate that instead</em>.</p>
+
+<p class=note>If the FM has multiple possible readme files, a list will be presented, from which a selection must be made.</p>
+
+<p>If you download an FM, and put it in your FMs folder, while NewDarkLoader is running, you can refresh the table with the green 'refresh' button or by pressing F5.</p>
+
+<hr>
+
+<h3><a name=uninstall>Uninstall</a></h3>
+<p>You don't have to uninstall FMs thanks to NewDark (each one is put in its own folder), but if you do, and you've saved games and/or taken screenshots, NewDarkLoader will ask if you want to back them up.</p>
+
+<p>Usually you'll want to select Yes, but if you select No, any previous savegame backup will remain intact, so you won't lose everything.</p>
+
+<p>In <strong>Setup</strong> you can tell NewDarkLoader to always backup the savegames.</p>
+
+<hr>
+
+<h3><a name=resize>Resizing</a></h3>
+<p>The division between the FM table and the readme can be dragged by the grey bar. The location will be remembered for the next time NewDarkLoader is run. The <strong>Full Screen Readme</strong> button toggles the readme between its current size and the full window.</p>
+<p class=note>If you drag the bar all the way to the top, that button will essentially do nothing.</p>
+<p class=note>When the program is closed, if the readme is full sized, or large enough to hide all the FMs in the table, its size will be reset to the default value when the program is next started.</p>
+
+<hr>
+
+<h3><a name=filltable>Filling the FM Table</a></h3>
+
+<p>If you didn't perform the optional steps of using FMSel.ini, or importing from Darkloader, the FM table will be mostly blank. Selecting an FM will cause NewDarkLoader to scan the files and try to get the title, release date, last played date, and tags. This process can take a few seconds, or maybe more for a large FM. To save time in the future, the values will be stored in and read from NewDarkLoader.ini.</p>
+
+<p>If you don't mind waiting, you can tell NewDarkLoader to scan all FMs at once, which fills the table. It could take a few minutes, which is why it doesn't happen automatically. <strong>Right-click on any FM</strong>, you will see a context menu. Select <strong>Scan All FMs</strong>. It will overwrite any changes you've made.</p>
+
+<p>The <strong>Last Played</strong> date is obtained by looking for savegames, and choosing the most recently modified file. If you play the FM, this date will be changed to the current date.</p>
+
+<p>NewDarkLoader does a thorough job of getting the correct information, but you can make your own changes. Some campaigns don't have their names defined clearly, so NewDarkLoader sticks with the downloaded filename.</p>
+
+<p>From the right-click menu. Select <strong>Edit FM Data</strong> and you'll see a new window where you can change any value.</p>
+
+<p>If you add new FMs to your folder, or delete them, you can press the refresh button (or F5) to and redraw the table. It does not update FM data (real name, release date etc).
+
+<hr>
+
+<h3><a name=editdata>Edit FM Data</a></h3>
+<p>The first value, <strong>Readme</strong>, allows you to choose which text file to display in the main window.</p>
+
+<p>The 'Extreme' difficulty checkbox is for SS2 (I don't have that game but I copied it from Darklaoder).</p>
+
+<p>You can change the <strong>Last Played</strong> date, but NewDarkLoader will automatically set this to today's date each time you tell it to play the FM. Selecting <strong>Not played</strong> will clear the value, but it won't erase the <strong>Difficulty</strong> checkboxes.
+
+<p>If the FM has savegames, you can tell NewDarkLoader to get the date from the most recent one. If the FM is currently installed, it'll look for those savegames as well as any backed up savegames. <em>This is also what happens when you scan all/rescan from the right-click menu.</em></p>
+
+<p><strong>Disabled mods</strong> is a NewDark feature. There are lots of fancy mods for this game, but sometimes they don't work with certain FMs, or you prefer an old school look. The correct things to type depend on the mod, but it's usually the name or a "crf" file, or a folder, e.g. "ep2" or "hdmod" (without quotes). Multiple mods should be separated by "+", or use "*" (no quotes) to disable all mods. If in doubt it's best to ask on the forums.</p>
+
+<hr>
+
+<h2><a name=s2>Section 2: Things that are optional but worth looking at</a></h2>
+
+<h3><a name=fmfix>FM Fixes</a></h3>
+<p>NewDark is wonderful but there are some FMs that don't work quite right. Some of these FMs have fixes available, which don't alter the original files, and NewDarkLoader can be made to apply those fixes each time you load the mission.</p>
+
+<p>After downloading the file, select the FM in the table and press Ctrl F. Select the file you downloaded (multiple file selection is supported), and NewDarkLoader will copy it to the correct location. The fix will be applied the next time you install the FM.</p>
+
+<p class=note>You can also set the location manually: In your FM archive folder (where you keep the Zip/7z/Rar files, which you specified in Setup) create a folder called ".fix." (no quotes). <strong>Note the full-stops at either end</strong>. Windows will remove the last one, leaving you with ".fix"</p>
+
+<p class=note>Inside this folder, create another one named after the FM's zip file (without the extension), e.g. The Skygem connection file is <strong>sgc_wv_102.zip</strong>, so create a folder called <strong>sgc_wv_102</strong></p>
+
+<p class=note>In this folder you can put the file. <a href=http://www.ttlg.com/forums/showthread.php?t=145374 target=_blank>This thread</a> has a link to a set of fix files. With the above example you'd need to get skygem.7z.</p>
+
+<p>In the unlikely event of an FM's fix file being updated (i.e. the fix gets fixed), you can repeat the procedure (either Ctrl F... or manually), and you will have to re-install the FM for the new files to apply. You can also extract them manually if you don't want to re-install, but remember to put the fix archive in the correct location for subsequent installations.</p>
+
+<p>For those wishing to make their own fix file: It must have the same folder structure as a normal FM archive.</p>
+
+<hr>
+
+<h3><a name=tags>Tags</a></h3>
+
+<p>Tags allow you to store extra information about FMs, and FMs can be filtered by their tags. Some FMs come with tags already defined, but you can modify the tags of <em>any</em> FM. Tags can be single words, or you can use a colon to create a category and a sub-tag, e.g. <em>author:some_taffer</em>, <em>genre:horror</em> and so on. There is a menu which can show you existing tags for a given category, or you can just type them manually.</p>
+
+<p>The <strong>Add New Tag</strong> button adds whatever is typed in the box next to it. You can use the <strong>&lt;Tag Presets&gt;</strong> menu to select common types of tag. If you select <em>author:</em> that text will go into the box on the right, and the menu below will show a list of existing author tags. You can finish off the text yourself, or make a selection from the menu and select <strong>Add New Tag</strong>.</p>
+
+<p><strong>Add Existing Tag</strong> shows you a list of all tags from all the FMs you have, any of which can then be added to the selected FM.</p>
+
+<p>The tree view shows the tags for the current FM. You can select a tag and delete it. If you select the 'category', e.g. author, all tags in that categroy will be deleted.</p>
+
+<p>There's a tall button between the tags and the FM table, which toggles the Tags' visibility; useful if you like to run a compact interface and don't use tags.</p>
+
+<hr>
+
+<h3><a name=filter>Filter</a></h3>
+<p>You can hide FMs using the filter bar at the top. The name filter is very exact, but is not case-sensitive, so it's best used to help you find an FM with a known word in the title, like "ghost".</p>
+
+<p><strong>Unfinished only</strong> is simple enough, though I should point out it uses the 'difficulty' checkboxes from the Edit window, or the ticks in the table, to determine whether or not an FM has been finished.</p>
+
+<p>The two dates will filter missions by their release dates (month and year). By default they are blank, which turns off date filtering. Selecting a month with no year will have no effect. Selecting a year without a month will include all missions in that year. It works like this:</p>
+<ul class=compact>
+<li>Start date: [blank], 2010, End date: [blank], 2012: All FMs from Jan 2010 to Dec 2012.</li>
+<li>Start date: [blank], [blank], End date: [blank], 2015: All FMs up to Dec 2015.</li>
+<li>Start date: Mar, 2004, End date: [blank], 2016: All FMs from Mar 2004 to the Dec 2016.</li>
+</ul>
+
+<p>The <strong>Tag Filter</strong> is not as complicated as it might appear. Click the button to bring up the <strong>Tag Filter</strong> window. On the left is a list of all tags from all missions. Click on one (child nodes only, not parents) and click on <strong>Include</strong> or <strong>Exclude</strong>. When you've finished, NewDarkLoader will show all FMs that have <em>any</em> of the include tags, and that have <em>none</em> of the exclude tags. Remember, you can add your own tags to FMs.</p>
+
+<h4>Remembering filters</h4>
+<p>The filters are stored and remembered for the next time you run the game.</p>
+
+<h4>Reset</h4>
+<p>The <strong>Reset</strong> button on the left clears everything, including tags. You can reset tags only by going back into the Tag Filter window and going to <strong>Remove All</strong>.</p>
+
+<hr>
+
+<h3><a name=fmini>fm.ini</a></h3>
+<p>An optional file for fan missions is "fm.ini" (that exact name), which can define the mission's title, its release date and its tags. This allows NewDarkLoader (and FMSel) to display the correct information without the player having to do any editing.</p>
+
+<p>Without this file, NewDarkLoader will use other methods to get the title and release date. These are quite reliable but take longer because multiple files within the archive have to be scanned.</p>
+
+<p>If you start NewDarkLoader with Dromed, the right-click menu will have an extra item: <strong>"Generate fm.ini"</strong>. This will take the existing fm info, which you set via <strong>Edit FM Data</strong> and by adding <strong>Tags</strong>, and use it to generate an fm.ini file. You can choose the folder, but the initial location will be the FM's installation folder.</p>
+
+<hr>
+
+<h3><a name=langini>[language].ini</a></h3>
+<p>This file allows you to modify all of the text you see in NewDarkLoader, allowing multi-language support. Place it in your <strong>[game installation]\FMs</strong> folder (<strong>Installed FMs</strong> folder for T3).</p>
+
+<p>The included English.ini shows the default English text to make it easier to see which keys are related to which piece of interface text. In some cases you'll need to be careful with the length of your translated text, e.g. if it goes inside a button.</p>
+
+<p class=note><strong>NOTE</strong>: To allow NewDarkLoader to correctly display certain characters, e.g. é, you should set the file's encoding to <strong>ANSII</strong>.</p>
+
+<hr>
+
+<h3><a name=log>Logging</a></h3>
+
+<p>In case of errors or odd behaviour, users can open NewDarkLoader.ini and in the [Config] section, add the line Log=1</p>
+
+<p>This will create a file called Log.txt in the same location as the .ini file, which should help this developer if there are any bugs.</p>
+
+<hr>
+
+<h3><a name=tribute>And Finally, a Tribute</a></h3>
+<p>Darkloader is a great program. It has served us well for over a decade. Many thanks to Björn Henke for creating it, and Telliamed for further development. NewDarkLoader draws heavily on the design of Darkloader.</p>
+
+<p>FMSel is a nice tool in its own way. I only started developing NewDarkLoader because I kept forgetting to check the readme of a fan mission I was beta testing, and decided to write something more user friendly.</p>
+
+<hr>
+
+<h3><a name=changes>Changes</a></h3>
+
+<section>
+<h4>Version 1.5.8</h4>
+<ul class=compact>
+<li>When the program is closed, if the readme is full sized, or large enough to hide all the FMs in the table, its size will be reset to the default value when the program is next started.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5.7</h4>
+<ul class=compact>
+<li>Attempted to add support for relative paths. After setting a directory it may be necessary to remove the drive letter from the path.</li>
+<li>More events added to the Log file.</li>
+<li>Logging can be toggled with Ctrl L, and an icon appears/disappears to indicate the state.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5.6</h4>
+<ul class=compact>
+<li>Added support for relative paths. See the Setup window.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5.5</h4>
+<ul class=compact>
+<li>Fixed a crash that would occur if an existing archive folder (or its contents) moved.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5.4</h4>
+<ul class=compact>
+<li>Filled in text for an warning message that may appear during Setup.</li>
+<li>Fixed a crash that would occur if the program ran without any FMs present.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5.3</h4>
+<ul class=compact>
+<li>Fixed a bug with the date filter.</li>
+</ul>
+</section>
+
+
+<section>
+<h4>Version 1.5.2</h4>
+<ul class=compact>
+<li>Another tweak to the multiple readme system.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5.1</h4>
+<ul class=compact>
+<li>Added log feature in case of errors. Open "NewDarkLoader.ini" and in the [Config] section add the entry <strong>Log=1</strong></li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5</h4>
+<ul class=compact>
+<li>Added a feature for mission editors: Create/show empty FM folders.</li>
+<li>New language keys in [FMTable] section: <strong>NewFMButton</strong> and <strong>NewFMName</strong> (see included English.ini for default examples)</li>
+<li>FM table is properly refreshed if a 'folder only' FM is uninstalled.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.11</h4>
+<ul class=compact>
+<li>Previous versions always showed the 'converting mp3s' message, even when the FM didn't have any. Now it only shows up if mp3s are present.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.10</h4>
+<ul class=compact>
+<li>Tweak to the readme system. Previous version only handled multiple readmes or none. This version also handles the scenario when there's just one possible file.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.9</h4>
+<ul class=compact>
+<li>Changed the multiple-readme handling again. More elegant solution found.</li>
+<li>Minor tweaks to how the multilanguage variables are read.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.8</h4>
+<ul class=compact>
+<li>Changed the handling of multiple possible FM readme files. User has to make a selection instead of the first one being assumed.</li>
+</ul>
+</section>
+
+<h4>Known Issues</h4>
+<ul class=compact>
+<li>If the first FM in the list has multiple readmes, and a choice hasn't already been made (either by the previous automatic behaviour or the user choosing another file), you won't see any part of the main FM table until you choose a readme.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.7</h4>
+<ul class=compact>
+<li>Fixed crash caused by NewDarkLoader looking for SneakyOptions.ini to get the installed FMs folder. NDL now gets the value from Thief3.exe.</li>
+<li>Improved detection of Thief 3 being the calling program by simply looking for a '3' in the exe filename.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.6</h4>
+<ul class=compact>
+<li>Modified to prevent a script loading bug which could have stopped some FMs' "events" triggering.</li>
+<li>Added a safety check to ensure your FM archive path is not the same as your FM installation path.</li>
+<li>New laguage key: FolderIsFMsWarning. See the example 'English.ini'.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.5</h4>
+<ul class=compact>
+<li>Did I say "Correctly"? Previous version did not include the 'current' saves folder. This version does.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.4</h4>
+<ul class=compact>
+<li>Correctly supports savegames for System Shock 2 (backup/restore and importing from a Darkloader backup).</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.3</h4>
+<ul class=compact>
+<li>Re-instated Home and End keys scrolling to first/last rows of table.</li>
+<li>Added blank entries to the date filter, which effectively turns it off. Useful if a fan mission comes with a dodgy release date like 1980.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.2</h4>
+<ul class=compact>
+<li>Fixed a date sorting crash caused by blank dates.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4.1</h4>
+<ul class=compact>
+<li>Fixed a crash caused by moving the mouse over a column header.</li>
+<li>Improved the web search feature so it's better at dealing with special characters (&, for example).</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.4</h4>
+<ul class=compact>
+<li>Changed the way the table is drawn - possible small performance improvement.</li>
+<li>Added a splitter bar above the readme box so users can resize the top and bottom parts of the window.</li>
+<li>Interface disabled while an FM is being uninstalled.</li>
+<li>Reworded the Tags description to explain things better.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.3.5</h4>
+<ul class=compact>
+<li>Added description for undocumented feature: Generate fm.ini.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.3.4</h4>
+<ul class=compact>
+<li>Fixed an error caused by the release date in fm.ini being in the wrong format.</li>
+<li>Refreshing the FM table now removes FMs that have been deleted.</li>
+<li>Clicking on an FM whose file/folder has been deleted will remove it from the table instead of causing a crash.</li>
+<li>Default text is now 'refresh' rather than 'scan for new FMs'.</li>
+<li>Added code to deal with badly formatted readme files.</li>
+<li>Added another language key: BadReadme</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.3.3</h4>
+<ul class=compact>
+<li>Fixed a crash caused by the first FM in the list having an HTML readme.</li>
+<li>Fixed a bug requiring the FM archive path having to be set twice when starting the program without the .ini file.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.3.2</h4>
+<ul class=compact>
+<li>For Windows 7 and below, controls are auto-focussed when the mouse enters. This happens by default from Windows 8 onwards.</li>
+<li>Selecting a new FM automatically scrolls to the top of the readme.</li>
+<li>Refreshing once again scrolls to the last selected FM (this feature was mistakenly removed during a previous update).</li>
+<li>Fixed an FM selection problem after applying the filter.</li>
+<li>Pressing Enter with the 'add tag' field selected once again attempts to add the tag. The key press handling change from 1.2.1 caused it to try to play the selected FM.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.3.1</h4>
+<ul class=compact>
+<li>Fixed a long delay that occurs during table sorting (sorting occurs on startup as well as on user action).</li>
+<li>The .ini file is only updated when the window closes.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.3</h4>
+<ul class=compact>
+<li>If the user searches for an FM on thiefmissions.com, articles ('the', 'a' and 'an') will go at the end. These can be changed in Setup.</li>
+<li>Added a Setup option to ignore articles when sorting by title.</li>
+<li>Tweaked the size of the Setup window to accomodate the increasing number of options.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.2.1</h4>
+<ul class=compact>
+<li>Refresh button added next to FM table.</li>
+<li>Sorting then refreshing the FM table no longer resets sorting to the previous value.</li>
+<li>Slight change to key press handling so it doesn't matter which part of the widndow has focus.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.2</h4>
+<ul class=compact>
+<li>Added a Web Search button, which searches Google for the selected FM's title.</li>
+<li>Included a 'web search site' option in Setup, so the google search can target ttlg.com, darkfate.org, and so on.</li>
+<li>Fixed multiple problems with FMs in subfolders</li>
+	<ul>
+	<li>Fixed a 'get FM name' failure when the FM is in a subfolder of the main archive folder.</li>
+	<li>"Import Darkloader Saves" allows for FMs in subfolders.</li>
+	<li>The same for "Import FM Data" from Darkloader.ini.</li>
+	<li>Fixed the readme selection feature when editing FM data via the right-click menu.</li>
+	<li>More changes to the language .ini file, with some keys renamed.</li>
+	</ul>
+</ul>
+
+<h4>Known Issues</h4>
+<ul class=compact>
+<li>Importing from Darkloader.ini can cause the tags to become unsynchronised with the FM table selection. Restarting NewDarkLoader will fix it, and the import is usually something you'll only need to do once.</li>
+<li>Since the last version, some new keys have been added to the example English.ini file. Anyone who's done their own translations should check to see which keys need to be translated.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.1.1</h4>
+<ul class=compact>
+<li>Fixed a crash on sorting by size which occurred if the FMs folder has any empty folders.</li>
+<li>Fixed the sort order when sorting by 'Finished'</li>
+<li>Added Ctrl R shortcut: Force FM to be reinstalled - useful if an uninstallation went wrong or you want to apply a newly downloaded fix file. 7Zip is required for this to work.</li>
+<li>Added Ctrl F shortcut: Copy a set of files to the selected FM's "fix" folder.</li>
+<li>Fixed a date display bug - sometimes the displayed date would be one day ahead of the user's selected date.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.1</h4>
+<ul class=compact>
+<li>Corrected drawing problem with lower buttons when the user has scaled up display settings.</li>
+<li>The FM table now displays the archive/folder size.</li>
+<li>An FM's installation folder name will now be truncated to 30 chars so the game can play it.</li>
+<li>FM fix files will now be installed for permanently installed FMs (i.e. ones with a folder but no archive).
+<li>The file "missflag.str" will be created if a fan mission doesn't have it.</li>
+</ul>
+</section>
+</body>
+</html> 

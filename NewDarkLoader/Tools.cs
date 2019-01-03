@@ -13,16 +13,16 @@ namespace NewDarkLoader
         /// Import Darkloader saves and ini settings.
         /// </summary>
         /// <param name="gameFullPath">Location of .exe file's folder (not file itself).</param>
-        /// <param name="fmArchiveFullPath">Location of FM zip files.</param>
+        /// <param name="fmArchivePaths">Locations of FM zip files.</param>
         /// <param name="sevenZipGExePath">7zG.exe location (the file itself).</param>
         /// <param name="tempPath">User's temp path. Ends with \\</param>
         /// <param name="archiveNames">Filenames of FM archives, extension, no path.</param>
         /// <param name="archiveExts">List of valid FM archive extensions, initially read from the .ini file.</param>
-        public Tools(string gameFullPath, string fmArchiveFullPath, string sevenZipGExePath, string tempPath, List<DarkLoaderFMData> dataList, newKeyNames keyNames, INIFile ndlINI, INIFile langIni, List<string> archiveExts, bool gameIsShock2)
+        public Tools(string gameFullPath, List<string> fmArchivePaths, string sevenZipGExePath, string tempPath, List<DarkLoaderFMData> dataList, newKeyNames keyNames, INIFile ndlINI, INIFile langIni, List<string> archiveExts, bool gameIsShock2)
         {
             InitializeComponent();
             gamePath = gameFullPath;
-            fmArchivePath = fmArchiveFullPath;
+            fmArchiveFullPaths = fmArchivePaths;
             sevenZipGPath = sevenZipGExePath;
             userTempPath = tempPath;
             foreach (DarkLoaderFMData datum in dataList)
@@ -65,10 +65,11 @@ namespace NewDarkLoader
         /// Does not end with \\
         /// </summary>
         private string gamePath;
+
         /// <summary>
-        /// Does not end with \\
+        /// Full path of each folder that may contain FMs
         /// </summary>
-        private string fmArchivePath;
+        private List<string> fmArchiveFullPaths;
         /// <summary>
         /// Full path to exe file.
         /// </summary>
@@ -107,12 +108,16 @@ namespace NewDarkLoader
             progressBar1.Visible = true;
             yesToAll = false;
             noToAll = false;
-            string allsavesPath = gamePath + "\\allsaves";
+            string allsavesPath = Path.Combine(gamePath, "allsaves");
 
             DirectoryInfo dInfo = new DirectoryInfo(allsavesPath);
             FileInfo[] darkLoaderSaveFiles = dInfo.GetFiles();
 
-            string[] fullFMPaths = Directory.GetFiles(fmArchivePath, "*.*", SearchOption.AllDirectories);
+            List<string> foundFilesInArchivePaths = new List<string>();
+            foreach (string path in fmArchiveFullPaths)
+            {
+                foundFilesInArchivePaths.AddRange(Directory.GetFiles(path, "*.*", SearchOption.AllDirectories));
+            }
 
             int currentFile = 0;
             foreach (FileInfo fInfo in darkLoaderSaveFiles) 
@@ -124,7 +129,7 @@ namespace NewDarkLoader
                 string dlName = fInfo.Name;
                 if (dlName.ToLower() != "original_saves.zip")
                 {
-                    addSavesDirToZip(fInfo, fullFMPaths);
+                    addSavesDirToZip(fInfo, foundFilesInArchivePaths);
                 }
                 currentFile++;
             }
@@ -132,13 +137,13 @@ namespace NewDarkLoader
             progressBar1.Visible = false;
         }
 
-        private void addSavesDirToZip(FileInfo zFile, string[] fullFMPaths)
+        private void addSavesDirToZip(FileInfo zFile, List<string> fullFMPaths)
         {
             //NDL saves backup filename.
             string ndlFileName = zFile.Name.Replace("_saves", ".FMSelBak");
 
-            string ndlFilePath = userTempPath + ndlFileName;
-            string tempSaves = userTempPath + "saves";
+            string ndlFilePath = Path.Combine(userTempPath, ndlFileName);
+            string tempSaves = Path.Combine(userTempPath, "saves");
 
             if (Directory.Exists(tempSaves)) //possible leftover from aborted run or massive coincidence
             {
@@ -155,7 +160,7 @@ namespace NewDarkLoader
 
             //Work out dest file location, with possible subfolder
             string fmBasicFilename = ndlFileName.Replace(".FMSelBak.zip", "");
-            string fmDir = fmArchivePath;
+            string fmDir = "";
             
             foreach (string file in fullFMPaths)
             {
@@ -258,9 +263,13 @@ namespace NewDarkLoader
                 //ini files
                 INIFile oldINI = new INIFile(openDarkloaderINI.FileName);
                 //Get sizes in bytes of each FM file
-                string[] fullFMPaths = Directory.GetFiles(fmArchivePath, "*.*", SearchOption.AllDirectories);
+                List<string> foundFilesInArchivePaths = new List<string>();
+                foreach (string path in fmArchiveFullPaths)
+                {
+                    foundFilesInArchivePaths.AddRange(Directory.GetFiles(path, "*.*", SearchOption.AllDirectories));
+                }
 
-                foreach (string file in fullFMPaths)
+                foreach (string file in foundFilesInArchivePaths)
                 {
                     FileInfo fI = new FileInfo(file);
                     long sizeBytes = fI.Length;

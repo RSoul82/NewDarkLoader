@@ -1,0 +1,79 @@
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Release\NewDarkLoader.exe.config
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Release\NewDarkLoader.exe
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Release\NewDarkLoader.pdb
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Release\NAudio.dll
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Release\SevenZipSharp.dll
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Release\NAudio.xml
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.AddExistingTag.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.ConvertMP3.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.DblClickFM.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.EditFM.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Form1.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Form2.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.OverwriteSave.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Properties.Resources.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Setup.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.SimpleCalendar.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.TagFilter.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Tools.resources
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.csproj.GenerateResource.Cache
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.exe
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.pdb
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.exe.config
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.pdb
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\bin\Debug\NewDarkLoader.pdb
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\bin\Debug\NAudio.dll
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\bin\Debug\RGiesecke.DllExport.Metadata.dll
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\bin\Debug\SevenZipSharp.dll
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\bin\Debug\NAudio.xml
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.AddExistingTag.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.ConvertMP3.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.DblClickFM.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.EditFM.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.Form1.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.Form2.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.OverwriteSave.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.Properties.Resources.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.Setup.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.SimpleCalendar.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.TagFilter.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.Tools.resources
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.csproj.GenerateResource.Cache
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\bin\Debug\NewDarkLoader.dll.config
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\bin\Debug\NewDarkLoader.dll
+C:\Users\Robin\c-sharp\NewDarkLoader - SimpleInterface\NewDarkLoader\obj\Release\NewDarkLoader.dll
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.exe
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.pdb
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Debug\NAudio.dll
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Debug\RGiesecke.DllExport.Metadata.dll
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Debug\SevenZipSharp.dll
+C:\Users\Robin\c-sharp\NewDarkLoader\NewDarkLoader\bin\Debug\NAudio.xml
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.dll.config
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.dll
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.pdb
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NAudio.dll
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NAudio.Vorbis.dll
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NVorbis.dll
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\RGiesecke.DllExport.Metadata.dll
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NAudio.xml
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NAudio.Vorbis.xml
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NVorbis.xml
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.csprojAssemblyReference.cache
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.AddExistingTag.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.ConvertMP3.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.DblClickFM.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.EditFM.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Form1.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Form2.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.NewFMFolder.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.OverwriteSave.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Properties.Resources.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Setup.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.SimpleCalendar.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.TagFilter.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.Tools.resources
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.csproj.GenerateResource.cache
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.csproj.CoreCompileInputs.cache
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.csproj.CopyComplete
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.dll
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Release\NewDarkLoader.pdb
