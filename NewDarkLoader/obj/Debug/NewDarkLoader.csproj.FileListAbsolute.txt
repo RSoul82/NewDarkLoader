@@ -76,8 +76,6 @@ C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader
 C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Debug\NewDarkLoader.csproj.GenerateResource.cache
 C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Debug\NewDarkLoader.csproj.CoreCompileInputs.cache
 C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Debug\NewDarkLoader.csproj.CopyComplete
-C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.exe.config
-C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.exe
-C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.pdb
-C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Debug\NewDarkLoader.exe
-C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Debug\NewDarkLoader.pdb
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.dll.config
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\bin\Debug\NewDarkLoader.dll
+C:\Users\Robin\Documents\Visual Studio 2017\Projects\NewDarkLoader\NewDarkLoader\obj\Debug\NewDarkLoader.dll

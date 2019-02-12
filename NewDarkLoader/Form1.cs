@@ -1280,8 +1280,11 @@ namespace NewDarkLoader
             List<string> paths = new List<string>();
             foreach (string s in allFMArchivePaths)
             {
-                string[] localPaths = Directory.GetFiles(s, "*.*", SearchOption.AllDirectories);
-                paths.AddRange(localPaths);
+                if (Directory.Exists(s))
+                {
+                    string[] localPaths = Directory.GetFiles(s, "*.*", SearchOption.AllDirectories);
+                    paths.AddRange(localPaths);
+                }
             }
             return paths.ToArray();
         }
