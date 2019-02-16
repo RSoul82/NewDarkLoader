@@ -15,9 +15,12 @@ namespace NewDarkLoader
         /// <param name="fullPath">Full path of the file to be deleted.</param>
         public static void DeleteFile(string fullPath)
         {
-            FileInfo fInfo = new FileInfo(fullPath);
-            fInfo.Attributes = FileAttributes.Normal;
-            File.Delete(fullPath);
+            if (File.Exists(fullPath))
+            {
+                FileInfo fInfo = new FileInfo(fullPath);
+                fInfo.Attributes = FileAttributes.Normal;
+                File.Delete(fullPath);
+            }
         }
 
         /// <summary>
@@ -27,16 +30,19 @@ namespace NewDarkLoader
         /// <param name="recursive">Delete all files/dirs within the dir.</param>
         public static void DeleteDir(string fullDirPath, bool recursive = false)
         {
-            DirectoryInfo dInfo = new DirectoryInfo(fullDirPath);
-            if (recursive)
+            if (Directory.Exists(fullDirPath))
             {
-                foreach (FileInfo fInfo in dInfo.GetFiles())
+                DirectoryInfo dInfo = new DirectoryInfo(fullDirPath);
+                if (recursive)
                 {
-                    fInfo.Attributes = FileAttributes.Normal;
+                    foreach (FileInfo fInfo in dInfo.GetFiles())
+                    {
+                        fInfo.Attributes = FileAttributes.Normal;
+                    }
                 }
+                dInfo.Attributes = FileAttributes.Normal;
+                Directory.Delete(fullDirPath, recursive);
             }
-            dInfo.Attributes = FileAttributes.Normal;
-            Directory.Delete(fullDirPath, recursive);
         }
     }
 }

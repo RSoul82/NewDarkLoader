@@ -1733,7 +1733,7 @@ namespace NewDarkLoader
                         FullDelete.DeleteFile(titlesStr);
                         string tempStrDir = Path.Combine(userTempFolder, "strings");
                         if (Directory.Exists(tempStrDir))
-                            FullDelete.DeleteDir(tempStrDir);
+                            FullDelete.DeleteDir(tempStrDir, true);
                     }
                 }
 
@@ -2137,7 +2137,6 @@ namespace NewDarkLoader
         /// <summary>
         /// True if miss_## line is "skip"
         /// </summary>
-        /// <param name="deleteMissflag">If true, file is deleted after being read.</param>
         /// <returns></returns>
         private bool lastMissionIsSkipped(int maxNum)
         {
