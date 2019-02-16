@@ -1987,7 +1987,7 @@ namespace NewDarkLoader
             string foundTitlesStr = null;
 
             var strQuery = from element in ext.ArchiveFileNames
-                           where element.EndsWith(titlesPathInArchive, StringComparison.CurrentCulture)
+                           where element.EndsWith(titlesPathInArchive, StringComparison.CurrentCultureIgnoreCase)
                            select element;
             foundTitlesStr = strQuery.FirstOrDefault();
 
