@@ -1,5 +1,5 @@
 set zpath="C:\Program Files\7-Zip\7z.exe"
-set zfile=NewDarkLoader1.6.0.zip
+set zfile=NewDarkLoader1.6.1.zip
 
 if exist %zfile% del %zfile%
 

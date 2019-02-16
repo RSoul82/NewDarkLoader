@@ -1731,6 +1731,9 @@ namespace NewDarkLoader
                         Point misNumbers = numMisFilesInArchive(subFolder, fNameWithExt);
                         foundTitle = getNameFromTitlesStr(misNumbers.X, misNumbers.Y, true);
                         FullDelete.DeleteFile(titlesStr);
+                        string tempStrDir = Path.Combine(userTempFolder, "strings");
+                        if (Directory.Exists(tempStrDir))
+                            FullDelete.DeleteDir(tempStrDir);
                     }
                 }
 
@@ -1933,7 +1936,7 @@ namespace NewDarkLoader
 
                 bool extracted = false;
 
-                Stopwatch sw = Stopwatch.StartNew();
+                //Stopwatch sw = Stopwatch.StartNew();
                 extracted = findTitlesInArchive(fmArchiveDir, fNameWithExt, ext, fnames, Path.Combine("strings", langGame.ToLower(), "titles.str"));
 
                 //only look for non-language specific if language str is not found
@@ -1947,8 +1950,8 @@ namespace NewDarkLoader
                 {
                     extracted = findTitlesInArchive(fmArchiveDir, fNameWithExt, ext, fnames, Path.Combine("strings", "english", "titles.str"));
                 }
-                sw.Stop();
-                long t = sw.ElapsedMilliseconds;
+                //sw.Stop();
+                //long t = sw.ElapsedMilliseconds;
 
                 //look for missflag.str
                 for (int x = 0; x < fnames.Count; x++)
@@ -1990,6 +1993,7 @@ namespace NewDarkLoader
 
             if (foundTitlesStr != null)
             {
+                titlesStr = Path.Combine(userTempFolder, foundTitlesStr);
                 if (sevenZipGExe == "")
                 {
                     extractStrInternal(ext, foundTitlesStr, strType.titles);
@@ -1997,7 +2001,6 @@ namespace NewDarkLoader
                 else
                     extractStrExternal(fmArchiveDir, fNameWithExt, ext, foundTitlesStr, strType.titles);
 
-                titlesStr = Path.Combine(userTempFolder, foundTitlesStr);
                 extracted = true;
             }
 
@@ -2053,6 +2056,10 @@ namespace NewDarkLoader
             else
                 extPath = missflagStr;
 
+            string dir = Path.GetDirectoryName(extPath);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
             FileStream fS_str = new FileStream(extPath, FileMode.Create);
             ext.ExtractFile(fileIndex, fS_str);
             fS_str.Close();
@@ -2068,6 +2075,10 @@ namespace NewDarkLoader
                 extPath = titlesStr;
             else
                 extPath = missflagStr;
+
+            string dir = Path.GetDirectoryName(extPath);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
 
             FileStream fS_str = new FileStream(extPath, FileMode.Create);
             ext.ExtractFile(filePathInArchive, fS_str);
@@ -2109,14 +2120,16 @@ namespace NewDarkLoader
                         break;
                     else
                     {
-                        //look in missflag.str
-                        if (lastMissionIsSkipped(maxMission, missflagFromArchive))
+                        if (lastMissionIsSkipped(maxMission))
                             break;
                         else
                             maxTitle = ""; //reset if miss_max is not a dummy
                     }
                 }
             }
+
+            if (missflagFromArchive)
+                FullDelete.DeleteFile(missflagStr);
 
             return maxTitle;
         }
@@ -2126,7 +2139,7 @@ namespace NewDarkLoader
         /// </summary>
         /// <param name="deleteMissflag">If true, file is deleted after being read.</param>
         /// <returns></returns>
-        private bool lastMissionIsSkipped(int maxNum, bool missflagFromArchive)
+        private bool lastMissionIsSkipped(int maxNum)
         {
             bool skip = false;
             if (File.Exists(missflagStr)) //just in case FM doesn't have it
@@ -2145,9 +2158,6 @@ namespace NewDarkLoader
                         }
                     }
                 }
-
-                if (missflagFromArchive)
-                    FullDelete.DeleteFile(missflagStr);
             }
 
             return skip;
@@ -2917,7 +2927,7 @@ namespace NewDarkLoader
 
             readGameLanguage();
 
-            if (File.Exists(Path.Combine(fmArchiveDir, selArchive)) || Directory.Exists(Path.Combine(fmInstalledPath, selArchive)))
+            if (File.Exists(Path.Combine(fmArchiveDir, selArchive)) || Directory.Exists(Path.Combine(fmInstalledPath, selFM.extractionName)))
             {
                 readmePath = ""; //reset this so it's not left with value from previously selected FM
                 fmExtractionFolder = selFM.extractionName;

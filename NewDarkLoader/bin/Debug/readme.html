@@ -127,10 +127,16 @@ Beta Testers: Brethren, Dahenjo, fxdwg, ItalianThief, JoergA, The Phantom, SlyFo
 <h3><a name=startup>First Startup/Setup Window</a></h3>
 <p class=note><em>If you've been using FMSel</em> you can easily transfer its data (FM names, disabled mods etc) to NewDarkLoader. Open your <game>\FMs folder (or for T3, ...\Installed FMs), make a copy of FMSel.ini and rename the copy to NewDarkLoader.ini.</p>
 
+<h4>Standard Options</h4>
 <p>The first time you run your game, NewDarkLoader's <strong>Setup</strong> window will appear. You need to <strong>set the FM Archive folder</strong>. If you copied FMSel.ini, this will already have been set, but Setup will still show in order to set some other options. All the other options can be left at their default values, and they can be changed at any time.</p>
+
+<p class=note>As of version 1.6.0, multiple paths can be selected.</p>
+
+<p><strong>Relative Paths</strong> is an option that may help people who run the game/FMs from different drives, but testing has been limited.</p>
 
 <p>The <strong>Language</strong> option is used to allow NewDarkLoader to look for a 'language name'.ini file which changes the interface text (button text, messages etc). See the included English.ini file to see an example. <em>There is further info about this in section 2</em>.</p>
 
+<h4>Extra Options</h4>
 <p>The <strong>Web Search Site</strong> is to make use of the Web Search button in the main window. This searches Google and limits the results to the specified website (example <em>"fm title" site:ttlg.com</em>). Leave blank for an ordinary Google search.</p>
 
 <p>The <strong>Article list</strong> field is used if the website is thiefmissions.com. For this site, if an FM's name begins with any of the words in this box (e.g. 'the', 'an', 'a'), that word is moved to the end of the title, e.g. Last Lighthouse Keeper, The.</p>
@@ -291,6 +297,27 @@ Beta Testers: Brethren, Dahenjo, fxdwg, ItalianThief, JoergA, The Phantom, SlyFo
 <hr>
 
 <h3><a name=changes>Changes</a></h3>
+<section>
+<h4>Version 1.6.1</h4>
+<ul class=compact>
+<li>Fixed a crash that could occur when scanning a mission while using the internal 7z feature.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.6.0</h4>
+<ul class=compact>
+<li>Added support for multiple archive locations.</li>
+<li>Modified the Setup window. Standard and Advanced options are now in two tab groups.</li>
+</ul>
+</section>
+
+<section>
+<h4>Version 1.5.9</h4>
+<ul class=compact>
+<li>Improved stability for when the user has no FMs.</li>
+</ul>
+</section>
 
 <section>
 <h4>Version 1.5.8</h4>
